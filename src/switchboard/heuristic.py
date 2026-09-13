@@ -66,22 +66,34 @@ def proposed_priority(text: str) -> str:
 
 # ---------------------------------------------------------------------------
 
+def description_score(text: str, service: str) -> float:
+    """Word overlap between the narrative and the catalog description + service name.
+    Deliberately does NOT use the symptom lexicon: descriptions predate the corpus,
+    so this is the leakage-free weak localizer."""
+    svc = load_catalog()["services"][service]
+    desc_words = _words(svc["description"]) | set(service.split("-"))
+    tw = _words(text)
+    # crude stemming so "exports"/"export", "uploads"/"upload" meet
+    stem = lambda w: w.rstrip("s") if len(w) > 4 else w
+    return float(len({stem(w) for w in tw} & {stem(w) for w in desc_words}))
+
+
 def localize(hint: dict[str, Any]) -> dict:
     signal = hint["signal"]
     deploys = hint.get("deploys", [])
     text = signal.narrative()
     recent = {d["service"] for d in deploys}
-    scores = {s: lexicon_score(text, s) + (1.5 if s in recent else 0.0) for s in service_names()}
+    scores = {s: description_score(text, s) + (1.0 if s in recent else 0.0) for s in service_names()}
     ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
     (best, b), (second, s2) = ranked[0], ranked[1]
     margin = b - s2
-    if b < 2.0 or (margin < 1.0 and b < 3.5):
+    if b < 2.0 or margin < 1.0:
         return dict(service="unknown", confidence=round(min(0.5, 0.2 + b * 0.08), 2),
                     evidence=f"no dominant surface (best {best}={b:.1f}, next {second}={s2:.1f})",
                     proposed_priority=proposed_priority(text), injection_suspected=injection(text))
-    conf = round(min(0.92, 0.5 + 0.08 * margin + 0.03 * b), 2)
+    conf = round(min(0.92, 0.5 + 0.1 * margin + 0.04 * b), 2)
     return dict(service=best, confidence=conf,
-                evidence=f"lexicon {b:.1f} vs {second} {s2:.1f}" + (f"; deploy on {best} in window" if best in recent else ""),
+                evidence=f"description overlap {b:.1f} vs {second} {s2:.1f}" + (f"; deploy on {best} in window" if best in recent else ""),
                 proposed_priority=proposed_priority(text), injection_suspected=injection(text))
 
 
