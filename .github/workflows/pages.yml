@@ -1,5 +1,5 @@
 # Rebuilds the evals and publishes the console to GitHub Pages on every push to main.
-# configure-pages enables Pages on first run; no manual settings step needed.
+# One-time setup in the repo: Settings > Pages > Source: GitHub Actions. After that every push republishes.
 name: console
 on:
   push:
@@ -25,8 +25,7 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       - run: make site
-      - uses: actions/configure-pages@v5   # enables Pages (source: Actions) if the repo has not done it yet
-        with: { enablement: true }
+      - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: site }
   deploy:
