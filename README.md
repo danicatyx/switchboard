@@ -2,7 +2,26 @@
 
 **Telemetry knows where. Customers know who and how bad. Switchboard correlates both into one owned incident and closes the loop with every reporter.**
 
-> Built in one day as a solo hackathon project. This document is the full design. What was implemented, what was cut, and the measured results are in [docs/BRIEF.md](docs/BRIEF.md); the build plan is [docs/PLAN.md](docs/PLAN.md).
+**Live console:** https://danicatyx.github.io/switchboard/ · **Demo video:** _coming soon_ · **Brief:** [docs/BRIEF.md](docs/BRIEF.md) · **Repo:** https://github.com/danicatyx/switchboard
+
+> Built in one day as a solo hackathon project. This document is the full design. What was implemented, what was cut, and the measured results are in [docs/BRIEF.md](docs/BRIEF.md); the build plan is [docs/PLAN.md](docs/PLAN.md). Section 9 explains how to read the console.
+
+## Why it matters: a worked example
+
+Take a mid-size B2B SaaS: about $40M ARR, 2,000 customer accounts, 40 services owned by 12 teams, and a support inbox plus error monitoring that together produce roughly **200 signals a week** (120 customer reports of defects, 80 alerts), about 10,000 a year. Today a human reads each one, guesses which of the 40 services is implicated, finds the owner, pages them, and replies to the customer. Switchboard does the correlation, localization, ownership lookup, and reporter follow-up, and only asks a human when it is not confident.
+
+Using the console's cost model with its default assumptions and the rates measured on the replay corpus, a year looks like this:
+
+| Value | How it is computed | Annual, estimated |
+| --- | --- | --- |
+| Engineer triage time | 15 min manual per signal today; with Switchboard 1 min to glance at an auto-handled case, 4 to approve a proposal, 15 for an escalation. At the corpus's decision mix (34% auto, 32% propose, 33% escalate) that is 6.6 min average, 8.4 min saved. 10,000 signals × 8.4 min = 1,400 hours × $150/h. | **$210,000** |
+| On-call interruptions | 20% of signals fold into an incident that already exists (corpus: 20 of 99), so the team is not paged again. 2,000 avoided pages × 30 min of on-call time × $150/h. | **$150,000** |
+| Wrong-team delays | Ownership is a lookup, not a guess. Assume half of signals are localized confidently enough to route, humans misroute 15% of those today, and the lookup misroutes 9% (corpus, all of them upstream localization errors). 300 fewer misroutes × 45 min with the wrong team × a blended $40/min for a mostly P2/P3 mix. | **$540,000** |
+| Revenue protected | Every correlated reporter is acknowledged and told when it is fixed. 6,000 customer reports × $20,000 average ARR × 1% churn risk from an unacknowledged defect report × 70% of that risk removed by closing the loop. | **$840,000** |
+| Security exposure | Support inboxes and error payloads carry attacker-controlled text. The architecture blocked 14 of 14 attack families in the corpus without depending on detection. Assume 12 real attempts a year × $25,000 blended exposure per successful attack. | **$300,000** |
+| **Total** | Against roughly $2,000 a year of model calls at 10,000 signals and about 2 calls per signal. | **about $2.0M** |
+
+Every figure is an assumption times a measured rate, and every assumption is an editable input on the console's **Business impact** page, which runs the same model over the actual corpus signal by signal. The largest levers are the cost of a misrouted incident and the churn risk per unacknowledged report; if your numbers for those are lower, the total falls with them. The corpus itself is synthetic and the localizer behind it is a deterministic stand-in, so treat the rates as what the architecture does around a weak localizer, not as a benchmark of a model.
 
 ---
 
@@ -560,7 +579,7 @@ Names on the console are written for a product reader first; the technical term 
 
 ### Hosting
 
-Live: **https://danicatyx.github.io/switchboard/** (rebuilt on every push to `main`).
+Live: **https://danicatyx.github.io/switchboard/** (rebuilt on every push to `main`). Demo video: _coming soon_.
 
 The artifact link from the build session is a private hosted copy that can be shared from its share menu. For a public deploy, push to GitHub. `.github/workflows/pages.yml` reruns the tests and evals and publishes `site/` to the `gh-pages` branch on every push to `main`, which GitHub serves at `https://<you>.github.io/<repo>/` (if it does not appear after the first run: Settings > Pages > Source: Deploy from a branch > gh-pages); add `ANTHROPIC_API_KEY` as a repository secret to build against a real model instead of the heuristic stand-in.
 
