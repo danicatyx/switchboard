@@ -1,8 +1,8 @@
 # Switchboard: System and Reliability Brief
 
 **Team:** Danica T (solo)
-**Repo:** this repository
-**Demo:** `python -m switchboard.demo` (terminal, ~5 s) and `make dashboard` (console: overview, modeled business impact with an editable cost model, signal replay with state traces, results charts, attack audit, failure gallery, integrations panel; opens offline)
+**Repo:** https://github.com/danicatyx/switchboard
+**Demo:** live console at https://danicatyx.github.io/switchboard/ · `python -m switchboard.demo` (terminal, ~5 s) · `make dashboard` (console: overview, modeled business impact with an editable cost model, signal replay with state traces, results charts, attack audit, failure gallery, integrations panel; opens offline)
 
 ---
 
