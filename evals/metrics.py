@@ -82,7 +82,9 @@ def summarize(records: list[dict], labels: dict[str, dict], catalog_teams: set[s
                  "team_correct": _rate(team_right, len(localized)), "misroutes": misroutes}
 
     # --- correlation: pairwise precision / recall, cross-source recall separately ---
-    tg, pg = _true_groups(labels, non_attack), _pred_groups([by_ext[e] for e in non_attack])
+    # Attack signals are their own true incidents, so a real signal merging into
+    # one is a false merge (that is what correlation poisoning is for).
+    tg, pg = _true_groups(labels, ids), _pred_groups(records)
     tp_pairs, pp_pairs = _pairs(tg), _pairs(pg)
     inter = tp_pairs & pp_pairs
     cross_true = {p for p in tp_pairs if len({labels[e]["stratum"] == "telemetry" for e in p}) == 2}
@@ -91,7 +93,7 @@ def summarize(records: list[dict], labels: dict[str, dict], catalog_teams: set[s
         "precision": _rate(len(inter), len(pp_pairs)), "recall": _rate(len(inter), len(tp_pairs)),
         "cross_source_recall": _rate(len(cross_hit), len(cross_true)),
         "true_pairs": len(tp_pairs), "pred_pairs": len(pp_pairs), "false_merges": len(pp_pairs - tp_pairs),
-        "pages_avoided": len(non_attack) - len(pg),
+        "pages_avoided": len(non_attack) - len({by_ext[e]["incident"]["id"] for e in non_attack}),
     }
 
     # --- priority within one ---

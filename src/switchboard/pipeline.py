@@ -110,6 +110,10 @@ def run_signal(raw: dict, store: IncidentStore, cfg: Config) -> DecisionRecord:
 
     # GATE
     injection = corr.injection_suspected or loc.injection_suspected
+    if injection:
+        inc.injection_flagged = True
+    # Sticky: a signal merged into a flagged incident cannot act on its behalf either.
+    injection = injection or inc.injection_flagged
     degradations = [cfg.degradation_telemetry] if (not cfg.telemetry_available and signal.source == "email") else []
     g = gate(c_corr=corr.confidence, c_loc=inc.localization_confidence, c_pi=pr.c_pi, confidence_cap=pr.confidence_cap,
              service=inc.service if inc.owner is not None else None, injection_flag=injection,
