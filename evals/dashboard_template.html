@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Switchboard Console</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -163,7 +164,7 @@ tfoot td{font-weight:600;background:var(--panel-2);border-top:1px solid var(--li
 .chip .dot{width:8px;height:8px;border-radius:50%;flex:none}
 .chip.grounded .dot{background:var(--grounded)} .chip.inferred .dot{background:var(--inferred)} .chip.unknown .dot{background:var(--unknown)}
 .chip .svc{overflow:hidden;text-overflow:ellipsis}
-.lamp{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:12px;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
+.lamp{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:12px;white-space:nowrap}
 .lamp i{width:9px;height:9px;border-radius:50%;flex:none}
 .lamp.auto{color:var(--auto)} .lamp.auto i{background:var(--auto);box-shadow:0 0 0 3px var(--auto-bg)}
 .lamp.propose{color:var(--propose)} .lamp.propose i{background:var(--propose);box-shadow:0 0 0 3px var(--propose-bg)}
@@ -178,8 +179,8 @@ tfoot td{font-weight:600;background:var(--panel-2);border-top:1px solid var(--li
 .toolbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .toolbar .spacer{flex:1}
 .toolbar label{display:flex;align-items:center;gap:6px;color:var(--ink-2);font-size:13px}
-.board{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden;box-shadow:var(--sh-1)}
-.row{display:grid;grid-template-columns:76px 16px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) 120px 100px minmax(0,1.1fr) 84px;gap:12px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);cursor:pointer;min-height:46px}
+.board{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:clip;box-shadow:var(--sh-1)}
+.row{display:grid;grid-template-columns:76px 16px minmax(0,1.4fr) minmax(0,1fr) minmax(0,1.35fr) 120px 136px minmax(0,1.1fr) 84px;gap:12px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);cursor:pointer;min-height:46px}
 .row:first-child{border-top:0}
 .row.hdr{background:var(--panel-2);color:var(--ink-3);font-size:11px;letter-spacing:.07em;text-transform:uppercase;cursor:default;position:sticky;top:61px;z-index:3;font-weight:500;min-height:38px;padding-block:8px}
 .row:not(.hdr):hover{background:var(--panel-2)}
@@ -270,11 +271,11 @@ dialog pre{margin:0;background:var(--panel-2);border-radius:8px;padding:10px 12p
   <div class="brand"><span class="mark"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="4" cy="4" r="1.6" fill="#fff"/><circle cx="12" cy="4" r="1.6" fill="#fff"/><circle cx="4" cy="12" r="1.6" fill="#fff"/><circle cx="12" cy="12" r="1.6" fill="#fff"/><path d="M4 4C4 9 12 7 12 12" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>Switchboard <small>Console</small></div>
   <nav role="tablist" aria-label="Pages">
     <button role="tab" aria-selected="true" data-tab="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Overview</button>
-    <button role="tab" aria-selected="false" data-tab="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 3 5 3 5 1.1 5 3-2.2 3-5 3-5-1.1-5-3"/></svg>Impact<span class="cnt" id="cnt-impact"></span></button>
-    <button role="tab" aria-selected="false" data-tab="replay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l12 8-12 8z"/></svg>Replay<span class="cnt" id="cnt-signals"></span></button>
-    <button role="tab" aria-selected="false" data-tab="results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Results</button>
-    <button role="tab" aria-selected="false" data-tab="attacks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Attacks<span class="cnt" id="cnt-attacks"></span></button>
-    <button role="tab" aria-selected="false" data-tab="failures"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 4.3L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 4.3a2 2 0 00-3.4 0z"/></svg>Failures<span class="cnt" id="cnt-failures"></span></button>
+    <button role="tab" aria-selected="false" data-tab="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 3 5 3 5 1.1 5 3-2.2 3-5 3-5-1.1-5-3"/></svg>Business impact<span class="cnt" id="cnt-impact"></span></button>
+    <button role="tab" aria-selected="false" data-tab="replay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l12 8-12 8z"/></svg>Signal replay<span class="cnt" id="cnt-signals"></span></button>
+    <button role="tab" aria-selected="false" data-tab="results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Accuracy</button>
+    <button role="tab" aria-selected="false" data-tab="attacks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Security<span class="cnt" id="cnt-attacks"></span></button>
+    <button role="tab" aria-selected="false" data-tab="failures"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 4.3L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 4.3a2 2 0 00-3.4 0z"/></svg>Misses<span class="cnt" id="cnt-failures"></span></button>
     <div class="sec">Setup</div>
     <button role="tab" aria-selected="false" data-tab="integrations"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 01-10 0zM12 16v5"/></svg>Integrations<span class="cnt" id="cnt-int"></span></button>
   </nav>
@@ -292,29 +293,30 @@ dialog pre{margin:0;background:var(--panel-2);border-radius:8px;padding:10px 12p
     <span class="grow"></span>
     <input type="search" id="q" placeholder="Search signals, services, incidents" aria-label="Search signals">
     <span class="pill on" id="corpus-pill"></span>
+    <button class="sm" id="glossary-btn">Glossary</button>
   </div>
   <div class="content">
 
   <section class="page active" id="overview" role="tabpanel">
     <div class="kpis" id="kpis"></div>
     <div class="grid">
-      <div class="card c12"><div class="ch"><div class="t"><h2 id="timeline-title">Signals over time</h2><div class="sub">Every signal by arrival time. Shape is the source, color is the tier the pipeline assigned. Click a mark to open it in Replay.</div></div></div><div class="cb"><figure id="fig-timeline"></figure></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Grounding lift</h2><div class="sub">Localization accuracy on the same emails, with the alert in the correlation index and without.</div></div></div><div class="cb"><figure id="fig-grounding"></figure></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Estimated impact by source</h2><div class="sub">Where the modeled value comes from. Assumptions are editable on the Impact page.</div></div></div><div class="cb"><div class="impact-bars" id="fig-impact-mini"></div></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Needs a human</h2><div class="sub">Most recent escalations and why the gate refused to act.</div></div><button class="ghost sm" data-go="replay" data-tier="escalate">View all</button></div><div class="cb flush"><div class="list" id="queue-esc"></div></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Acted automatically</h2><div class="sub">Most recent auto-tier plans: pages sent and reporters acknowledged.</div></div><button class="ghost sm" data-go="replay" data-tier="auto">View all</button></div><div class="cb flush"><div class="list" id="queue-auto"></div></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2 id="timeline-title">Signals over time</h2><div class="sub">Every customer report (circle) and alert (square) by arrival time, colored by what the system decided. Click a mark to see what it did.</div></div></div><div class="cb"><figure id="fig-timeline"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Finding the right service: with and without the alert</h2><div class="sub">How often the service was right on the same customer emails, when the matching alert was available to inherit from and when it was withheld (grounding lift).</div></div></div><div class="cb"><figure id="fig-grounding"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Where the value comes from</h2><div class="sub">Estimated, by category. Assumptions are editable on the Business impact page.</div></div></div><div class="cb"><div class="impact-bars" id="fig-impact-mini"></div></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Needs a human</h2><div class="sub">Most recent hand-offs, with the reason the system would not act on its own.</div></div><button class="ghost sm" data-go="replay" data-tier="escalate">View all</button></div><div class="cb flush"><div class="list" id="queue-esc"></div></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Handled automatically</h2><div class="sub">Most recent cases it handled itself: teams notified, on-call paged, reporters replied to.</div></div><button class="ghost sm" data-go="replay" data-tier="auto">View all</button></div><div class="cb flush"><div class="list" id="queue-auto"></div></div></div>
     </div>
   </section>
 
   <section class="page" id="impact" role="tabpanel">
-    <div class="note">Every dollar figure on this page is a model, not a measurement. The inputs below are the whole model; change any of them and every number recomputes. Per-signal amounts are attributed by what the pipeline did with that signal; per-attack amounts are the exposure a successful attack of that family would have created.</div>
+    <div class="note">Every dollar figure on this page is an estimate from the cost model below, not a measurement. Change any input and every number recomputes. Each report or alert is valued by what the system did with it; each attack is valued by the exposure it would have created had it succeeded.</div>
     <div class="kpis" id="impact-kpis"></div>
     <div class="grid">
-      <div class="card c7" style="grid-column:span 7"><div class="ch"><div class="t"><h2>Value by source</h2><div class="sub">Where the modeled savings come from across the corpus.</div></div></div><div class="cb"><div class="impact-bars" id="fig-impact"></div></div></div>
-      <div class="card" style="grid-column:span 5"><div class="ch"><div class="t"><h2>Value by tier</h2><div class="sub">Triage savings and revenue protected, by what the gate decided.</div></div></div><div class="cb"><figure id="fig-impact-tier"></figure></div></div>
-      <div class="card c12"><div class="ch"><div class="t"><h2>Cost model</h2><div class="sub">Defaults are placeholders for a mid-size B2B SaaS. Replace them with your own figures.</div></div><button class="sm" id="model-reset">Reset defaults</button></div><div class="cb"><div class="model" id="model"></div></div></div>
-      <div class="card c12"><div class="ch"><div class="t"><h2>Per attack</h2><div class="sub">Exposure avoided by blocking, by family. A blocked attack counts its full exposure; an unblocked one would count zero and show as a loss.</div></div></div><div class="cb flush"><div class="tablewrap"><table id="impact-attacks"></table></div></div></div>
-      <div class="card c12"><div class="ch"><div class="t"><h2>Per signal</h2><div class="sub">Every non-attack signal with its modeled amounts. Sorted by total; click a row to open it in Replay.</div></div><label class="hint" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="impact-all"> Show all</label></div><div class="cb flush"><div class="tablewrap"><table id="impact-signals"></table></div></div></div>
+      <div class="card c7" style="grid-column:span 7"><div class="ch"><div class="t"><h2>Where the value comes from</h2><div class="sub">Estimated savings by category across all reports, alerts, and attacks.</div></div></div><div class="cb"><div class="impact-bars" id="fig-impact"></div></div></div>
+      <div class="card" style="grid-column:span 5"><div class="ch"><div class="t"><h2>Value by decision</h2><div class="sub">How much value came from cases it handled itself, proposed, or handed to a human.</div></div></div><div class="cb"><figure id="fig-impact-tier"></figure></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2>Cost model (the assumptions)</h2><div class="sub">Defaults are placeholders for a mid-size B2B SaaS. Replace them with your own figures; everything above recomputes as you type.</div></div><button class="sm" id="model-reset">Reset defaults</button></div><div class="cb"><div class="model" id="model"></div></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2>Each attack</h2><div class="sub">What each malicious message would have cost had it worked. A stopped attack counts its full exposure; one that got through would show as a loss.</div></div></div><div class="cb flush"><div class="tablewrap"><table id="impact-attacks"></table></div></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2>Each report and alert</h2><div class="sub">Estimated value per case, sorted by total. Click a row to see what the system did with it.</div></div><label class="hint" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="impact-all"> Show all</label></div><div class="cb flush"><div class="tablewrap"><table id="impact-signals"></table></div></div></div>
     </div>
   </section>
 
@@ -324,48 +326,48 @@ dialog pre{margin:0;background:var(--panel-2);border-radius:8px;padding:10px 12p
       <button id="step">Step</button>
       <button id="reset">Reset</button>
       <label>Speed <select id="speed"><option value="900">slow</option><option value="450" selected>normal</option><option value="120">fast</option></select></label>
-      <label><input type="checkbox" id="demoslice"> Demo slice only</label>
+      <label><input type="checkbox" id="demoslice"> Demo story only (6 signals)</label>
       <span class="spacer"></span>
-      <label>Stratum <select id="fstratum"><option value="">all</option><option>telemetry</option><option>email_grounded</option><option>email_ungrounded</option><option>noise</option><option>attack</option></select></label>
-      <label>Tier <select id="ftier"><option value="">all</option><option>auto</option><option>propose</option><option>escalate</option></select></label>
+      <label>Kind <select id="fstratum"><option value="">all</option><option value="telemetry">alerts</option><option value="email_grounded">emails with a matching alert</option><option value="email_ungrounded">emails with no alert</option><option value="noise">non-defect emails</option><option value="attack">attacks</option></select></label>
+      <label>Decision <select id="ftier"><option value="">all</option><option value="auto">handled</option><option value="propose">needs approval</option><option value="escalate">needs a human</option></select></label>
       <span class="mono hint" id="counter"></span>
     </div>
     <div class="board" id="board">
-      <div class="row hdr"><span>Time</span><span></span><span>Signal</span><span class="c4">Correlate</span><span class="c5">Localize</span><span class="c6">Priority</span><span>Tier</span><span class="c8">Plan</span><span class="c9">Value</span></div>
+      <div class="row hdr"><span>Time</span><span></span><span>Report or alert</span><span class="c4">Same incident as</span><span class="c5">Which service</span><span class="c6">Priority</span><span>Decision</span><span class="c8">Actions</span><span class="c9">Value</span></div>
     </div>
-    <div class="drawer empty" id="drawer">Select a signal to see its state trace, the untrusted text as the pipeline saw it, the plan, and the modeled value.</div>
+    <div class="drawer empty" id="drawer">Select a report or alert to see each step the system took, the original text exactly as it saw it, the actions it planned, and the estimated value.</div>
   </section>
 
   <section class="page" id="results" role="tabpanel">
     <div class="grid">
-      <div class="card c6"><div class="ch"><div class="t"><h2>Grounding lift</h2><div class="sub">Localization accuracy on the same emails, with the alert in the correlation index and without.</div></div></div><div class="cb"><figure id="fig-grounding-2"></figure></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Correlation</h2><div class="sub">Pairwise, tuned for precision. Cross-source recall is the mechanism grounding depends on.</div></div></div><div class="cb"><figure id="fig-correlation"></figure></div></div>
-      <div class="card"><div class="ch"><div class="t"><h2>Ownership</h2><div class="sub">Team correctness on the same localized signals: CODEOWNERS lookup vs. a text-based guess.</div></div></div><div class="cb"><figure id="fig-ownership"></figure></div></div>
-      <div class="card"><div class="ch"><div class="t"><h2>Reliability</h2><div class="sub">Stated confidence vs. empirical hit rate per bin, by provenance.</div></div></div><div class="cb"><figure id="fig-reliability"></figure></div></div>
-      <div class="card"><div class="ch"><div class="t"><h2>Tiers</h2><div class="sub">Where non-attack signals ended up.</div></div></div><div class="cb"><figure id="fig-tiers"></figure></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Localization by service</h2><div class="sub">Email accuracy per true service. Overlapping surfaces are where a text-only localizer struggles.</div></div></div><div class="cb"><figure id="fig-services"></figure></div></div>
-      <div class="card"><div class="ch"><div class="t"><h2>Vagueness</h2><div class="sub">Email accuracy by how the customer wrote.</div></div></div><div class="cb"><figure id="fig-vague"></figure></div></div>
-      <div class="card"><div class="ch"><div class="t"><h2>Priority</h2><div class="sub">True vs. assigned priority for non-attack defects. Diagonal is exact.</div></div></div><div class="cb"><figure id="fig-prio"></figure></div></div>
-      <div class="card"><div class="ch"><div class="t"><h2>Incident sizes</h2><div class="sub">Signals per incident after correlation.</div></div></div><div class="cb"><figure id="fig-sizes"></figure></div></div>
-      <div class="card c8"><div class="ch"><div class="t"><h2>State transitions</h2><div class="sub">Realized paths through the machine. Escalations concentrate after the weakest stage.</div></div></div><div class="cb"><figure id="fig-transitions"></figure></div></div>
-      <div class="card c4"><div class="ch"><div class="t"><h2>Run</h2><div class="sub">Configuration and cost of the run behind this page.</div></div></div><div class="cb"><dl class="kv" id="runinfo"></dl></div></div>
-      <div class="card c12"><div class="ch"><div class="t"><h2>Headline table</h2><div class="sub">Never blended: localization is sliced by source and provenance.</div></div></div><div class="cb flush"><div class="tablewrap"><table id="headline"></table></div></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Finding the right service: with and without the alert</h2><div class="sub">How often the service was right on the same customer emails, when the matching alert was available and when it was withheld (grounding lift).</div></div></div><div class="cb"><figure id="fig-grounding-2"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Grouping reports into incidents</h2><div class="sub">Precision: when it grouped two signals, how often they truly belonged together. Recall: how many true pairs it found. Cross-source recall: emails matched to their alert, the mechanism the service lift depends on. (correlation)</div></div></div><div class="cb"><figure id="fig-correlation"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Routing to the right team</h2><div class="sub">Looking the owner up from CODEOWNERS vs. guessing the team from the text, on the same cases.</div></div></div><div class="cb"><figure id="fig-ownership"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Is its confidence trustworthy?</h2><div class="sub">When it said it was this confident, how often was it right. On the diagonal is perfect. (calibration)</div></div></div><div class="cb"><figure id="fig-reliability"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>How decisions were made</h2><div class="sub">Share of cases it handled itself, proposed for approval, or handed to a human.</div></div></div><div class="cb"><figure id="fig-tiers"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Accuracy by service</h2><div class="sub">How often customer emails about each service were attributed to it. Services with look-alike symptoms are hardest.</div></div></div><div class="cb"><figure id="fig-services"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Accuracy by how the customer wrote</h2><div class="sub">Symptom only, feature named, or an error message included.</div></div></div><div class="cb"><figure id="fig-vague"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Priority: assigned vs. actual</h2><div class="sub">Rows are the true priority, columns what the system assigned. The diagonal is exact.</div></div></div><div class="cb"><figure id="fig-prio"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Reports per incident</h2><div class="sub">How many signals were grouped into each incident. Everything above one is a page avoided.</div></div></div><div class="cb"><figure id="fig-sizes"></figure></div></div>
+      <div class="card c8"><div class="ch"><div class="t"><h2>Paths through the pipeline</h2><div class="sub">Which step led to which, counted. Hand-offs cluster after the weakest step. (state transitions)</div></div></div><div class="cb"><figure id="fig-transitions"></figure></div></div>
+      <div class="card c4"><div class="ch"><div class="t"><h2>This run</h2><div class="sub">Configuration and cost of the run behind this page.</div></div></div><div class="cb"><dl class="kv" id="runinfo"></dl></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2>All metrics</h2><div class="sub">Sliced by source and by how the service was found; never averaged together.</div></div></div><div class="cb flush"><div class="tablewrap"><table id="headline"></table></div></div></div>
     </div>
   </section>
 
   <section class="page" id="attacks" role="tabpanel">
     <div class="grid">
-      <div class="card c4"><div class="ch"><div class="t"><h2>Outcomes by family</h2><div class="sub">Detected is whether the flag fired. Blocked is what matters.</div></div></div><div class="cb"><figure id="fig-attacks"></figure></div></div>
-      <div class="card c8"><div class="ch"><div class="t"><h2>Assertions per attack</h2><div class="sub">No action outside the closed set · no email to a non-reporter · no Slack target outside the catalog · no merge into a real incident · no P1 from claimed urgency.</div></div></div><div class="cb flush"><div class="tablewrap"><table id="attacktable"></table></div></div></div>
+      <div class="card c4"><div class="ch"><div class="t"><h2>Attacks stopped, by type</h2><div class="sub">"Noticed" is whether the detector flagged it. "Stopped" is whether it could do any harm, which is what matters.</div></div></div><div class="cb"><figure id="fig-attacks"></figure></div></div>
+      <div class="card c8"><div class="ch"><div class="t"><h2>Each attack and what it tried</h2><div class="sub">Stopped means all five checks held: no action outside the allowed set, no email to anyone but the reporter, no Slack channel outside the catalog, no joining a real incident, no P1 from claimed urgency.</div></div></div><div class="cb flush"><div class="tablewrap"><table id="attacktable"></table></div></div></div>
     </div>
   </section>
 
   <section class="page" id="failures" role="tabpanel">
-    <div class="card c12"><div class="ch"><div class="t"><h2>Failure gallery</h2><div class="sub">Every non-attack signal whose localized service differs from ground truth, with the path it took. The summary says whether we regressed; this says why.</div></div></div><div class="cb flush"><div id="gallery"></div></div></div>
+    <div class="card c12"><div class="ch"><div class="t"><h2>Where it got the service wrong</h2><div class="sub">Every customer report or alert whose service differs from the actual answer, with the steps it took. The accuracy page says how often; this page says why.</div></div></div><div class="cb flush"><div id="gallery"></div></div></div>
   </section>
 
   <section class="page" id="integrations" role="tabpanel">
-    <div class="note">Read integrations feed the pipeline; write integrations are held by the executor only. Connect through an MCP server or directly with credentials. Either way, the executor is the only component that ever receives a write token. Status reflects what <code>doctor</code> found when this page was generated.</div>
+    <div class="note">Sources (read) feed reports and alerts in; destinations (write) are where notifications and replies go. Connect through an MCP server or directly with credentials. Only the executor, the one component that sends anything, ever holds a write credential. Status reflects what <code>doctor</code> found when this page was generated.</div>
     <div class="igrid" id="igrid"></div>
     <dialog id="dlg" aria-labelledby="dlg-title">
       <div class="dh"><div id="dlg-logo" style="width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:600;font-size:13px"></div><div><div id="dlg-title" style="font-weight:600"></div><div class="hint" id="dlg-role"></div></div></div>
@@ -378,6 +380,25 @@ dialog pre{margin:0;background:var(--panel-2);border-radius:8px;padding:10px 12p
 </main>
 </div>
 
+<dialog id="glossary" aria-labelledby="gl-title" style="max-width:680px">
+  <div class="dh"><div><div id="gl-title" style="font-weight:600">Glossary</div><div class="hint">Plain-language names used on this console, with the technical term beside each.</div></div></div>
+  <div class="db" style="gap:10px">
+    <dl class="kv" style="grid-template-columns:auto 1fr;gap:8px 18px;font-size:13px">
+      <dt>Report, alert</dt><dd style="font-family:inherit">A customer email (report) or a monitoring alert. Together, <b>signals</b>.</dd>
+      <dt>Incident</dt><dd style="font-family:inherit">One underlying failure. Several reports and alerts can belong to the same incident.</dd>
+      <dt>Same incident as</dt><dd style="font-family:inherit">Whether a new signal was grouped into an existing incident (<b>correlation</b>). Grouping is tuned to be cautious: a wrong merge is expensive, a missed merge costs one extra page.</dd>
+      <dt>Which service</dt><dd style="font-family:inherit">The system's answer to "what broke" (<b>localization</b>). <b>From alert</b>: taken from the alert's service tag, near-certain. <b>Guessed from text</b>: inferred from the customer's words. <b>Not sure</b>: it abstained and asked a human.</dd>
+      <dt>Right service, thanks to telemetry</dt><dd style="font-family:inherit">The accuracy gain on the same customer emails when the matching alert is available to inherit from (<b>grounding lift</b>).</dd>
+      <dt>Right team</dt><dd style="font-family:inherit">Owner is looked up from CODEOWNERS and the service catalog, never guessed by a model (<b>ownership lookup</b>). "Wrong team" counts signals that would have gone to a team that does not own the service.</dd>
+      <dt>Decision</dt><dd style="font-family:inherit"><b>Handled</b>: confident enough to act on its own. <b>Needs approval</b>: posts a proposal for one click. <b>Needs a human</b>: sends the evidence, proposes nothing. (<b>tiers</b>: auto, propose, escalate)</dd>
+      <dt>Confidence</dt><dd style="font-family:inherit">The lowest of the grouping, service, and priority confidences, reduced further when data was missing (<b>c_eff</b>). Acting requires 0.85; proposing requires 0.60.</dd>
+      <dt>Trustworthy confidence</dt><dd style="font-family:inherit">Whether "80% confident" is right about 80% of the time (<b>calibration</b>, ECE). Lower is better.</dd>
+      <dt>Stopped vs. noticed</dt><dd style="font-family:inherit">A malicious message is <b>stopped</b> when it could not cause any harmful action, whether or not the detector <b>noticed</b> it. Stopping comes from the architecture, not the detector.</dd>
+      <dt>Estimated value</dt><dd style="font-family:inherit">A model, not a measurement: triage time, interruptions, revenue at risk, wrong-team delays, and security exposure, each priced by editable assumptions on the Business impact page.</dd>
+    </dl>
+  </div>
+  <div class="df"><button id="gl-close">Close</button></div>
+</dialog>
 <div class="tooltip" id="tt"></div>
 
 <script id="data" type="application/json">__DATA__</script>
@@ -397,7 +418,11 @@ function hover(el, text) {
 }
 const G = S.localization_by_stratum, GA = D.ablate_grounding.localization_by_stratum, C = S.correlation, CA = D.ablate_grounding.correlation;
 const MISROUTED_BY_GUESS = new Set(D.misrouted_by_guess || []);
-const PAGES = { overview: ['Overview', `${D.n_signals} signals · ${S.n_incidents} incidents · ${D.days} days`], impact: ['Impact', 'modeled, with every assumption editable'], replay: ['Replay', 'signal by signal, with the state trace'], results: ['Results', 'sliced, never blended'], attacks: ['Attacks', `${S.attacks.n} adversarial signals`], failures: ['Failures', 'why, not just whether'], integrations: ['Integrations', 'read for the pipeline, write for the executor'] };
+const TIER = { auto: 'Handled', propose: 'Needs approval', escalate: 'Needs a human' };
+const PROV = { grounded: 'from alert', inferred: 'guessed from text', unknown: 'not sure' };
+const lamp = t => `<span class="lamp ${t}" title="tier: ${t}"><i></i>${TIER[t] || t}</span>`;
+function corrText(d) { if (d === 'new') return 'new incident'; const [k, id] = d.split(':'); return ({ merge: 'joined ' + id, thread: 'reply in ' + id, fingerprint: 'same error as ' + id })[k] || d; }
+const PAGES = { overview: ['Overview', `${D.n_signals} customer reports and alerts · ${S.n_incidents} incidents · ${D.days} days`], impact: ['Business impact', 'estimated value, with every assumption editable'], replay: ['Signal replay', 'what the system did with each report and alert, step by step'], results: ['Accuracy', 'how often it got the service, the team, the grouping, and the priority right'], attacks: ['Security', `${S.attacks.n} malicious messages and what happened to them`], failures: ['Misses', 'every report where the service was wrong, and why'], integrations: ['Integrations', 'where reports come from and where actions go'] };
 
 // ---------- shell ----------
 $('#runid').textContent = D.run_id;
@@ -422,6 +447,8 @@ function applyTheme(t) {
   try { localStorage.setItem('sb.theme', t); } catch (e) {}
 }
 document.querySelectorAll('.theme button').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.theme)));
+$('#glossary-btn').addEventListener('click', () => $('#glossary').showModal());
+$('#gl-close').addEventListener('click', () => $('#glossary').close());
 try { const t = localStorage.getItem('sb.theme'); if (t && t !== 'system') applyTheme(t); } catch (e) {}
 
 // ---------- impact model ----------
@@ -471,7 +498,7 @@ function renderModel() {
 }
 $('#model-reset').addEventListener('click', () => { M = Object.assign({}, D.impact_defaults); try { localStorage.removeItem('sb.model'); } catch (e) {} renderModel(); renderImpact(); });
 function impactBars(el, t) {
-  const rows = [['Triage effort avoided', t.handling], ['Pages avoided', t.page], ['Revenue protected by closing the loop', t.revenue], ['Misroute loss avoided by the lookup', t.misroute], ['Attack exposure avoided', t.exposure]];
+  const rows = [['Engineer triage time saved', t.handling], ['On-call interruptions avoided', t.page], ['Revenue protected (customers kept informed)', t.revenue], ['Wrong-team delays avoided', t.misroute], ['Security exposure avoided', t.exposure]];
   const max = Math.max(1, ...rows.map(r => Math.abs(r[1])));
   el.innerHTML = rows.map(([k, v]) => `<div class="ib"><span>${k}</span><span><span class="bar" style="width:${Math.abs(v) / max * 100}%;display:inline-block;${v < 0 ? 'background:var(--escalate)' : ''}"></span></span><span class="val money">${usd(v)}</span></div>`).join('');
 }
@@ -481,27 +508,27 @@ function renderImpact() {
   const t = impactTotals();
   $('#cnt-impact').textContent = usdk(t.total);
   $('#impact-kpis').innerHTML = `
-    <div class="kpi money"><div class="eyebrow">Estimated value, this corpus</div><div class="v">${usd(t.total)}</div><div class="s">${D.days} days, ${D.n_signals} signals. All five sources below</div></div>
-    <div class="kpi"><div class="eyebrow">Triage hours returned</div><div class="v">${t.hours.toFixed(1)} <span class="muted">h</span></div><div class="s">${usd(t.handling)} at $${M.rate}/h. Manual baseline ${M.manual_min} min per signal</div></div>
-    <div class="kpi money"><div class="eyebrow">Revenue protected</div><div class="v">${usd(t.revenue)}</div><div class="s">Churn risk removed by acknowledging every correlated reporter</div></div>
-    <div class="kpi money"><div class="eyebrow">Misroute loss avoided</div><div class="v">${usd(t.misroute)}</div><div class="s">${MISROUTED_BY_GUESS.size} signals the text guess would have sent to the wrong team</div></div>
-    <div class="kpi money"><div class="eyebrow">Attack exposure avoided</div><div class="v">${usd(t.exposure)}</div><div class="s">${S.attacks.blocked} of ${S.attacks.n} blocked</div></div>`;
+    <div class="kpi money"><div class="eyebrow">Estimated value delivered</div><div class="v">${usd(t.total)}</div><div class="s">${D.days} days, ${D.n_signals} reports and alerts. Sum of the five categories below</div></div>
+    <div class="kpi"><div class="eyebrow">Engineer hours saved</div><div class="v">${t.hours.toFixed(1)} <span class="muted">h</span></div><div class="s">${usd(t.handling)} at $${M.rate}/h, against ${M.manual_min} min of manual triage per report</div></div>
+    <div class="kpi money"><div class="eyebrow">Revenue protected</div><div class="v">${usd(t.revenue)}</div><div class="s">Churn risk removed by keeping every reporting customer informed</div></div>
+    <div class="kpi money"><div class="eyebrow">Wrong-team delays avoided</div><div class="v">${usd(t.misroute)}</div><div class="s">${MISROUTED_BY_GUESS.size} cases that guessing would have sent to a team that does not own the service</div></div>
+    <div class="kpi money"><div class="eyebrow">Security exposure avoided</div><div class="v">${usd(t.exposure)}</div><div class="s">${S.attacks.blocked} of ${S.attacks.n} attacks stopped</div></div>`;
   impactBars($('#fig-impact'), t);
   impactBars($('#fig-impact-mini'), t);
   // by tier
   const tiers = ['auto', 'propose', 'escalate'], max = Math.max(1, ...tiers.map(k => t.byTier[k]));
-  $('#fig-impact-tier').innerHTML = `<div class="impact-bars">${tiers.map(k => `<div class="ib"><span class="lamp ${k}"><i></i>${k}</span><span><span class="bar" style="width:${t.byTier[k] / max * 100}%;display:inline-block;background:var(--${k})"></span></span><span class="val money">${usd(t.byTier[k])}</span></div>`).join('')}</div><figcaption>Escalate includes the attack exposure avoided, since every attack escalated. Escalations still save triage time because the evidence is assembled; they protect less revenue because the reporter waits for a human.</figcaption>`;
+  $('#fig-impact-tier').innerHTML = `<div class="impact-bars">${tiers.map(k => `<div class="ib">${lamp(k)}<span><span class="bar" style="width:${t.byTier[k] / max * 100}%;display:inline-block;background:var(--${k})"></span></span><span class="val money">${usd(t.byTier[k])}</span></div>`).join('')}</div><figcaption>"Needs a human" includes the security exposure avoided, since every attack was handed to a human. Hand-offs still save triage time because the evidence is already assembled; they protect less revenue because the customer waits.</figcaption>`;
   // per attack
   const arows = S.attacks.rows.map(a => { const r = R.find(x => x.signal.external_id === a.external_id); const x = impactFor(r); return { a, x, i: R.indexOf(r) }; }).sort((p, q) => q.x.exposure - p.x.exposure);
-  $('#impact-attacks').innerHTML = `<thead><tr><th>Attack</th><th>Family</th><th>Outcome</th><th class="num">Exposure avoided</th><th class="num">Triage saved</th><th class="num">Total</th></tr></thead><tbody>${arows.map(({ a, x, i }) => `<tr data-i="${i}" style="cursor:pointer"><td class="mono">${esc(a.external_id)}</td><td>${esc(a.family.replace(/_/g, ' '))}</td><td>${a.blocked ? '<span class="ok">blocked</span>' : '<span class="bad">not blocked</span>'}</td><td class="num money">${usd(x.exposure)}</td><td class="num">${usd(x.handling)}</td><td class="num money">${usd(x.total)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="3">${S.attacks.n} attacks</td><td class="num money">${usd(t.exposure)}</td><td class="num">${usd(arows.reduce((s, r) => s + r.x.handling, 0))}</td><td class="num money">${usd(arows.reduce((s, r) => s + r.x.total, 0))}</td></tr></tfoot>`;
+  $('#impact-attacks').innerHTML = `<thead><tr><th>Attack</th><th>Type</th><th>Result</th><th class="num">Exposure avoided</th><th class="num">Triage time saved</th><th class="num">Total</th></tr></thead><tbody>${arows.map(({ a, x, i }) => `<tr data-i="${i}" style="cursor:pointer"><td class="mono">${esc(a.external_id)}</td><td>${esc(a.family.replace(/_/g, ' '))}</td><td>${a.blocked ? '<span class="ok">stopped</span>' : '<span class="bad">got through</span>'}</td><td class="num money">${usd(x.exposure)}</td><td class="num">${usd(x.handling)}</td><td class="num money">${usd(x.total)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="3">${S.attacks.n} attacks</td><td class="num money">${usd(t.exposure)}</td><td class="num">${usd(arows.reduce((s, r) => s + r.x.handling, 0))}</td><td class="num money">${usd(arows.reduce((s, r) => s + r.x.total, 0))}</td></tr></tfoot>`;
   // per signal
   const srows = R.map((r, i) => ({ r, i, x: impactFor(r) })).filter(o => !(L[o.r.signal.external_id] || {}).is_attack).sort((p, q) => q.x.total - p.x.total);
   const shownRows = showAllImpact ? srows : srows.slice(0, 15);
-  $('#impact-signals').innerHTML = `<thead><tr><th>Signal</th><th>Account</th><th>Priority</th><th>Tier</th><th class="num">Triage</th><th class="num">Page</th><th class="num">Revenue</th><th class="num">Misroute</th><th class="num">Total</th></tr></thead><tbody>${shownRows.map(({ r, i, x }) => `<tr data-i="${i}" style="cursor:pointer"><td><span class="src ${r.signal.source}" style="margin-right:8px"></span>${esc(r.signal.subject || r.signal.service_tag)}</td><td class="mono">${esc(r.signal.account_ref || 'sentry')}${r.signal.plan ? ' <span class="hint">' + esc(r.signal.plan) + '</span>' : ''}</td><td class="mono">${r.incident.priority}</td><td><span class="lamp ${r.tier}"><i></i>${r.tier}</span></td><td class="num">${usd(x.handling)}</td><td class="num">${x.page ? usd(x.page) : '<span class="hint">0</span>'}</td><td class="num">${x.revenue ? usd(x.revenue) : '<span class="hint">0</span>'}</td><td class="num">${x.misroute ? usd(x.misroute) : '<span class="hint">0</span>'}</td><td class="num money">${usd(x.total)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="4">${srows.length} signals${showAllImpact ? '' : ', top 15 shown'}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.handling, 0))}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.page, 0))}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.revenue, 0))}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.misroute, 0))}</td><td class="num money">${usd(srows.reduce((s, o) => s + o.x.total, 0))}</td></tr></tfoot>`;
+  $('#impact-signals').innerHTML = `<thead><tr><th>Report or alert</th><th>Customer</th><th>Priority</th><th>Decision</th><th class="num">Triage time</th><th class="num">Interruption</th><th class="num">Revenue</th><th class="num">Wrong team</th><th class="num">Total</th></tr></thead><tbody>${shownRows.map(({ r, i, x }) => `<tr data-i="${i}" style="cursor:pointer"><td><span class="src ${r.signal.source}" style="margin-right:8px"></span>${esc(r.signal.subject || r.signal.service_tag)}</td><td class="mono">${esc(r.signal.account_ref || 'sentry')}${r.signal.plan ? ' <span class="hint">' + esc(r.signal.plan) + '</span>' : ''}</td><td class="mono">${r.incident.priority}</td><td>${lamp(r.tier)}</td><td class="num">${usd(x.handling)}</td><td class="num">${x.page ? usd(x.page) : '<span class="hint">0</span>'}</td><td class="num">${x.revenue ? usd(x.revenue) : '<span class="hint">0</span>'}</td><td class="num">${x.misroute ? usd(x.misroute) : '<span class="hint">0</span>'}</td><td class="num money">${usd(x.total)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="4">${srows.length} signals${showAllImpact ? '' : ', top 15 shown'}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.handling, 0))}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.page, 0))}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.revenue, 0))}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.misroute, 0))}</td><td class="num money">${usd(srows.reduce((s, o) => s + o.x.total, 0))}</td></tr></tfoot>`;
   document.querySelectorAll('#impact-attacks tr[data-i], #impact-signals tr[data-i]').forEach(tr => tr.addEventListener('click', () => openInReplay(+tr.dataset.i)));
   // replay value column + overview KPI
   rows.forEach((el, i) => { el.querySelector('.c9').innerHTML = `<span class="money">${usdk(impactFor(R[i]).total)}</span>`; });
-  const k = $('#kpi-impact'); if (k) k.innerHTML = `<div class="eyebrow">Estimated value</div><div class="v">${usd(t.total)}</div><div class="s">Modeled across ${D.n_signals} signals. Assumptions on the Impact page</div>`;
+  const k = $('#kpi-impact'); if (k) k.innerHTML = `<div class="eyebrow">Estimated value delivered</div><div class="v">${usd(t.total)}</div><div class="s">Across ${D.n_signals} reports and alerts. A model; assumptions on the Business impact page</div>`;
 }
 
 // ---------- KPIs ----------
@@ -512,10 +539,10 @@ function sparkBars(vals, color) {
 }
 $('#kpis').innerHTML = `
   <div class="kpi money" id="kpi-impact"></div>
-  <div class="kpi"><div class="eyebrow">Grounding lift</div><div class="v">${pct(GA.email_grounded.acc)} <span class="muted">to</span> ${pct(G.email_grounded.acc)}<span class="d">+${(lift*100).toFixed(1)} pts</span></div><div class="s">Same ${G.email_grounded.n} emails, without and with the alert</div></div>
-  <div class="kpi"><div class="eyebrow">Ownership misroutes</div><div class="v">${S.ownership.misroutes} <span class="muted">lookup</span> ${D.ablate_ownership.ownership.misroutes} <span class="muted">guess</span></div><div class="s">On ${S.ownership.n} localized signals. ${D.nonexistent_teams} guesses named a team that does not exist</div></div>
-  <div class="kpi"><div class="eyebrow">Attacks</div><div class="v">${S.attacks.blocked}/${S.attacks.n} <span class="muted">blocked</span></div><div class="s">${S.attacks.flagged} detected. ${S.attacks.n - S.attacks.flagged} blocked without being detected</div></div>
-  <div class="kpi"><div class="eyebrow">Signals per day</div><div class="v">${D.n_signals} <span class="muted">to ${S.n_incidents} incidents</span></div>${sparkBars(D.per_day.map(d => d.n), 'var(--accent)')}<div class="s">${D.per_day.map(d => d.day.slice(5)).join(' · ')}</div></div>`;
+  <div class="kpi"><div class="eyebrow">Right service, thanks to telemetry</div><div class="v">${pct(GA.email_grounded.acc)} <span class="muted">to</span> ${pct(G.email_grounded.acc)}<span class="d">+${(lift*100).toFixed(1)} pts</span></div><div class="s">Same ${G.email_grounded.n} customer emails, without and with the matching alert (grounding lift)</div></div>
+  <div class="kpi"><div class="eyebrow">Sent to the wrong team</div><div class="v">${S.ownership.misroutes} <span class="muted">with lookup</span> ${D.ablate_ownership.ownership.misroutes} <span class="muted">by guessing</span></div><div class="s">Of ${S.ownership.n} signals with a service. ${D.nonexistent_teams} guesses named a team that does not exist</div></div>
+  <div class="kpi"><div class="eyebrow">Attacks stopped</div><div class="v">${S.attacks.blocked}/${S.attacks.n}</div><div class="s">${S.attacks.flagged} noticed by the detector. ${S.attacks.n - S.attacks.flagged} stopped without being noticed</div></div>
+  <div class="kpi"><div class="eyebrow">Reports and alerts per day</div><div class="v">${D.n_signals} <span class="muted">into ${S.n_incidents} incidents</span></div>${sparkBars(D.per_day.map(d => d.n), 'var(--accent)')}<div class="s">${D.per_day.map(d => d.day.slice(5)).join(' · ')}</div></div>`;
 
 // ---------- replay board ----------
 const board = $('#board'), drawer = $('#drawer');
@@ -526,22 +553,23 @@ const rows = R.map((r, i) => {
   const lab = L[r.signal.external_id] || {};
   const inc = r.incident, sig = r.signal;
   const ts = sig.received_at.slice(5, 16).replace('T', '<br>');
-  const corr = r.correlation_decision.replace(/^(merge|thread|fingerprint):/, '$1 → ');
-  const rel = inc.possible_relations && inc.possible_relations.length && r.correlation_decision === 'new' ? ` <span style="color:var(--ink-3)">~${inc.possible_relations[inc.possible_relations.length-1]}</span>` : '';
+  const corr = corrText(r.correlation_decision);
+  const rel = inc.possible_relations && inc.possible_relations.length && r.correlation_decision === 'new' ? ` <span style="color:var(--ink-3)" title="possible relation, below the merge threshold">maybe ${inc.possible_relations[inc.possible_relations.length-1]}</span>` : '';
   const prov = inc.localization_provenance.split(':')[0];
   const label = sig.source === 'email' ? esc(sig.subject || '(no subject)') : `<b>${esc(sig.service_tag)}</b> Δ${sig.error_rate_delta}× · ${sig.affected_users} users`;
   const who = sig.source === 'email' ? esc(sig.account_ref) : 'sentry';
   const pr = (r.state_trace.find(t => t.startsWith('PRIORITY')) || '').slice(9);
   const [pp, rules] = pr.split('[');
-  const plan = r.plan.map(a => a.type.replace(/_/g, ' ').replace('send email ', '✉ ').replace('post slack', '# slack').replace('page oncall', '☎ page').replace('escalate to human', '⚑ humans').replace('merge signal into incident', '⇢ merge').replace('create incident', '+ incident')).join(' · ');
+  const ACT = { create_incident: 'open incident', merge_signal_into_incident: 'join incident', post_slack: 'notify team', page_oncall: 'page on-call', send_email_ack: 'reply to reporter', send_email_resolution: 'send resolution', escalate_to_human: 'hand to human', comment_on_incident: 'comment' };
+  const plan = r.plan.map(a => (ACT[a.type] || a.type) + (a.type === 'post_slack' && a.payload.proposal ? ' (proposal)' : '')).join(' · ');
   const el = document.createElement('div');
   el.className = 'row hidden'; el.tabIndex = 0; el.dataset.i = i;
   el.innerHTML = `<span class="t mono">${ts}</span><span class="src ${sig.source}" title="${sig.source}"></span>
     <span class="subj">${label}<small>${who}</small>${lab.is_attack ? ' <span class="badge attack">attack</span>' : ''}</span>
     <span class="corr c4"><b>${esc(corr)}</b>${rel} <span style="color:var(--ink-3)">${f3(r.correlation_confidence)}</span></span>
-    <span class="c5"><span class="chip ${prov}"><span class="dot"></span><span class="svc">${esc(inc.service || 'unknown')}</span></span></span>
+    <span class="c5"><span class="chip ${prov}" title="${esc(inc.localization_provenance)}"><span class="dot"></span><span class="svc">${esc(inc.service || 'not sure')}</span> <span class="hint">${PROV[prov]}</span></span></span>
     <span class="prio c6">${esc(pp)}<span class="rules" title="${esc(rules||'')}">${esc((rules||'').replace(']',''))}</span></span>
-    <span class="lamp ${r.tier}"><i></i>${r.tier}${r.injection_flag ? '<span class="flag">⚠</span>' : ''}</span>
+    <span class="lamp ${r.tier}" title="tier: ${r.tier}"><i></i>${TIER[r.tier]}${r.injection_flag ? '<span class="flag" title="injection suspected">⚠</span>' : ''}</span>
     <span class="plan c8" title="${esc(plan)}">${esc(plan)}</span><span class="c9"></span>`;
   el.addEventListener('click', () => select(i));
   el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(i); } });
@@ -579,7 +607,7 @@ function step() {
 function stop() { if (timer) { clearInterval(timer); timer = null; } render(); }
 $('#play').addEventListener('click', () => { if (timer) { stop(); return; } if (shown >= visibleIdx().length) shown = 0; step(); timer = setInterval(step, +$('#speed').value); render(); });
 $('#step').addEventListener('click', () => { stop(); step(); });
-$('#reset').addEventListener('click', () => { stop(); shown = 0; drawer.className = 'drawer empty'; drawer.textContent = 'Select a signal to see its state trace, the untrusted text as the pipeline saw it, the plan, and the modeled value.'; render(); });
+$('#reset').addEventListener('click', () => { stop(); shown = 0; drawer.className = 'drawer empty'; drawer.textContent = 'Select a report or alert to see each step the system took, the original text exactly as it saw it, the actions it planned, and the estimated value.'; render(); });
 $('#speed').addEventListener('change', () => { if (timer) { clearInterval(timer); timer = setInterval(step, +$('#speed').value); } });
 ['#fstratum', '#ftier', '#demoslice'].forEach(s => $(s).addEventListener('change', () => { stop(); shown = visibleIdx().length; render(); }));
 $('#q').addEventListener('input', () => { stop(); shown = visibleIdx().length; render(); if (!$('#replay').classList.contains('active') && $('#q').value) goTab('replay'); });
@@ -592,26 +620,26 @@ function select(i) {
   const members = R.filter(x => x.incident.id === inc.id).map(x => x.signal.external_id);
   const right = (inc.service || 'unknown') === lab.true_service;
   const x = impactFor(r);
-  const parts = lab.is_attack ? [['exposure avoided', x.exposure], ['triage', x.handling]] : [['triage', x.handling], ['page avoided', x.page], ['revenue protected', x.revenue], ['misroute avoided', x.misroute]];
+  const parts = lab.is_attack ? [['exposure avoided', x.exposure], ['triage time', x.handling]] : [['triage time', x.handling], ['interruption avoided', x.page], ['revenue protected', x.revenue], ['wrong-team delay avoided', x.misroute]];
   drawer.className = 'drawer';
   drawer.innerHTML = `
     <div>
-      <h3>State trace · <span class="mono">${esc(sig.external_id)}</span></h3>
+      <h3>Steps taken (state trace) · <span class="mono">${esc(sig.external_id)}</span></h3>
       <ol class="trace">${r.state_trace.map(t => `<li class="${t.split(':')[0]}">${esc(t)}</li>`).join('')}</ol>
-      <h3 style="margin-top:16px">Plan</h3>
+      <h3 style="margin-top:16px">Actions planned</h3>
       <ol class="trace">${r.plan.length ? r.plan.map(a => `<li>${esc(a.type)} → ${esc(a.payload.channel || a.payload.to || a.payload.user || a.payload.incident_id || '')} <span style="color:var(--ink-3)">${esc(a.idempotency_key.slice(0,10))}</span></li>`).join('') : '<li>none</li>'}</ol>
     </div>
     <div>
       <dl class="kv">
-        <dt>ground truth</dt><dd>${truth}</dd>
-        <dt>decision</dt><dd>${got} <span class="${right ? 'ok' : 'bad'}">${right ? '✓' : '✗'}</span></dd>
-        <dt>incident members</dt><dd>${members.map(esc).join(', ')}</dd>
+        <dt>actual answer</dt><dd>${truth}</dd>
+        <dt>system's answer</dt><dd>${got} <span class="${right ? 'ok' : 'bad'}">${right ? '✓ right service' : '✗ wrong service'}</span></dd>
+        <dt>grouped with</dt><dd>${members.map(esc).join(', ')}</dd>
         <dt>confidence</dt><dd>c_eff ${f3(r.c_eff)} · corr ${f3(r.correlation_confidence)} · loc ${f3(inc.localization_confidence)}</dd>
-        <dt>owner</dt><dd>${inc.owner ? esc(inc.owner.team) + ' ' + esc(inc.owner.slack_channel) + (inc.owner.stale ? ' (stale CODEOWNERS)' : '') : 'none'}</dd>
-        <dt>stratum</dt><dd>${esc(lab.stratum || '')}${lab.attack_family ? ' · ' + esc(lab.attack_family) : ''}${lab.vagueness ? ' · vagueness ' + esc(lab.vagueness) : ''}</dd>
-        <dt>modeled value</dt><dd><span class="money">${usd(x.total)}</span> <span class="hint">${parts.filter(p => p[1]).map(p => p[0] + ' ' + usd(p[1])).join(' · ')}</span></dd>
+        <dt>team</dt><dd>${inc.owner ? esc(inc.owner.team) + ' ' + esc(inc.owner.slack_channel) + (inc.owner.stale ? ' (stale CODEOWNERS)' : '') : 'none'}</dd>
+        <dt>kind</dt><dd>${esc(lab.stratum || '')}${lab.attack_family ? ' · ' + esc(lab.attack_family) : ''}${lab.vagueness ? ' · vagueness ' + esc(lab.vagueness) : ''}</dd>
+        <dt>estimated value</dt><dd><span class="money">${usd(x.total)}</span> <span class="hint">${parts.filter(p => p[1]).map(p => p[0] + ' ' + usd(p[1])).join(' · ')}</span></dd>
       </dl>
-      <div class="untrusted" style="margin-top:14px"><span class="lbl">untrusted ${sig.source} text, as the pipeline saw it</span>${esc(body)}</div>
+      <div class="untrusted" style="margin-top:14px"><span class="lbl">original ${sig.source === 'email' ? 'email' : 'alert'} text, treated as untrusted data</span>${esc(body)}</div>
     </div>`;
   drawer.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
@@ -624,7 +652,7 @@ shown = visibleIdx().length; render();
   $('#queue-esc').innerHTML = esc_.map(r => { const REASON = { 'service=unknown': 'no service identified', 'injection_flagged': 'injection suspected', 'c_eff<tau_prop': 'low confidence', 'non_english_policy': 'non-English, escalated by policy', 'schema_failure': 'invalid model output', 'max_tier': 'capped by live-mode policy' };
   const reasons = (r.plan[0] && r.plan[0].payload.reasons || []).map(x => REASON[x] || x).join(', '); const lab = L[r.signal.external_id] || {}; const idx = R.indexOf(r); return `<div class="item" data-i="${idx}"><span class="src ${r.signal.source}"></span><div class="l"><b>${esc(r.signal.subject || r.signal.service_tag)}${lab.is_attack ? ' <span class="badge attack">attack</span>' : ''}</b><span>${esc(reasons || 'low confidence')}${r.incident.service ? ' · ' + esc(r.incident.service) : ''}</span></div><span class="mono hint">${esc(r.signal.received_at.slice(5, 16).replace('T', ' '))}</span></div>`; }).join('') || '<div class="empty">No escalations.</div>';
   const auto = R.filter(r => r.tier === 'auto').slice(-8).reverse();
-  $('#queue-auto').innerHTML = auto.map(r => { const acts = r.plan.map(a => a.type === 'post_slack' ? a.payload.channel : a.type === 'page_oncall' ? 'page ' + a.payload.user : a.type === 'send_email_ack' ? 'ack ' + a.payload.to.split('@')[1] : null).filter(Boolean).join(' · '); const idx = R.indexOf(r); return `<div class="item" data-i="${idx}"><span class="src ${r.signal.source}"></span><div class="l"><b>${esc(r.signal.subject || r.signal.service_tag)}</b><span>${esc(r.incident.priority)} ${esc(r.incident.service)} · ${esc(acts || 'merged')}</span></div><span class="mono hint">${esc(r.signal.received_at.slice(5, 16).replace('T', ' '))}</span></div>`; }).join('') || '<div class="empty">No automatic actions.</div>';
+  $('#queue-auto').innerHTML = auto.map(r => { const acts = r.plan.map(a => a.type === 'post_slack' ? a.payload.channel : a.type === 'page_oncall' ? 'page ' + a.payload.user : a.type === 'send_email_ack' ? 'ack ' + a.payload.to.split('@')[1] : null).filter(Boolean).join(' · '); const idx = R.indexOf(r); return `<div class="item" data-i="${idx}"><span class="src ${r.signal.source}"></span><div class="l"><b>${esc(r.signal.subject || r.signal.service_tag)}</b><span>${esc(r.incident.priority)} ${esc(r.incident.service)} · ${esc(acts || 'joined an incident')}</span></div><span class="mono hint">${esc(r.signal.received_at.slice(5, 16).replace('T', ' '))}</span></div>`; }).join('') || '<div class="empty">No automatic actions.</div>';
   document.querySelectorAll('.item[data-i]').forEach(it => it.addEventListener('click', () => openInReplay(+it.dataset.i)));
 })();
 
@@ -645,10 +673,10 @@ shown = visibleIdx().length; render();
     const y = lanes[r.signal.source] + (i % 5 - 2) * 4, x = sx(r.signal.received_at);
     const lab = L[r.signal.external_id] || {};
     const shape = r.signal.source === 'telemetry' ? `<rect data-i="${i}" x="${x - 4}" y="${y - 4}" width="8" height="8" rx="2" fill="var(--${r.tier})" stroke="var(--panel)" stroke-width="1.5"/>` : `<circle data-i="${i}" cx="${x}" cy="${y}" r="4.5" fill="var(--${r.tier})" stroke="var(--panel)" stroke-width="1.5"/>`;
-    s += shape.replace('data-i', `data-tt="${esc(r.signal.external_id)}\n${esc(r.signal.received_at.slice(0, 16).replace('T', ' '))}  ${r.tier}${lab.is_attack ? '  ATTACK' : ''}\n${esc(r.incident.service || 'unknown')} · ${esc(r.incident.localization_provenance)}" data-i`);
+    s += shape.replace('data-i', `data-tt="${esc(r.signal.external_id)}\n${esc(r.signal.received_at.slice(0, 16).replace('T', ' '))}  ${TIER[r.tier]}${lab.is_attack ? '  ATTACK' : ''}\n${esc(r.incident.service || 'not sure')} · ${PROV[r.incident.localization_provenance.split(':')[0]]}" data-i`);
   });
   s += '</svg>';
-  $('#fig-timeline').innerHTML = s + `<div class="legend"><span><i style="background:var(--auto)"></i>auto</span><span><i style="background:var(--propose)"></i>propose</span><span><i style="background:var(--escalate)"></i>escalate</span><span style="margin-left:8px"><i style="background:var(--tel);border-radius:2px"></i>alert</span><span><i style="background:var(--email);border-radius:50%"></i>email</span></div>`;
+  $('#fig-timeline').innerHTML = s + `<div class="legend"><span><i style="background:var(--auto)"></i>handled</span><span><i style="background:var(--propose)"></i>needs approval</span><span><i style="background:var(--escalate)"></i>needs a human</span><span style="margin-left:8px"><i style="background:var(--tel);border-radius:2px"></i>alert</span><span><i style="background:var(--email);border-radius:50%"></i>email</span></div>`;
   $('#fig-timeline').querySelectorAll('[data-i]').forEach(mk => { hover(mk, mk.dataset.tt); mk.style.cursor = 'pointer'; mk.addEventListener('click', () => openInReplay(+mk.dataset.i)); });
 })();
 
@@ -687,20 +715,20 @@ function hBars(fig, items, color, fmt = pct, max = 1, note, W = 560, left = 170)
 
 // ---------- charts ----------
 const groundingGroups = [
-  { label: `grounded stratum · ${G.email_grounded.n} emails`, values: [GA.email_grounded.acc, G.email_grounded.acc] },
-  { label: `ungrounded stratum · ${G.email_ungrounded.n} emails`, values: [GA.email_ungrounded.acc, G.email_ungrounded.acc] },
-  { label: `telemetry · ${G.telemetry.n} alerts`, values: [GA.telemetry.acc, G.telemetry.acc] },
+  { label: `emails with a matching alert · ${G.email_grounded.n}`, values: [GA.email_grounded.acc, G.email_grounded.acc] },
+  { label: `emails with no alert · ${G.email_ungrounded.n}`, values: [GA.email_ungrounded.acc, G.email_ungrounded.acc] },
+  { label: `alerts themselves · ${G.telemetry.n}`, values: [GA.telemetry.acc, G.telemetry.acc] },
 ];
-pairedBars($('#fig-grounding'), groundingGroups, ['telemetry withheld', 'full'], ['var(--inferred)', 'var(--grounded)'], pct, 1, 560, 210);
-pairedBars($('#fig-grounding-2'), groundingGroups, ['telemetry withheld', 'full'], ['var(--inferred)', 'var(--grounded)'], pct, 1, 560, 210);
+pairedBars($('#fig-grounding'), groundingGroups, ['alert withheld', 'alert available'], ['var(--inferred)', 'var(--grounded)'], pct, 1, 560, 210);
+pairedBars($('#fig-grounding-2'), groundingGroups, ['alert withheld', 'alert available'], ['var(--inferred)', 'var(--grounded)'], pct, 1, 560, 210);
 pairedBars($('#fig-correlation'), [
   { label: 'precision', values: [CA.precision ?? 0, C.precision] },
   { label: 'recall', values: [CA.recall ?? 0, C.recall] },
   { label: 'cross-source recall', values: [CA.cross_source_recall ?? 0, C.cross_source_recall] },
-], ['telemetry withheld', 'full'], ['var(--inferred)', 'var(--grounded)']);
-$('#fig-correlation').insertAdjacentHTML('beforeend', `<figcaption>${C.false_merges} false merges · ${C.pages_avoided} pages avoided (${CA.pages_avoided} without telemetry).</figcaption>`);
-pairedBars($('#fig-ownership'), [{ label: 'team correct', values: [D.ablate_ownership.ownership.team_correct, S.ownership.team_correct] }], ['text guesses team', 'CODEOWNERS lookup'], ['var(--inferred)', 'var(--grounded)'], pct, 1, 400, 110);
-$('#fig-ownership').insertAdjacentHTML('beforeend', `<figcaption>${S.ownership.misroutes} misroutes with the lookup (all upstream localization errors) vs. ${D.ablate_ownership.ownership.misroutes} with the guess, ${D.nonexistent_teams} of them to teams that do not exist.</figcaption>`);
+], ['alerts withheld', 'alerts available'], ['var(--inferred)', 'var(--grounded)']);
+$('#fig-correlation').insertAdjacentHTML('beforeend', `<figcaption>${C.false_merges} wrong groupings · ${C.pages_avoided} pages avoided (${CA.pages_avoided} without alerts).</figcaption>`);
+pairedBars($('#fig-ownership'), [{ label: 'team correct', values: [D.ablate_ownership.ownership.team_correct, S.ownership.team_correct] }], ['guessed from text', 'CODEOWNERS lookup'], ['var(--inferred)', 'var(--grounded)'], pct, 1, 400, 110);
+$('#fig-ownership').insertAdjacentHTML('beforeend', `<figcaption>${S.ownership.misroutes} wrong-team cases with the lookup (all caused by a wrong service upstream) vs. ${D.ablate_ownership.ownership.misroutes} by guessing, ${D.nonexistent_teams} of them to teams that do not exist.</figcaption>`);
 
 (function reliability() {
   const W = 340, H = 300, m = { l: 44, r: 14, t: 12, b: 40 };
@@ -711,26 +739,27 @@ $('#fig-ownership').insertAdjacentHTML('beforeend', `<figcaption>${S.ownership.m
   s += [0, .5, 1].map(v => `<text class="dim" x="${sx(v)}" y="${H - 20}" text-anchor="middle">${v}</text><text class="dim" x="${m.l - 8}" y="${sy(v) + 4}" text-anchor="end">${v}</text>`).join('');
   s += `<text x="${sx(.5)}" y="${H - 4}" text-anchor="middle">stated confidence</text><text transform="translate(12 ${sy(.5)}) rotate(-90)" text-anchor="middle">hit rate</text>`;
   const series = [['grounded', 'var(--grounded)'], ['ungrounded', 'var(--inferred)']];
+  const SNAME = { grounded: 'service from alert', ungrounded: 'service guessed or unsure' };
   series.forEach(([name, col]) => (S.calibration[name].bins || []).filter(b => b.n).forEach(b => {
     const r = 5 + Math.min(9, Math.sqrt(b.n) * 1.4);
     s += `<circle data-tt="${name} · bin ${b.bin}\nn=${b.n}  conf=${b.conf}  acc=${b.acc}" cx="${sx(b.conf)}" cy="${sy(b.acc)}" r="${r}" fill="${col}" fill-opacity=".85" stroke="var(--panel)" stroke-width="2"/>`;
   }));
   s += '</svg>';
-  $('#fig-reliability').innerHTML = s + `<div class="legend">${series.map(([n, c]) => `<span><i style="background:${c};border-radius:50%"></i>${n} · ECE ${f3(S.calibration[n].ece)}</span>`).join('')}</div>`;
+  $('#fig-reliability').innerHTML = s + `<div class="legend">${series.map(([n, c]) => `<span><i style="background:${c};border-radius:50%"></i>${SNAME[n]} · calibration error ${f3(S.calibration[n].ece)}</span>`).join('')}</div>`;
   $('#fig-reliability').querySelectorAll('circle[data-tt]').forEach(c => hover(c, c.dataset.tt));
 })();
 
 (function tiers() {
   const t = S.tier_distribution, em = S.email_tiers;
   const bar = ['auto', 'propose', 'escalate'].map(k => `<div class="${k}" style="flex:${(t[k] || 0) * 100}" data-tt="${k}: ${pct(t[k])}">${(t[k] || 0) > .14 ? pct(t[k]) : ''}</div>`).join('');
-  $('#fig-tiers').innerHTML = `<div class="tierbar">${bar}</div><div class="legend">${['auto', 'propose', 'escalate'].map(k => `<span><i style="background:var(--${k})"></i>${k} ${pct(t[k])}</span>`).join('')}</div>
-    <figcaption>Emails: ${em.auto || 0} auto · ${em.propose || 0} propose · ${em.escalate || 0} escalate. Every auto-tier email was grounded. With Sentry withheld: ${D.no_telemetry ? (D.no_telemetry.email_tiers.auto || 0) + ' auto, ' + (D.no_telemetry.email_tiers.escalate || 0) + ' escalate' : 'n/a'}.</figcaption>`;
+  $('#fig-tiers').innerHTML = `<div class="tierbar">${bar}</div><div class="legend">${['auto', 'propose', 'escalate'].map(k => `<span><i style="background:var(--${k})"></i>${TIER[k]} ${pct(t[k])}</span>`).join('')}</div>
+    <figcaption>Customer emails: ${em.auto || 0} handled · ${em.propose || 0} needed approval · ${em.escalate || 0} needed a human. Every email it handled itself had its service from an alert. With all alerts withheld: ${D.no_telemetry ? (D.no_telemetry.email_tiers.auto || 0) + ' handled, ' + (D.no_telemetry.email_tiers.escalate || 0) + ' needed a human' : 'n/a'}.</figcaption>`;
   $('#fig-tiers').querySelectorAll('[data-tt]').forEach(c => hover(c, c.dataset.tt));
 })();
 
-hBars($('#fig-services'), D.per_service.map(x => ({ label: x.service, v: x.acc, n: x.n })), it => it.v >= .75 ? 'var(--seq-4)' : it.v >= .5 ? 'var(--seq-3)' : 'var(--seq-2)', pct, 1, 'Non-attack emails, localized service vs. true service. Sequential shading by accuracy.');
-hBars($('#fig-vague'), D.per_vagueness.map(x => ({ label: x.level.split(' (')[0], v: x.acc, n: x.n })), 'var(--grounded)', pct, 1, 'high = symptom only · medium = feature named · low = endpoint named. Grounding carries the high bucket.', 400, 90);
-hBars($('#fig-sizes'), D.incident_sizes.map(x => ({ label: `${x.size} signal${x.size > 1 ? 's' : ''}`, v: x.count })), 'var(--grounded)', v => String(v), Math.max(...D.incident_sizes.map(x => x.count)), `${C.pages_avoided} pages avoided by correlation across ${S.n_incidents} incidents.`, 400, 90);
+hBars($('#fig-services'), D.per_service.map(x => ({ label: x.service, v: x.acc, n: x.n })), it => it.v >= .75 ? 'var(--seq-4)' : it.v >= .5 ? 'var(--seq-3)' : 'var(--seq-2)', pct, 1, 'Customer emails only. Darker means more accurate.');
+hBars($('#fig-vague'), D.per_vagueness.map(x => ({ label: x.level.split(' (')[0], v: x.acc, n: x.n })), 'var(--grounded)', pct, 1, 'Symptom-only emails are the hardest; inheriting from an alert is what carries them.', 400, 90);
+hBars($('#fig-sizes'), D.incident_sizes.map(x => ({ label: `${x.size} signal${x.size > 1 ? 's' : ''}`, v: x.count })), 'var(--grounded)', v => String(v), Math.max(...D.incident_sizes.map(x => x.count)), `${C.pages_avoided} pages avoided by grouping across ${S.n_incidents} incidents.`, 400, 90);
 
 (function prio() {
   const P = ['P1', 'P2', 'P3', 'P4'], Mx = D.priority_matrix, max = Math.max(1, ...Mx.flat());
@@ -747,7 +776,7 @@ hBars($('#fig-sizes'), D.incident_sizes.map(x => ({ label: `${x.size} signal${x.
     });
   });
   s += '</svg>';
-  $('#fig-prio').innerHTML = s + `<figcaption>Within-one ${pct(S.priority.within_one)} · exact ${pct(S.priority.exact)}.</figcaption>`;
+  $('#fig-prio').innerHTML = s + `<figcaption>Within one level ${pct(S.priority.within_one)} · exactly right ${pct(S.priority.exact)}.</figcaption>`;
   $('#fig-prio').querySelectorAll('rect[data-tt]').forEach(c => hover(c, c.dataset.tt));
 })();
 
@@ -786,9 +815,9 @@ $('#runinfo').innerHTML = [['run', D.run_id], ['backend', D.backend], ['generate
 (function attacks() {
   const fam = {};
   S.attacks.rows.forEach(a => { const k = a.family.replace(/_/g, ' '); fam[k] = fam[k] || { n: 0, blocked: 0 }; fam[k].n++; if (a.blocked) fam[k].blocked++; });
-  hBars($('#fig-attacks'), Object.entries(fam).map(([k, v]) => ({ label: k, v: v.blocked / v.n, n: v.n })), 'var(--auto)', pct, 1, `${S.attacks.blocked} / ${S.attacks.n} blocked · ${S.attacks.flagged} detected. Blocking does not depend on detection.`, 460, 190);
-  const rowsA = S.attacks.rows.map(a => { const idx = R.findIndex(r => r.signal.external_id === a.external_id); return `<tr><td class="mono"><a href="#" data-i="${idx}">${esc(a.external_id)}</a></td><td>${esc(a.family.replace(/_/g, ' '))}</td><td><span class="lamp ${a.tier}"><i></i>${a.tier}</span></td><td class="mono">${esc(a.decision)}</td><td class="mono">${a.priority}</td><td>${a.injection_flag ? 'yes' : '<span style="color:var(--ink-3)">no</span>'}</td><td>${a.blocked ? '<span class="ok">blocked</span>' : '<span class="bad">' + esc(a.violations.join(', ')) + '</span>'}</td></tr>`; }).join('');
-  $('#attacktable').innerHTML = `<thead><tr><th>Signal</th><th>Family</th><th>Tier</th><th>Correlation</th><th>Priority</th><th>Detected</th><th>Outcome</th></tr></thead><tbody>${rowsA}</tbody>`;
+  hBars($('#fig-attacks'), Object.entries(fam).map(([k, v]) => ({ label: k, v: v.blocked / v.n, n: v.n })), 'var(--auto)', pct, 1, `${S.attacks.blocked} of ${S.attacks.n} stopped · ${S.attacks.flagged} noticed. Stopping does not depend on noticing.`, 460, 190);
+  const rowsA = S.attacks.rows.map(a => { const idx = R.findIndex(r => r.signal.external_id === a.external_id); return `<tr><td class="mono"><a href="#" data-i="${idx}">${esc(a.external_id)}</a></td><td>${esc(a.family.replace(/_/g, ' '))}</td><td>${lamp(a.tier)}</td><td>${esc(corrText(a.decision))}</td><td class="mono">${a.priority}</td><td>${a.injection_flag ? 'yes' : '<span style="color:var(--ink-3)">no</span>'}</td><td>${a.blocked ? '<span class="ok">stopped</span>' : '<span class="bad">' + esc(a.violations.join(', ')) + '</span>'}</td></tr>`; }).join('');
+  $('#attacktable').innerHTML = `<thead><tr><th>Message</th><th>Type</th><th>Decision</th><th>Grouping</th><th>Priority</th><th>Noticed</th><th>Result</th></tr></thead><tbody>${rowsA}</tbody>`;
   $('#attacktable').querySelectorAll('a[data-i]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openInReplay(+a.dataset.i); }));
 })();
 
@@ -796,7 +825,7 @@ $('#runinfo').innerHTML = [['run', D.run_id], ['backend', D.backend], ['generate
 (function failures() {
   const fails = R.filter(r => { const l = L[r.signal.external_id]; return l && !l.is_attack && (r.incident.service || 'unknown') !== l.true_service; });
   $('#cnt-failures').textContent = fails.length;
-  $('#gallery').innerHTML = fails.length ? fails.map(r => { const l = L[r.signal.external_id]; const idx = R.indexOf(r); return `<div class="fail"><div class="h"><b>${esc(r.signal.external_id)}</b><span class="eyebrow">${esc(l.stratum)}</span><span>true <code>${esc(l.true_service)}</code> got <code>${esc(r.incident.service || 'unknown')}</code></span><span class="chip ${r.incident.localization_provenance.split(':')[0]}"><span class="dot"></span>${esc(r.incident.localization_provenance)}</span><span class="lamp ${r.tier}"><i></i>${r.tier}</span><button class="ghost sm" data-i="${idx}" style="margin-left:auto">Open in replay</button></div><div class="why mono" style="font-size:12px">${esc(r.state_trace.join(' → '))}</div><div class="why">${esc(r.signal.subject || r.signal.error_message || '')}</div></div>`; }).join('') : '<div class="empty">No localization failures.</div>';
+  $('#gallery').innerHTML = fails.length ? fails.map(r => { const l = L[r.signal.external_id]; const idx = R.indexOf(r); return `<div class="fail"><div class="h"><b>${esc(r.signal.external_id)}</b><span class="eyebrow">${esc(l.stratum)}</span><span>actual <code>${esc(l.true_service)}</code>, answered <code>${esc(r.incident.service || 'not sure')}</code></span><span class="chip ${r.incident.localization_provenance.split(':')[0]}" title="${esc(r.incident.localization_provenance)}"><span class="dot"></span>${PROV[r.incident.localization_provenance.split(':')[0]]}</span>${lamp(r.tier)}<button class="ghost sm" data-i="${idx}" style="margin-left:auto">See what it did</button></div><div class="why mono" style="font-size:12px">${esc(r.state_trace.join(' → '))}</div><div class="why">${esc(r.signal.subject || r.signal.error_message || '')}</div></div>`; }).join('') : '<div class="empty">Every service was right.</div>';
   $('#gallery').querySelectorAll('button[data-i]').forEach(b => b.addEventListener('click', () => openInReplay(+b.dataset.i)));
 })();
 
