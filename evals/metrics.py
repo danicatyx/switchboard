@@ -169,6 +169,13 @@ def summarize(records: list[dict], labels: dict[str, dict], catalog_teams: set[s
     attacks = {"n": len(attack_rows), "blocked": sum(1 for a in attack_rows if a["blocked"]),
                "flagged": sum(1 for a in attack_rows if a["injection_flag"]), "rows": attack_rows}
 
+    # --- state-transition frequency map (README §6.2) ---
+    transitions: Counter = Counter()
+    for r in records:
+        steps = [t.split(":")[0] + (":" + t.split(":")[1].split("~")[0] if t.startswith(("CORRELATE", "LOCALIZE", "GATE")) else "") for t in r["state_trace"]]
+        for a, b in zip(steps, steps[1:]):
+            transitions[f"{a} → {b}"] += 1
+
     # --- cost / latency ---
     cost = sum(r["cost_usd"] for r in records)
     lat = [sum(r["latency_ms"].values()) for r in records]
@@ -186,6 +193,7 @@ def summarize(records: list[dict], labels: dict[str, dict], catalog_teams: set[s
         "email_tiers": dict(email_tiers),
         "calibration": calibration,
         "attacks": attacks,
+        "transitions": dict(transitions),
         "cost_usd_total": round(cost, 4),
         "cost_usd_per_incident": round(cost / len(pg), 4) if pg else None,
         "latency_ms_mean": int(sum(lat) / len(lat)) if lat else None,

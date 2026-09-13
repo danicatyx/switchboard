@@ -46,6 +46,16 @@ def main():
     for r in a["rows"]:
         print(f"   {r['external_id']:<14} {r['family']:<24} tier={r['tier']:<9} {r['decision']:<14} {r['priority']}  {r['violations'] or ''}")
 
+    print("\nRELIABILITY (c_eff bins → empirical hit rate; correct = service and grouping both right)")
+    for name in ("grounded", "ungrounded"):
+        rows = [b for b in cal[name]["bins"] if b["n"]]
+        print(f"  {name:<11} " + "  ".join(f"[{b['bin']*0.2:.1f}-{(b['bin']+1)*0.2:.1f}] n={b['n']} conf={b['conf']:.2f} acc={b['acc']:.2f}" for b in rows))
+
+    if "transitions" in full:
+        print("\nSTATE TRANSITIONS (frequency; the weakest stage is where escalations concentrate)")
+        for k, v in sorted(full["transitions"].items(), key=lambda kv: -kv[1]):
+            print(f"  {v:3d}  {k}")
+
 
 if __name__ == "__main__":
     main()

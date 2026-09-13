@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from .models import Incident, Signal
 
@@ -48,3 +50,17 @@ class IncidentStore:
             return False
         lo, hi = ts - timedelta(days=days), ts - timedelta(hours=24)
         return any(i.service == service and i.id != exclude and lo <= i.opened_at < hi for i in self.incidents.values())
+
+    # -- persistence (live mode and resolve) ---------------------------------
+    def save(self, path: str | Path) -> None:
+        Path(path).write_text(json.dumps({"n": self._n, "incidents": {k: v.model_dump(mode="json") for k, v in self.incidents.items()}}, indent=1))
+
+    @classmethod
+    def load(cls, path: str | Path) -> "IncidentStore":
+        st = cls()
+        p = Path(path)
+        if p.exists():
+            data = json.loads(p.read_text())
+            st._n = data["n"]
+            st.incidents = {k: Incident.model_validate(v) for k, v in data["incidents"].items()}
+        return st

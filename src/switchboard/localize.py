@@ -50,13 +50,12 @@ class LocalizationResult:
 
 
 def _base_priority_from_telemetry(signal: Signal) -> Priority:
-    d = signal.error_rate_delta or 0.0
+    """Base from affected users only. The error-rate delta belongs to the rule
+    layer (`error_rate_spike`); using it here too would count it twice."""
     users = signal.affected_users or 0
-    if d >= 10 or users >= 1000:
-        return "P1"
-    if d >= 5 or users >= 200:
+    if users >= 1000:
         return "P2"
-    if d >= 2 or users >= 20:
+    if users >= 50:
         return "P3"
     return "P4"
 

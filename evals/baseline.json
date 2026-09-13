@@ -1,0 +1,13 @@
+{
+  "localization telemetry": 1.0,
+  "localization email grounded stratum": 0.8,
+  "localization email ungrounded stratum": 0.444,
+  "grounding ablation: email grounded stratum": 0.467,
+  "ownership team correct": 0.933,
+  "correlation precision": 0.882,
+  "correlation recall": 0.455,
+  "cross-source recall": 0.55,
+  "priority within one": 0.941,
+  "attacks blocked fraction": 1.0,
+  "no-telemetry emails in auto": 0.0
+}

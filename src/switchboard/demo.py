@@ -74,6 +74,15 @@ def main() -> None:
         print()
         time.sleep(0.6)
 
+    # Close the loop: resolve the first incident, then retry to show the WAL refuses to double-send.
+    from .resolve import resolve
+    print(f"{B}── Resolve SB-001{R}  (one email per correlated reporter, via the executor)\n")
+    sys.stdout.flush()
+    for r in resolve(store.incidents["SB-001"], executor, "Root cause: a timezone change in the export scheduler's 2.14.0 release. Rolled back; your scheduled exports have been re-run."):
+        print(f"   {r.action.type} → {r.action.payload['to']}: {r.detail}")
+    print(f"   retry → " + ", ".join(r.detail for r in resolve(store.incidents["SB-001"], executor)))
+    print()
+
     # Grounding comparison: re-run the two emails with telemetry withheld from candidates.
     print(f"{B}── Grounding comparison{R}  (same two emails, telemetry withheld from the correlation index)\n")
     store2 = IncidentStore()

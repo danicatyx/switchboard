@@ -112,7 +112,8 @@ class Executor:
                 raise AllowlistViolation(f"recipient {p['to']} not a reporter on {p['incident_id']}")
             body = (f"Thanks for your report. We've opened incident {p['incident_id']} and the owning team is on it. "
                     f"We'll email you again when it's resolved.") if a.type == "send_email_ack" else \
-                   f"Incident {p['incident_id']} is resolved. Thanks again for reporting it."
+                   (f"The issue you reported ({p['incident_id']}) is resolved. Thanks again for letting us know."
+                    + (f"\n\n{p['note']}" if p.get("note") else ""))
             self.write.gmail.send(p["to"], p["subject"] if "subject" in p else f"Update on {p['incident_id']}", body, p.get("thread_ref"))
             return f"emailed {p['to']}"
         raise AllowlistViolation(f"unhandled action {a.type}")

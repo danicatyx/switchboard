@@ -42,6 +42,7 @@ def main() -> None:
     ap.add_argument("--once", action="store_true")
     ap.add_argument("--poll", type=int, default=30)
     ap.add_argument("--no-sync", action="store_true", help="skip GitHub sync at startup")
+    ap.add_argument("--state", default="state.json", help="incident store persisted here (used by switchboard.resolve)")
     args = ap.parse_args()
     sources = set(args.sources.split(","))
 
@@ -55,7 +56,7 @@ def main() -> None:
         sources.discard("gmail")
 
     creds = WriteCredentials.from_env()
-    store = IncidentStore()
+    store = IncidentStore.load(args.state)
     executor = Executor(creds, WAL("wal.json"), lambda inc_id: store.incidents[inc_id].reporters)
     cfg = Config(run_id=f"live-{int(time.time())}")
     seen_sentry: set[str] = set()
@@ -82,6 +83,7 @@ def main() -> None:
                 rec.state_trace.append(f"DEMOTED:{rec.tier}")
             rec.executed = executor.execute(rec.plan)
             print(f"{raw['external_id']:<40} {' → '.join(rec.state_trace)}", file=sys.stderr)
+        store.save(args.state)
         if args.once:
             break
         time.sleep(args.poll)

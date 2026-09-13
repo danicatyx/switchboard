@@ -84,7 +84,8 @@ class Incident(BaseModel):
     applied_rules: list[str] = Field(default_factory=list)
     opened_at: datetime
     paged: bool = False
-    injection_flagged: bool = False              # sticky: set by any flagged signal, blocks AUTO for all
+    injection_flagged: bool = False
+    resolved: bool = False              # sticky: set by any flagged signal, blocks AUTO for all
     possible_relations: list[str] = Field(default_factory=list)
 
     @property

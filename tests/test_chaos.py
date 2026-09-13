@@ -2,10 +2,6 @@
 from evals.run import load_corpus, replay
 from switchboard.config import Config
 
-from .conftest import needs_api
-
-pytestmark = needs_api
-
 
 def test_withholding_telemetry_demotes_every_email():
     signals, labels = load_corpus()
