@@ -1,4 +1,4 @@
-"""python -m switchboard.sync — pull CODEOWNERS, catalog and deploy history from GitHub."""
+"""python -m switchboard.sync - pull CODEOWNERS, catalog and deploy history from GitHub."""
 import sys
 
 from dotenv import load_dotenv

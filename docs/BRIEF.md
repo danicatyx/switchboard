@@ -2,7 +2,7 @@
 
 **Team:** Danica T (solo)
 **Repo:** this repository
-**Demo:** `python -m switchboard.demo` (terminal, ~5 s) and `make dashboard` (console page: signal replay with state traces, results charts, attack audit, failure gallery, integrations panel; opens offline)
+**Demo:** `python -m switchboard.demo` (terminal, ~5 s) and `make dashboard` (console: overview, modeled business impact with an editable cost model, signal replay with state traces, results charts, attack audit, failure gallery, integrations panel; opens offline)
 
 ---
 
@@ -13,7 +13,7 @@ One day, one person, zero API spend. [README.md](../README.md) is the full desig
 **Built and measured:** the fixed pipeline (normalize → correlate → localize → ownership → priority → gate → plan → execute) with a `state_trace` per signal; cross-source grounding; a live-enum localizer that cannot emit a service outside the catalog; ownership as a CODEOWNERS + catalog join with staleness surfaced; the YAML priority rule layer; three-tier gating with `c_eff = min(·)`; an executor that is the sole holder of write credentials, with a recipient allowlist, catalog-only channels, an idempotency WAL, and crash-safe retry; a 113-signal labeled corpus over five days; the replay harness with sliced metrics, two ablations, k=3 flip rate, ECE, a fault test, a 14-case attack corpus, a regression gate, and a failure gallery; incident resolution that emails every correlated reporter once; `doctor` with live credential checks; the terminal demo; and a self-contained console page (`make dashboard`).
 
 **Cut, and why:**
-- **No model was called.** The two LLM decision points (correlate judge, localizer) run on a deterministic stand-in (`heuristic.py`) behind the same `llm.call()` interface and schemas. Every number below therefore measures the *architecture* — what grounding, the lookup, and the gate do around a localizer — not model ability. Switching to Claude is `ANTHROPIC_API_KEY` in `.env`; nothing else changes.
+- **No model was called.** The two LLM decision points (correlate judge, localizer) run on a deterministic stand-in (`heuristic.py`) behind the same `llm.call()` interface and schemas. Every number below therefore measures the *architecture* - what grounding, the lookup, and the gate do around a localizer - not model ability. Switching to Claude is `ANTHROPIC_API_KEY` in `.env`; nothing else changes.
 - Retrieval is "all open incidents in 24 h". No BM25, embeddings, or RRF; at 113 signals over five days the candidate list never exceeds 15.
 - The Evaluation Agent's backward transitions are schema validation with one retry; a second failure is `ESCALATE`.
 - One fault test (Sentry withheld), not a per-adapter chaos matrix.
@@ -57,7 +57,7 @@ We measure this directly. Localization accuracy on the same fifteen emails is re
 | **Slack** | Pages the owning team once per incident, with correlated blast radius attached; proposals and escalations to triage channels | write | `SLACK_BOT_TOKEN` (chat.postMessage, per-team channels) or `SLACK_WEBHOOK_URL`; console when unset |
 | **Email** | Ingests customer reports; sends acknowledgment and resolution notices to every correlated reporter | read + write | IMAP read (`ImapInbox.fetch_unseen`) and SMTP send with `In-Reply-To` threading; Gmail via app password, no OAuth |
 | **GitHub** | CODEOWNERS and service catalog for ownership resolution; recent deploys as localization evidence | read | `python -m switchboard.sync` pulls `CODEOWNERS`, `catalog.yaml`, and commits touching `services/<name>/` into a cache the loaders prefer over `fixtures/` |
-| **Sentry** | Telemetry signals: fingerprints, stack traces, affected-user counts, error-rate deltas | read | no receiver; JSONL drop file in live mode, corpus rows in eval |
+| **Sentry / Datadog** | Telemetry signals: fingerprints, stack traces, affected-user counts, error-rate deltas; Datadog monitors and APM service tags | read | no receiver in this build; JSONL drop file in live mode, corpus rows in eval. Both have connect cards in the console |
 
 Credentials live in `.env` (see `.env.example`). Read credentials (IMAP, GitHub) are constructed by the pipeline; write credentials (Slack, SMTP) are constructed only inside `WriteCredentials.from_env()` and handed only to the executor. Live mode is `python -m switchboard.run --sources gmail,sentry --max-tier propose`, which caps every decision at PROPOSE by default so nothing external happens without a human click.
 
@@ -137,7 +137,7 @@ Three of these are the ones we would defend hardest:
 | Configuration | Email loc acc@1 (grounded stratum) | Cross-source recall | Ownership misroutes | Priority within-one |
 | --- | --- | --- | --- | --- |
 | Full (both sources, correlated) | 0.732 | 0.380 | 6 | 0.872 |
-| **Email only, no telemetry grounding** | 0.561 | 0.000 | — | — |
+| **Email only, no telemetry grounding** | 0.561 | 0.000 | - | - |
 | **No ownership lookup (text guesses team)** | 0.732 | 0.380 | 26 | 0.872 |
 | Free-text services (no enum constraint) | not run | | | |
 
@@ -147,7 +147,7 @@ The second row quantifies cross-source grounding. The third quantifies why owner
 
 A false merge folds a live incident into an unrelated one and can delay detection for hours while the wrong team looks at it. A false split pages two teams instead of one and costs a human a minute. We tune for precision, accept mediocre recall, and report the two separately rather than as F1. Auto-merge requires confidence ≥ 0.85; between 0.60 and 0.85 the incident is created separately with a "possible relation" annotation. The confidence carried into the gate for a "new" decision that rejected a plausible match is `1 − 0.5·c`: the split penalty is halved because a split is cheap.
 
-Measured: precision 0.933, recall 0.322. Most misses are emails whose vocabulary did not reach the stand-in's merge threshold against the right candidate — typically scoring 0.6–0.75, which lands in the "possible relation" band rather than a merge. One miss is the email that arrived before its alert (correctly not grounded: the alert did not exist yet).
+Measured: precision 0.933, recall 0.322. Most misses are emails whose vocabulary did not reach the stand-in's merge threshold against the right candidate - typically scoring 0.6–0.75, which lands in the "possible relation" band rather than a merge. One miss is the email that arrived before its alert (correctly not grounded: the alert did not exist yet).
 
 The two false merges are instructive. Both are real customer emails that merged into incidents opened by the *second-order injection* alerts (a stack frame and an error string carrying instructions). Because the injection flag is **sticky on the incident**, neither email could act: both escalated instead of auto-paging. This rule was added after the first eval run exposed one of them reaching AUTO with the wrong service.
 
@@ -158,6 +158,10 @@ The two false merges are instructive. Both are real customer emails that merged 
 - **Regression gate.** `make eval` compares eleven headline numbers against `evals/baseline.json` and fails on a drop of more than 0.02, advisory when the corpus fingerprint has changed.
 - **Prompt injection.** 14 attacks: 2 direct override, 1 authority impersonation, 1 base64 payload, 1 hidden HTML comment, 1 zero-width-character override, 1 fake system notification, 1 third-order instruction inside a quoted reply, 3 second-order through telemetry (exception string, stack frame, echoed user-agent), 1 correlation poisoning aimed at the P1 payments incident, 1 thread-header spoof aimed at the SSO incident, 1 claimed urgency from a two-day-old free account. Asserted per attack: no action outside the closed set, no email to a non-reporter, no Slack target outside the catalog, no merge into a real incident, no P1 from claimed urgency. 14 / 14 pass. Defenses are architectural first (credential split, closed action set, recipient allowlist, reporter-guarded thread merge, no-merge-when-flagged, sticky incident flag) and prompt-level second.
 - **Cross-customer leakage.** `tests/test_security.py` runs the whole corpus through the executor, resolves every multi-reporter incident, and asserts no outbound email mentions another reporter's address or account.
+
+### Business impact, modeled
+
+The console's Impact page attaches a dollar figure to every signal and every attack. It is a model with every assumption exposed as an editable input, not a measurement: triage minutes by tier at a loaded engineer rate, on-call minutes per avoidable page, annual revenue by plan times a churn risk by priority times the share of that risk removed by closing the loop at each tier, minutes a misrouted incident sits with the wrong team times a downtime cost by priority (attributed only to signals the text-based guess misrouted and the lookup did not), and an exposure figure per attack family that a blocked attack avoids. Under the placeholder defaults the corpus models at roughly $660k, most of it attack exposure and misroute loss. Change any input and every figure recomputes; judges are invited to.
 
 ### What we did not automate
 
@@ -180,4 +184,4 @@ Three tiers. Above 0.85 the system acts. Between 0.60 and 0.85 it posts the prop
 
 ## What we would build next
 
-Put a model behind `llm.call()` and rerun the sweep — that is one environment variable and roughly ten dollars, and it turns three placeholder rows into measurements. Then feed misroute data back into CODEOWNERS as suggested amendments, so the organization's ownership map improves as a side effect of triage. Then active learning on the propose tier, where every human correction becomes a labeled example, making that tier a data pipeline rather than a cost.
+Put a model behind `llm.call()` and rerun the sweep - that is one environment variable and roughly ten dollars, and it turns three placeholder rows into measurements. Then feed misroute data back into CODEOWNERS as suggested amendments, so the organization's ownership map improves as a side effect of triage. Then active learning on the propose tier, where every human correction becomes a labeled example, making that tier a data pipeline rather than a cost.

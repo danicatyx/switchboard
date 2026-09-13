@@ -1,9 +1,9 @@
 """Hand-written customer emails for the corpus, keyed by (incident id, index).
 
 Written to the same vagueness rules the model generator uses:
-  high   — symptom only; no feature, service, endpoint, or error names
-  medium — may name the feature
-  low    — may include an endpoint, status code, or error text
+  high - symptom only; no feature, service, endpoint, or error names
+  medium - may name the feature
+  low - may include an endpoint, status code, or error text
 """
 
 DRAFTS: dict[tuple[str, int], tuple[str, str]] = {
@@ -40,7 +40,7 @@ DRAFTS: dict[tuple[str, int], tuple[str, str]] = {
         "the app on my iphone isn't showing anything new. i pull down to refresh and it just snaps back and nothing changes. been like this for an hour. i'm out on site so i can't use a laptop\n\n-jake, umbrella",
     ),
     ("INC-04", 1): (
-        "Android app sync failures — multiple users",
+        "Android app sync failures - multiple users",
         "Hi team,\n\nWe're getting a steady stream of internal tickets from Android users saying the mobile app won't sync: new items don't appear and pull-to-refresh does nothing. iOS users are reporting the same. The web app is fine. Started around 12:30 UTC.\n\nHappy to collect device logs if useful.\n\nNate Kwan\nSupport Lead, Hooli",
     ),
     # INC-05 file-storage -----------------------------------------------------

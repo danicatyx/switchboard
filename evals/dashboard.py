@@ -82,6 +82,15 @@ def integrations() -> list[dict]:
                      dict(env="SENTRY_WEBHOOK_SECRET", label="Webhook signing secret", secret=True)],
              mcp_fields=[dict(env="SENTRY_MCP_URL", label="MCP server URL", placeholder="https://mcp.sentry.dev/mcp"),
                          dict(env="SENTRY_MCP_TOKEN", label="MCP bearer token", secret=True)]),
+        dict(key="datadog", name="Datadog", abbr="DD", direction="read", held_by="pipeline", live=bool(os.environ.get("DD_API_KEY") and os.environ.get("DD_APP_KEY")),
+             detail=os.environ.get("DD_SITE", "") if os.environ.get("DD_API_KEY") else "",
+             role="Telemetry from monitors and APM: monitor alerts as signals, service tags from APM, error-rate deltas from metrics queries, deploy markers as localization evidence.",
+             capabilities=["monitor webhooks", "APM service tags", "metrics query", "deploy events"], transports=["Direct", "MCP"],
+             direct_hint="API and application keys with monitors_read and apm_read scopes. Monitor alerts arrive through a webhook; error-rate deltas come from a metrics query at signal time.",
+             fields=[dict(env="DD_API_KEY", label="API key", secret=True), dict(env="DD_APP_KEY", label="Application key", secret=True),
+                     dict(env="DD_SITE", label="Site", placeholder="datadoghq.com"), dict(env="DD_WEBHOOK_SECRET", label="Webhook signing secret", secret=True)],
+             mcp_fields=[dict(env="DD_MCP_URL", label="MCP server URL", placeholder="https://mcp.datadoghq.com/api/unstable/mcp-server/mcp"),
+                         dict(env="DD_MCP_TOKEN", label="MCP bearer token", secret=True)]),
         dict(key="linear", name="Linear", abbr="Li", direction="read + write", held_by="pipeline / executor", live=False, detail="",
              role="Incident records: create, merge signals into, and comment on incidents. No action closes, deletes, or reassigns.",
              capabilities=["create issue", "comment", "labels", "no destructive actions"], transports=["Direct", "MCP"],
@@ -90,6 +99,28 @@ def integrations() -> list[dict]:
              mcp_fields=[dict(env="LINEAR_MCP_URL", label="MCP server URL", placeholder="https://mcp.linear.app/mcp"),
                          dict(env="LINEAR_MCP_TOKEN", label="MCP bearer token", secret=True)]),
     ]
+
+
+IMPACT_DEFAULTS = {
+    # Every figure is an assumption. The page exposes all of them as inputs.
+    "rate": 150,            # loaded engineer cost per hour, USD
+    "manual_min": 15,       # minutes a human spends triaging one signal by hand
+    "auto_min": 1,          # minutes to glance at an auto-tier decision
+    "propose_min": 4,       # minutes to approve or edit a proposal
+    "escalate_min": 15,     # minutes for an escalation (same as manual)
+    "page_min": 30,         # on-call minutes lost per avoidable page (interruption + context switch)
+    "arr_enterprise": 120000, "arr_pro": 9600, "arr_free": 0,   # annual revenue per account by plan
+    "churn_P1": 0.03, "churn_P2": 0.015, "churn_P3": 0.005, "churn_P4": 0.001,   # churn risk from an unacknowledged report
+    "loop_auto": 1.0, "loop_propose": 0.7, "loop_escalate": 0.4,                  # share of that risk removed by closing the loop at each tier
+    "misroute_min": 45,     # minutes a misrouted incident sits with the wrong team
+    "down_P1": 400, "down_P2": 80, "down_P3": 10, "down_P4": 0,                  # cost per minute of an unresolved incident by priority
+    "exp_correlation_poisoning": 75000, "exp_thread_spoof_poisoning": 75000,     # cross-customer data exposure
+    "exp_fake_system_message": 40000, "exp_direct_override": 40000,              # mass mis-email or wrong-channel disclosure
+    "exp_authority_impersonation": 15000, "exp_encoded_payload": 15000, "exp_hidden_html_comment": 15000,
+    "exp_zero_width_override": 15000, "exp_third_order_quoted": 15000,           # wasted response + wrong pages
+    "exp_second_order_telemetry": 10000,                                          # instructions smuggled through error payloads
+    "exp_priority_manipulation": 2500,                                            # one wasted P1 response
+}
 
 
 def build(out: Path) -> Path:
@@ -129,6 +160,18 @@ def build(out: Path) -> Path:
         matrix[P.index(l["true_priority"])][P.index(r["incident"]["priority"])] += 1
     per_day = Counter(r["signal"]["received_at"][:10] for r in recs)
     nonexistent = sum(1 for r in own_recs for t in r["state_trace"] if t.startswith("OWNERSHIP:guessed:NONEXISTENT"))
+    # Signals the text-based guess misrouted that the lookup routed correctly: the lookup's per-signal value.
+    misrouted_by_guess = []
+    full_ok = {r["signal"]["external_id"]: (r["incident"]["owner"] or {}).get("team") for r in recs}
+    for r in own_recs:
+        e = r["signal"]["external_id"]
+        l = labels[e]
+        if l["is_attack"] or l["true_service"] == "unknown":
+            continue
+        true_team = (catalog_service(l["true_service"]) or {}).get("team")
+        got = (r["incident"]["owner"] or {}).get("team")
+        if got != true_team and full_ok.get(e) == true_team:
+            misrouted_by_guess.append(e)
     times = sorted(r["signal"]["received_at"] for r in recs)
 
     data = {
@@ -152,6 +195,9 @@ def build(out: Path) -> Path:
         "incident_sizes": incident_sizes,
         "priority_matrix": matrix,
         "nonexistent_teams": nonexistent,
+        "n_non_attack": len(non_attack),
+        "misrouted_by_guess": misrouted_by_guess,
+        "impact_defaults": IMPACT_DEFAULTS,
         "integrations": integrations(),
     }
     html = TEMPLATE.read_text().replace("__DATA__", json.dumps(data).replace("</", "<\\/"))

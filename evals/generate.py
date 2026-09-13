@@ -195,7 +195,7 @@ def draft_emails(inc: dict, use_model: bool = False) -> list[EmailDraft]:
     )
     svc = catalog_service(inc["service"])
     user = f"""<incident>
-service: {inc['service']} — {svc['description']}
+service: {inc['service']} - {svc['description']}
 what actually broke (for your reference only; the customer does not know this): {inc['symptom']}
 </incident>
 

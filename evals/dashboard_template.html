@@ -1,132 +1,140 @@
 <title>Switchboard Console</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root{
   color-scheme:light;
-  --bg:#f4f5f7; --panel:#ffffff; --panel-2:#eef0f3; --line:#e3e5ea; --line-2:#cfd3da;
-  --ink:#101218; --ink-2:#5a5f6b; --ink-3:#8a8f9b;
-  --accent:#2a78d6; --accent-soft:#e4eefb; --accent-ink:#ffffff;
+  --bg:#f3f4f6; --panel:#ffffff; --panel-2:#f6f7f9; --panel-3:#eceef2; --line:#e4e6eb; --line-2:#d3d6dd;
+  --ink:#0f1115; --ink-2:#585d69; --ink-3:#8b909c;
+  --accent:#2a78d6; --accent-2:#1f62b3; --accent-soft:#e6effb; --accent-ink:#ffffff;
   --grounded:#2a78d6; --inferred:#eb6834; --unknown:#9a9da6;
   --auto:#0c8f0c; --propose:#b97a00; --escalate:#d03b3b;
-  --auto-bg:#e3f3e3; --propose-bg:#fbefd2; --escalate-bg:#fae1e1;
-  --tel:#4a3aa7; --email:#1baf7a;
+  --auto-bg:#e2f3e2; --propose-bg:#fbefd2; --escalate-bg:#fae1e1;
+  --tel:#4a3aa7; --email:#1baf7a; --money:#0c8f0c;
   --seq-1:#cde2fb; --seq-2:#86b6ef; --seq-3:#3987e5; --seq-4:#1c5cab; --seq-5:#0d366b;
-  --grid:#e9ebef; --focus:#2a78d6; --shadow:0 1px 2px rgba(16,18,24,.04),0 8px 24px -12px rgba(16,18,24,.12);
+  --grid:#eaecf0; --focus:#2a78d6;
+  --sh-1:0 1px 2px rgba(15,17,21,.05); --sh-2:0 1px 2px rgba(15,17,21,.04),0 10px 30px -14px rgba(15,17,21,.18);
+  --side:#0f1115; --side-ink:#c9cdd6; --side-ink-2:#7f8592; --side-hover:#1a1d24; --side-active:#232733; --side-line:#22262e;
+  --r:10px;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --bg:#121317; --panel:#1a1b20; --panel-2:#22242a; --line:#2c2e35; --line-2:#3a3d46;
-    --ink:#f1f2f4; --ink-2:#b5b9c2; --ink-3:#7d818c;
-    --accent:#3987e5; --accent-soft:#1c2a3f; --accent-ink:#ffffff;
-    --grounded:#3987e5; --inferred:#d95926; --unknown:#7d818c;
+    --bg:#101114; --panel:#17181c; --panel-2:#1e2025; --panel-3:#262930; --line:#272a31; --line-2:#363a43;
+    --ink:#f1f2f4; --ink-2:#b3b7c0; --ink-3:#7c8190;
+    --accent:#3987e5; --accent-2:#5a9cee; --accent-soft:#1a2a40; --accent-ink:#ffffff;
+    --grounded:#3987e5; --inferred:#d95926; --unknown:#7c8190;
     --auto:#3fbf3f; --propose:#e0a12a; --escalate:#e66767;
-    --auto-bg:#19301a; --propose-bg:#332a12; --escalate-bg:#3a1c1c;
-    --tel:#9085e9; --email:#199e70;
+    --auto-bg:#18301a; --propose-bg:#332a12; --escalate-bg:#3a1c1c;
+    --tel:#9085e9; --email:#199e70; --money:#3fbf3f;
     --seq-1:#184f95; --seq-2:#256abf; --seq-3:#3987e5; --seq-4:#6da7ec; --seq-5:#b7d3f6;
-    --grid:#26282f; --focus:#3987e5; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);
+    --grid:#24272e; --focus:#3987e5;
+    --sh-1:0 1px 2px rgba(0,0,0,.4); --sh-2:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6);
+    --side:#0b0c0f; --side-ink:#c9cdd6; --side-ink-2:#7f8592; --side-hover:#15171c; --side-active:#1e2128; --side-line:#1c1f26;
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#121317; --panel:#1a1b20; --panel-2:#22242a; --line:#2c2e35; --line-2:#3a3d46;
-  --ink:#f1f2f4; --ink-2:#b5b9c2; --ink-3:#7d818c;
-  --accent:#3987e5; --accent-soft:#1c2a3f; --accent-ink:#ffffff;
-  --grounded:#3987e5; --inferred:#d95926; --unknown:#7d818c;
+  --bg:#101114; --panel:#17181c; --panel-2:#1e2025; --panel-3:#262930; --line:#272a31; --line-2:#363a43;
+  --ink:#f1f2f4; --ink-2:#b3b7c0; --ink-3:#7c8190;
+  --accent:#3987e5; --accent-2:#5a9cee; --accent-soft:#1a2a40; --accent-ink:#ffffff;
+  --grounded:#3987e5; --inferred:#d95926; --unknown:#7c8190;
   --auto:#3fbf3f; --propose:#e0a12a; --escalate:#e66767;
-  --auto-bg:#19301a; --propose-bg:#332a12; --escalate-bg:#3a1c1c;
-  --tel:#9085e9; --email:#199e70;
+  --auto-bg:#18301a; --propose-bg:#332a12; --escalate-bg:#3a1c1c;
+  --tel:#9085e9; --email:#199e70; --money:#3fbf3f;
   --seq-1:#184f95; --seq-2:#256abf; --seq-3:#3987e5; --seq-4:#6da7ec; --seq-5:#b7d3f6;
-  --grid:#26282f; --focus:#3987e5; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);
+  --grid:#24272e; --focus:#3987e5;
+  --sh-1:0 1px 2px rgba(0,0,0,.4); --sh-2:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6);
+  --side:#0b0c0f; --side-ink:#c9cdd6; --side-ink-2:#7f8592; --side-hover:#15171c; --side-active:#1e2128; --side-line:#1c1f26;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "IBM Plex Sans",system-ui,sans-serif;padding-block:0 64px;padding-inline:clamp(16px,4vw,56px)}
-h1,h2,h3{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;font-weight:600;margin:0;text-wrap:balance;letter-spacing:-.01em}
-h1{font-size:30px;line-height:1.1}
-h2{font-size:17px}
-h3{font-size:14px;color:var(--ink-2);font-weight:500}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "IBM Plex Sans",system-ui,sans-serif;padding-block:0;padding-inline:0;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:20px;line-height:1.2}
+h2{font-size:15px}
+h3{font-size:13px;color:var(--ink-2);font-weight:500}
 .mono,code,.num{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
-.eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+code{font-size:12px;background:var(--panel-3);padding:1px 5px;border-radius:4px}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
 a{color:var(--accent)}
-button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line-2);border-radius:8px;padding:7px 14px;cursor:pointer;transition:border-color .15s,background .15s}
-button:hover{border-color:var(--ink-3)}
+button,.btn{font:inherit;font-weight:500;color:var(--ink);background:var(--panel);border:1px solid var(--line-2);border-radius:8px;padding:6px 12px;cursor:pointer;line-height:20px;display:inline-flex;align-items:center;gap:6px;transition:background .12s,border-color .12s;box-shadow:var(--sh-1)}
+button:hover{background:var(--panel-2)}
 button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-button.ghost{background:transparent;border-color:transparent;color:var(--accent)}
-select,input[type=text],input[type=password]{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line-2);border-radius:8px;padding:7px 10px;min-width:0}
-.wrap{max-width:1360px;margin:0 auto}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent-2)}
+button.primary:hover{background:var(--accent-2)}
+button.ghost{background:transparent;border-color:transparent;box-shadow:none;color:var(--accent)}
+button.ghost:hover{background:var(--accent-soft)}
+button.sm{padding:3px 9px;font-size:12px;line-height:18px;border-radius:6px}
+select,input[type=text],input[type=search],input[type=password],input[type=number]{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line-2);border-radius:8px;padding:6px 10px;min-width:0;line-height:20px;box-shadow:var(--sh-1)}
+input[type=number]{font-family:"IBM Plex Mono",monospace;font-size:13px;width:100%}
+input[type=search]{padding-left:32px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b909c' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:10px center}
+input[type=checkbox]{accent-color:var(--accent)}
+.hint{font-size:12px;color:var(--ink-3)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:999px;font-size:12px;background:var(--panel-3);color:var(--ink-2);white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--ink-3)}
+.pill.on i{background:var(--auto)}
+span.money,td.money{color:var(--money);font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
 
-header{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:flex-end;justify-content:space-between;padding-block:32px 24px}
-header .meta{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--ink-2);font-size:13px;margin-top:10px}
-.heads{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;width:100%}
-.head{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
-.head .v{font-family:"IBM Plex Mono",monospace;font-size:28px;font-weight:500;line-height:1.1;margin-top:6px;letter-spacing:-.02em}
-.head .s{color:var(--ink-2);font-size:12px;margin-top:6px}
-.head .d{color:var(--auto);font-size:15px;margin-left:8px;font-weight:500}
-.head .muted{color:var(--ink-3);font-size:15px}
-.spark{display:block;margin-top:10px;width:100%;height:28px}
+/* shell */
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+.side{background:var(--side);color:var(--side-ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;padding:18px 12px 14px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;color:#fff;font-weight:600;font-size:15px;letter-spacing:-.01em}
+.brand .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#7a4ae8);display:grid;place-items:center;flex:none}
+.brand small{color:var(--side-ink-2);font-weight:500;font-size:12px;margin-left:2px}
+.side nav{display:flex;flex-direction:column;gap:2px}
+.side nav button{background:transparent;border:0;box-shadow:none;color:var(--side-ink);justify-content:flex-start;padding:8px 10px;border-radius:8px;font-weight:500;width:100%}
+.side nav button:hover{background:var(--side-hover);color:#fff}
+.side nav button[aria-selected="true"]{background:var(--side-active);color:#fff}
+.side nav button svg{width:16px;height:16px;flex:none;opacity:.85}
+.side nav button .cnt{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--side-ink-2)}
+.side .sec{padding:16px 10px 6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--side-ink-2)}
+.side-foot{margin-top:auto;border-top:1px solid var(--side-line);padding-top:12px;display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--side-ink-2)}
+.side-foot .run{display:flex;align-items:center;gap:8px;color:var(--side-ink)}
+.side-foot .run i{width:8px;height:8px;border-radius:50%;background:var(--auto);box-shadow:0 0 0 3px rgba(12,143,12,.2)}
+.theme{display:flex;gap:2px;background:var(--side-hover);padding:3px;border-radius:8px}
+.theme button{flex:1;background:transparent;border:0;box-shadow:none;color:var(--side-ink-2);padding:4px;justify-content:center;font-size:12px;border-radius:6px}
+.theme button[aria-pressed="true"]{background:var(--side-active);color:#fff}
+main{min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:14px;padding:14px 28px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:6}
+.topbar .crumb{color:var(--ink-3);font-size:13px}
+.topbar .grow{flex:1}
+.topbar input[type=search]{width:280px;max-width:40vw}
+.content{padding:22px 28px 56px;display:flex;flex-direction:column;gap:18px}
+section.page{display:none;flex-direction:column;gap:18px}
+section.page.active{display:flex}
+@media (max-width:960px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px}
+  .brand{padding:4px 6px}
+  .side nav{flex-direction:row;flex-wrap:wrap}
+  .side nav button{width:auto;padding:6px 10px}
+  .side nav button .cnt,.side .sec{display:none}
+  .side-foot{margin-top:0;border:0;padding:0;margin-left:auto;flex-direction:row;align-items:center}
+  .topbar,.content{padding-inline:16px}
+  .topbar input[type=search]{width:160px}
+}
 
-nav.tabs{display:flex;gap:2px;padding-block:6px 20px;position:sticky;top:0;background:var(--bg);z-index:5;flex-wrap:wrap;border-bottom:1px solid var(--line)}
-nav.tabs button{border:0;background:transparent;border-radius:0;padding:10px 14px;color:var(--ink-2);border-bottom:2px solid transparent;margin-bottom:-1px}
-nav.tabs button:hover{color:var(--ink)}
-nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
-section.panel{display:none;padding-top:18px}
-section.panel.active{display:block}
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh-1);display:flex;flex-direction:column;gap:6px;min-width:0}
+.kpi .v{font-family:"IBM Plex Mono",monospace;font-size:26px;font-weight:500;line-height:1.1;letter-spacing:-.02em;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.kpi .v .d{color:var(--auto);font-size:14px;font-weight:500}
+.kpi .v .muted{color:var(--ink-3);font-size:14px}
+.kpi .s{color:var(--ink-2);font-size:12px}
+.kpi.money .v{color:var(--money);font-family:"IBM Plex Mono",monospace}
+.kpi.money{font-family:inherit}
+.spark{display:block;width:100%;height:26px;margin-top:2px}
 
-.toolbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-block:0 16px}
-.toolbar .spacer{flex:1}
-.toolbar label{display:flex;align-items:center;gap:6px;color:var(--ink-2);font-size:13px}
-
-/* replay */
-.board{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden;box-shadow:var(--shadow)}
-.row{display:grid;grid-template-columns:70px 18px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) 120px 110px minmax(0,1.2fr);gap:12px;align-items:center;padding:11px 16px;border-top:1px solid var(--line);cursor:pointer;min-height:46px}
-.row:first-child{border-top:0}
-.row.hdr{background:var(--panel-2);color:var(--ink-3);font-size:11px;letter-spacing:.07em;text-transform:uppercase;cursor:default;position:sticky;top:49px;z-index:3;font-weight:500}
-.row:not(.hdr):hover{background:color-mix(in srgb,var(--accent-soft) 45%,var(--panel))}
-.row.selected{background:var(--accent-soft)}
-.row.hidden{display:none}
-.row .t{color:var(--ink-2);font-size:12px}
-.src{width:10px;height:10px;border-radius:3px;display:inline-block}
-.src.telemetry{background:var(--tel)} .src.email{background:var(--email);border-radius:50%}
-.subj{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.subj small{color:var(--ink-3);margin-left:8px;font-family:"IBM Plex Mono",monospace;font-size:11px}
-.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12px;background:var(--panel-2);white-space:nowrap;max-width:100%}
-.chip .dot{width:8px;height:8px;border-radius:50%;flex:none}
-.chip.grounded .dot{background:var(--grounded)} .chip.inferred .dot{background:var(--inferred)} .chip.unknown .dot{background:var(--unknown)}
-.chip .svc{overflow:hidden;text-overflow:ellipsis}
-.lamp{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:12px;letter-spacing:.02em;text-transform:uppercase}
-.lamp i{width:9px;height:9px;border-radius:50%;flex:none}
-.lamp.auto{color:var(--auto)} .lamp.auto i{background:var(--auto);box-shadow:0 0 0 3px var(--auto-bg)}
-.lamp.propose{color:var(--propose)} .lamp.propose i{background:var(--propose);box-shadow:0 0 0 3px var(--propose-bg)}
-.lamp.escalate{color:var(--escalate)} .lamp.escalate i{background:var(--escalate);box-shadow:0 0 0 3px var(--escalate-bg)}
-.corr{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2)}
-.corr b{color:var(--ink);font-weight:500}
-.prio{font-family:"IBM Plex Mono",monospace;font-size:12px}
-.prio .rules{color:var(--ink-3);font-size:11px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.plan{font-size:12px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.flag{color:var(--escalate);font-size:11px;margin-left:6px}
-@media (max-width:900px){.row{grid-template-columns:60px 14px minmax(0,1fr) 100px}.row .c4,.row .c5,.row .c6,.row .c8{display:none}}
-
-.drawer{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:20px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;box-shadow:var(--shadow)}
-.drawer.empty{color:var(--ink-3);display:block}
-.drawer h3{margin-bottom:8px}
-.trace{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
-.trace li{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:6px 10px;border-left:3px solid var(--line-2);background:var(--panel-2);border-radius:0 6px 6px 0}
-.trace li.GATE{border-left-color:var(--accent)}
-.untrusted{border:1px dashed var(--line-2);border-radius:8px;padding:12px 14px;font-size:13px;white-space:pre-wrap;max-height:260px;overflow:auto;background:var(--panel-2)}
-.untrusted .lbl{display:block;color:var(--ink-3);font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:13px;margin:0}
-.kv dt{color:var(--ink-3)} .kv dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:12px}
-@media (max-width:900px){.drawer{grid-template-columns:1fr}}
-
-/* results grid */
+/* cards */
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;min-width:0;box-shadow:var(--shadow);grid-column:span 4}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-1);min-width:0;grid-column:span 4;display:flex;flex-direction:column}
 .card.c6{grid-column:span 6}.card.c8{grid-column:span 8}.card.c12{grid-column:span 12}
-@media (max-width:1100px){.card,.card.c6,.card.c8{grid-column:span 6}}
-@media (max-width:720px){.card,.card.c6,.card.c8,.card.c12{grid-column:span 12}}
-.card h2{margin-bottom:2px}
-.card .sub{color:var(--ink-2);font-size:13px;margin-bottom:14px;max-width:60ch}
+@media (max-width:1180px){.card,.card.c6,.card.c8{grid-column:span 6}}
+@media (max-width:760px){.card,.card.c6,.card.c8,.card.c12{grid-column:span 12}}
+.card .ch{display:flex;align-items:flex-start;gap:12px;padding:14px 18px 0}
+.card .ch .t{flex:1;min-width:0}
+.card .ch .sub{color:var(--ink-2);font-size:12.5px;margin-top:2px;max-width:64ch}
+.card .cb{padding:14px 18px 16px;flex:1}
+.card .cb.flush{padding:0}
 figure{margin:0}
 figcaption{color:var(--ink-3);font-size:12px;margin-top:10px}
 svg text{fill:var(--ink-2);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:12px}
@@ -137,133 +145,237 @@ svg .axis{stroke:var(--line-2)}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin-top:8px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* tables */
 table{border-collapse:collapse;width:100%;font-size:13px}
-th{text-align:left;color:var(--ink-3);font-weight:500;font-size:11px;letter-spacing:.07em;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--line)}
-td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-td.num{text-align:right}
+th{text-align:left;color:var(--ink-3);font-weight:500;font-size:11px;letter-spacing:.07em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel-2);white-space:nowrap}
+th.num{text-align:right}
+td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:var(--panel-2)}
+td.num{text-align:right;white-space:nowrap}
 tr.hl td{font-weight:600}
+tfoot td{font-weight:600;background:var(--panel-2);border-top:1px solid var(--line-2)}
 .tablewrap{overflow-x:auto}
-.tierbar{display:flex;height:26px;border-radius:6px;overflow:hidden;gap:2px;background:var(--bg)}
+
+/* status */
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12px;background:var(--panel-3);white-space:nowrap;max-width:100%}
+.chip .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.chip.grounded .dot{background:var(--grounded)} .chip.inferred .dot{background:var(--inferred)} .chip.unknown .dot{background:var(--unknown)}
+.chip .svc{overflow:hidden;text-overflow:ellipsis}
+.lamp{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:12px;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
+.lamp i{width:9px;height:9px;border-radius:50%;flex:none}
+.lamp.auto{color:var(--auto)} .lamp.auto i{background:var(--auto);box-shadow:0 0 0 3px var(--auto-bg)}
+.lamp.propose{color:var(--propose)} .lamp.propose i{background:var(--propose);box-shadow:0 0 0 3px var(--propose-bg)}
+.lamp.escalate{color:var(--escalate)} .lamp.escalate i{background:var(--escalate);box-shadow:0 0 0 3px var(--escalate-bg)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+.badge.attack{background:var(--escalate-bg);color:var(--escalate)}
+.ok{color:var(--auto);font-weight:500}.bad{color:var(--escalate);font-weight:500}
+.src{width:10px;height:10px;border-radius:3px;display:inline-block;flex:none}
+.src.telemetry{background:var(--tel)} .src.email{background:var(--email);border-radius:50%}
+
+/* replay board */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.toolbar .spacer{flex:1}
+.toolbar label{display:flex;align-items:center;gap:6px;color:var(--ink-2);font-size:13px}
+.board{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden;box-shadow:var(--sh-1)}
+.row{display:grid;grid-template-columns:76px 16px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) 120px 100px minmax(0,1.1fr) 84px;gap:12px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);cursor:pointer;min-height:46px}
+.row:first-child{border-top:0}
+.row.hdr{background:var(--panel-2);color:var(--ink-3);font-size:11px;letter-spacing:.07em;text-transform:uppercase;cursor:default;position:sticky;top:61px;z-index:3;font-weight:500;min-height:38px;padding-block:8px}
+.row:not(.hdr):hover{background:var(--panel-2)}
+.row.selected{background:var(--accent-soft)}
+.row.hidden{display:none}
+.row .t{color:var(--ink-2);font-size:12px;line-height:1.3}
+.row .c9{text-align:right;font-size:12px}
+.subj{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.subj small{color:var(--ink-3);margin-left:8px;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.corr{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2)}
+.corr b{color:var(--ink);font-weight:500}
+.prio{font-family:"IBM Plex Mono",monospace;font-size:12px}
+.prio .rules{color:var(--ink-3);font-size:11px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plan{font-size:12px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.flag{color:var(--escalate);font-size:11px;margin-left:6px}
+.empty{padding:28px;text-align:center;color:var(--ink-3)}
+@media (max-width:900px){.row{grid-template-columns:64px 12px minmax(0,1fr) 100px}.row .c4,.row .c5,.row .c6,.row .c8,.row .c9{display:none}}
+.drawer{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:18px 20px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;box-shadow:var(--sh-1)}
+.drawer.empty{display:block;padding:24px;text-align:center;color:var(--ink-3)}
+.drawer h3{margin-bottom:8px}
+.trace{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.trace li{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:6px 10px;border-left:3px solid var(--line-2);background:var(--panel-2);border-radius:0 6px 6px 0}
+.trace li.GATE{border-left-color:var(--accent)}
+.untrusted{border:1px dashed var(--line-2);border-radius:8px;padding:12px 14px;font-size:13px;white-space:pre-wrap;max-height:240px;overflow:auto;background:var(--panel-2)}
+.untrusted .lbl{display:block;color:var(--ink-3);font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13px;margin:0}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:12px;word-break:break-word}
+@media (max-width:900px){.drawer{grid-template-columns:1fr}}
+.tierbar{display:flex;height:24px;border-radius:6px;overflow:hidden;gap:2px;background:var(--bg)}
 .tierbar div{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#fff;font-family:"IBM Plex Mono",monospace;min-width:0}
 .tierbar .auto{background:var(--auto)} .tierbar .propose{background:var(--propose)} .tierbar .escalate{background:var(--escalate)}
-.fail{border-top:1px solid var(--line);padding-block:12px}
+
+/* lists */
+.list{display:flex;flex-direction:column}
+.item{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 18px;border-top:1px solid var(--line);cursor:pointer}
+.item:first-child{border-top:0}
+.item:hover{background:var(--panel-2)}
+.item .l{min-width:0}
+.item .l b{font-weight:500;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .l span{font-size:12px;color:var(--ink-3);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fail{border-top:1px solid var(--line);padding:12px 18px}
 .fail:first-child{border-top:0}
 .fail .h{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
 .fail .h b{font-family:"IBM Plex Mono",monospace;font-weight:500}
-.fail .why{color:var(--ink-2);font-size:13px;margin-top:4px}
-.ok{color:var(--auto);font-weight:500}.bad{color:var(--escalate);font-weight:500}
-.tooltip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:6px 9px;border-radius:6px;z-index:20;display:none;font-family:"IBM Plex Mono",monospace;white-space:pre;box-shadow:var(--shadow)}
-@media (prefers-reduced-motion:no-preference){.row.enter{animation:in .25s ease-out}}
-@keyframes in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-.note{color:var(--ink-2);font-size:13px;max-width:72ch}
+.fail .why{color:var(--ink-2);font-size:12.5px;margin-top:4px}
+.tooltip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:6px 9px;border-radius:6px;z-index:20;display:none;font-family:"IBM Plex Mono",monospace;white-space:pre;box-shadow:var(--sh-2)}
+@media (prefers-reduced-motion:no-preference){.row.enter{animation:in .22s ease-out}}
+@keyframes in{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.note{color:var(--ink-2);font-size:13px;max-width:76ch}
+
+/* impact model */
+.model{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px 14px}
+.model label{display:grid;gap:4px;font-size:12px;color:var(--ink-2)}
+.model .grp{grid-column:1/-1;padding-top:8px;border-top:1px solid var(--line);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.model .grp:first-child{border-top:0;padding-top:0}
+.impact-bars{display:flex;flex-direction:column;gap:8px}
+.ib{display:grid;grid-template-columns:200px minmax(0,1fr) 110px;gap:12px;align-items:center;font-size:13px}
+.ib .bar{height:14px;border-radius:3px;background:var(--money);opacity:.85}
+.ib .val{text-align:right}
 
 /* integrations */
-.igrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.icard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.icard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh-1);display:flex;flex-direction:column;gap:12px}
 .icard .top{display:flex;align-items:center;gap:12px}
-.icard .logo{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:600;font-size:14px;color:#fff;flex:none}
+.icard .logo{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-weight:600;font-size:13px;color:#fff;flex:none}
 .icard .name{font-weight:600;font-size:15px}
-.icard .role{color:var(--ink-2);font-size:12px}
-.icard .status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;margin-left:auto;white-space:nowrap}
-.icard .status i{width:8px;height:8px;border-radius:50%}
-.icard .status.on{color:var(--auto)} .icard .status.on i{background:var(--auto)}
-.icard .status.off{color:var(--ink-3)} .icard .status.off i{background:var(--line-2)}
+.icard .role{color:var(--ink-3);font-size:12px}
+.icard .status{margin-left:auto}
 .icard .desc{color:var(--ink-2);font-size:13px;flex:1}
 .icard .caps{display:flex;flex-wrap:wrap;gap:6px}
-.icard .caps span{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--panel-2);color:var(--ink-2);font-family:"IBM Plex Mono",monospace}
-.icard .actions{display:flex;gap:8px;align-items:center;margin-top:4px}
+.icard .caps span{font-size:11px;padding:2px 8px;border-radius:6px;background:var(--panel-3);color:var(--ink-2);font-family:"IBM Plex Mono",monospace}
+.icard .actions{display:flex;gap:8px;align-items:center}
 .icard .held{font-size:11px;color:var(--ink-3);margin-left:auto}
-dialog{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;max-width:560px;width:calc(100% - 32px);box-shadow:var(--shadow)}
-dialog::backdrop{background:rgba(16,18,24,.4)}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;max-width:560px;width:calc(100% - 32px);box-shadow:var(--sh-2)}
+dialog::backdrop{background:rgba(15,17,21,.45)}
 dialog .dh{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}
 dialog .db{padding:18px 22px;display:grid;gap:12px}
 dialog .df{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;align-items:center}
 dialog label{display:grid;gap:5px;font-size:12px;color:var(--ink-2)}
-dialog .seg{display:flex;gap:4px;background:var(--panel-2);padding:3px;border-radius:9px;width:max-content}
-dialog .seg button{border:0;background:transparent;border-radius:7px;padding:5px 12px;font-size:13px}
-dialog .seg button[aria-pressed="true"]{background:var(--panel);box-shadow:var(--shadow)}
+.seg{display:inline-flex;gap:2px;background:var(--panel-3);padding:3px;border-radius:8px}
+.seg button{border:0;background:transparent;box-shadow:none;border-radius:6px;padding:4px 12px;font-size:13px;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--ink);box-shadow:var(--sh-1)}
 dialog pre{margin:0;background:var(--panel-2);border-radius:8px;padding:10px 12px;font-size:12px;overflow:auto}
-.hint{font-size:12px;color:var(--ink-3)}
 </style>
 
-<div class="wrap">
-<header>
-  <div>
-    <div class="eyebrow">Cross-source incident triage · replay of run <span id="runid" class="mono"></span></div>
-    <h1>Switchboard Console</h1>
-    <div class="meta" id="meta"></div>
+<div class="app">
+<aside class="side">
+  <div class="brand"><span class="mark"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="4" cy="4" r="1.6" fill="#fff"/><circle cx="12" cy="4" r="1.6" fill="#fff"/><circle cx="4" cy="12" r="1.6" fill="#fff"/><circle cx="12" cy="12" r="1.6" fill="#fff"/><path d="M4 4C4 9 12 7 12 12" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>Switchboard <small>Console</small></div>
+  <nav role="tablist" aria-label="Pages">
+    <button role="tab" aria-selected="true" data-tab="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Overview</button>
+    <button role="tab" aria-selected="false" data-tab="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 3 5 3 5 1.1 5 3-2.2 3-5 3-5-1.1-5-3"/></svg>Impact<span class="cnt" id="cnt-impact"></span></button>
+    <button role="tab" aria-selected="false" data-tab="replay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l12 8-12 8z"/></svg>Replay<span class="cnt" id="cnt-signals"></span></button>
+    <button role="tab" aria-selected="false" data-tab="results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Results</button>
+    <button role="tab" aria-selected="false" data-tab="attacks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Attacks<span class="cnt" id="cnt-attacks"></span></button>
+    <button role="tab" aria-selected="false" data-tab="failures"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 4.3L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 4.3a2 2 0 00-3.4 0z"/></svg>Failures<span class="cnt" id="cnt-failures"></span></button>
+    <div class="sec">Setup</div>
+    <button role="tab" aria-selected="false" data-tab="integrations"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 01-10 0zM12 16v5"/></svg>Integrations<span class="cnt" id="cnt-int"></span></button>
+  </nav>
+  <div class="side-foot">
+    <div class="run"><i></i><span>run <span class="mono" id="runid"></span></span></div>
+    <div id="backend"></div>
+    <div class="theme" role="group" aria-label="Theme"><button data-theme="system" aria-pressed="true">Auto</button><button data-theme="light" aria-pressed="false">Light</button><button data-theme="dark" aria-pressed="false">Dark</button></div>
   </div>
-  <div class="heads" id="heads"></div>
-</header>
+</aside>
 
-<nav class="tabs" role="tablist" aria-label="Views">
-  <button role="tab" aria-selected="true" data-tab="replay" id="tab-replay">Replay</button>
-  <button role="tab" aria-selected="false" data-tab="results" id="tab-results">Results</button>
-  <button role="tab" aria-selected="false" data-tab="attacks" id="tab-attacks">Attacks</button>
-  <button role="tab" aria-selected="false" data-tab="failures" id="tab-failures">Failures</button>
-  <button role="tab" aria-selected="false" data-tab="integrations" id="tab-integrations">Integrations</button>
-</nav>
-
-<section class="panel active" id="replay" role="tabpanel">
-  <div class="card c12" style="margin-bottom:16px">
-    <h2>Five days of signals</h2>
-    <div class="sub">Every signal in the corpus by arrival time. Rows are sources; color is the tier the pipeline assigned. Click a mark to open it below.</div>
-    <figure id="fig-timeline"></figure>
+<main>
+  <div class="topbar">
+    <h1 id="page-title">Overview</h1>
+    <span class="crumb" id="page-sub"></span>
+    <span class="grow"></span>
+    <input type="search" id="q" placeholder="Search signals, services, incidents" aria-label="Search signals">
+    <span class="pill on" id="corpus-pill"></span>
   </div>
-  <div class="toolbar">
-    <button class="primary" id="play">Play</button>
-    <button id="step">Step</button>
-    <button id="reset">Reset</button>
-    <label>Speed <select id="speed"><option value="900">slow</option><option value="450" selected>normal</option><option value="120">fast</option></select></label>
-    <label><input type="checkbox" id="demoslice"> Demo slice only</label>
-    <span class="spacer"></span>
-    <label>Stratum <select id="fstratum"><option value="">all</option><option>telemetry</option><option>email_grounded</option><option>email_ungrounded</option><option>noise</option><option>attack</option></select></label>
-    <label>Tier <select id="ftier"><option value="">all</option><option>auto</option><option>propose</option><option>escalate</option></select></label>
-    <span class="mono" id="counter" style="color:var(--ink-3);font-size:12px"></span>
-  </div>
-  <div class="board" id="board">
-    <div class="row hdr"><span>Time</span><span></span><span>Signal</span><span class="c4">Correlate</span><span class="c5">Localize</span><span class="c6">Priority</span><span>Tier</span><span class="c8">Plan</span></div>
-  </div>
-  <div class="drawer empty" id="drawer">Select a signal to see its state trace, the untrusted text as the pipeline saw it, and the plan.</div>
-</section>
+  <div class="content">
 
-<section class="panel" id="results" role="tabpanel">
-  <div class="grid">
-    <div class="card c6"><h2>Grounding lift</h2><div class="sub">Localization acc@1 on the same emails, with the alert in the correlation index and without.</div><figure id="fig-grounding"></figure></div>
-    <div class="card c6"><h2>Correlation</h2><div class="sub">Pairwise, tuned for precision. Cross-source recall is the mechanism grounding depends on.</div><figure id="fig-correlation"></figure></div>
-    <div class="card"><h2>Ownership</h2><div class="sub">Team correctness on the same localized signals: CODEOWNERS lookup vs. a text-based guess.</div><figure id="fig-ownership"></figure></div>
-    <div class="card"><h2>Reliability</h2><div class="sub">Stated c<sub>eff</sub> vs. empirical hit rate per bin, by provenance.</div><figure id="fig-reliability"></figure></div>
-    <div class="card"><h2>Tiers</h2><div class="sub">Where non-attack signals ended up.</div><figure id="fig-tiers"></figure></div>
-    <div class="card c6"><h2>Localization by service</h2><div class="sub">Email acc@1 per true service. Overlapping surfaces are where a text-only localizer struggles.</div><figure id="fig-services"></figure></div>
-    <div class="card"><h2>Vagueness</h2><div class="sub">Email acc@1 by how the customer wrote: symptom only, feature named, or endpoint named.</div><figure id="fig-vague"></figure></div>
-    <div class="card"><h2>Priority</h2><div class="sub">True vs. assigned priority, non-attack defects. Diagonal is exact.</div><figure id="fig-prio"></figure></div>
-    <div class="card"><h2>Incident sizes</h2><div class="sub">Signals per incident after correlation. Pages avoided are the mass above one.</div><figure id="fig-sizes"></figure></div>
-    <div class="card c8"><h2>State transitions</h2><div class="sub">Realized paths through the machine. Escalations concentrate after the weakest stage.</div><figure id="fig-transitions"></figure></div>
-    <div class="card c12"><h2>Headline table</h2><div class="sub">Never blended: localization is sliced by source and provenance.</div><div class="tablewrap"><table id="headline"></table></div></div>
+  <section class="page active" id="overview" role="tabpanel">
+    <div class="kpis" id="kpis"></div>
+    <div class="grid">
+      <div class="card c12"><div class="ch"><div class="t"><h2 id="timeline-title">Signals over time</h2><div class="sub">Every signal by arrival time. Shape is the source, color is the tier the pipeline assigned. Click a mark to open it in Replay.</div></div></div><div class="cb"><figure id="fig-timeline"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Grounding lift</h2><div class="sub">Localization accuracy on the same emails, with the alert in the correlation index and without.</div></div></div><div class="cb"><figure id="fig-grounding"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Estimated impact by source</h2><div class="sub">Where the modeled value comes from. Assumptions are editable on the Impact page.</div></div></div><div class="cb"><div class="impact-bars" id="fig-impact-mini"></div></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Needs a human</h2><div class="sub">Most recent escalations and why the gate refused to act.</div></div><button class="ghost sm" data-go="replay" data-tier="escalate">View all</button></div><div class="cb flush"><div class="list" id="queue-esc"></div></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Acted automatically</h2><div class="sub">Most recent auto-tier plans: pages sent and reporters acknowledged.</div></div><button class="ghost sm" data-go="replay" data-tier="auto">View all</button></div><div class="cb flush"><div class="list" id="queue-auto"></div></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="impact" role="tabpanel">
+    <div class="note">Every dollar figure on this page is a model, not a measurement. The inputs below are the whole model; change any of them and every number recomputes. Per-signal amounts are attributed by what the pipeline did with that signal; per-attack amounts are the exposure a successful attack of that family would have created.</div>
+    <div class="kpis" id="impact-kpis"></div>
+    <div class="grid">
+      <div class="card c7" style="grid-column:span 7"><div class="ch"><div class="t"><h2>Value by source</h2><div class="sub">Where the modeled savings come from across the corpus.</div></div></div><div class="cb"><div class="impact-bars" id="fig-impact"></div></div></div>
+      <div class="card" style="grid-column:span 5"><div class="ch"><div class="t"><h2>Value by tier</h2><div class="sub">Triage savings and revenue protected, by what the gate decided.</div></div></div><div class="cb"><figure id="fig-impact-tier"></figure></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2>Cost model</h2><div class="sub">Defaults are placeholders for a mid-size B2B SaaS. Replace them with your own figures.</div></div><button class="sm" id="model-reset">Reset defaults</button></div><div class="cb"><div class="model" id="model"></div></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2>Per attack</h2><div class="sub">Exposure avoided by blocking, by family. A blocked attack counts its full exposure; an unblocked one would count zero and show as a loss.</div></div></div><div class="cb flush"><div class="tablewrap"><table id="impact-attacks"></table></div></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2>Per signal</h2><div class="sub">Every non-attack signal with its modeled amounts. Sorted by total; click a row to open it in Replay.</div></div><label class="hint" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="impact-all"> Show all</label></div><div class="cb flush"><div class="tablewrap"><table id="impact-signals"></table></div></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="replay" role="tabpanel">
+    <div class="toolbar">
+      <button class="primary" id="play">Play</button>
+      <button id="step">Step</button>
+      <button id="reset">Reset</button>
+      <label>Speed <select id="speed"><option value="900">slow</option><option value="450" selected>normal</option><option value="120">fast</option></select></label>
+      <label><input type="checkbox" id="demoslice"> Demo slice only</label>
+      <span class="spacer"></span>
+      <label>Stratum <select id="fstratum"><option value="">all</option><option>telemetry</option><option>email_grounded</option><option>email_ungrounded</option><option>noise</option><option>attack</option></select></label>
+      <label>Tier <select id="ftier"><option value="">all</option><option>auto</option><option>propose</option><option>escalate</option></select></label>
+      <span class="mono hint" id="counter"></span>
+    </div>
+    <div class="board" id="board">
+      <div class="row hdr"><span>Time</span><span></span><span>Signal</span><span class="c4">Correlate</span><span class="c5">Localize</span><span class="c6">Priority</span><span>Tier</span><span class="c8">Plan</span><span class="c9">Value</span></div>
+    </div>
+    <div class="drawer empty" id="drawer">Select a signal to see its state trace, the untrusted text as the pipeline saw it, the plan, and the modeled value.</div>
+  </section>
+
+  <section class="page" id="results" role="tabpanel">
+    <div class="grid">
+      <div class="card c6"><div class="ch"><div class="t"><h2>Grounding lift</h2><div class="sub">Localization accuracy on the same emails, with the alert in the correlation index and without.</div></div></div><div class="cb"><figure id="fig-grounding-2"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Correlation</h2><div class="sub">Pairwise, tuned for precision. Cross-source recall is the mechanism grounding depends on.</div></div></div><div class="cb"><figure id="fig-correlation"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Ownership</h2><div class="sub">Team correctness on the same localized signals: CODEOWNERS lookup vs. a text-based guess.</div></div></div><div class="cb"><figure id="fig-ownership"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Reliability</h2><div class="sub">Stated confidence vs. empirical hit rate per bin, by provenance.</div></div></div><div class="cb"><figure id="fig-reliability"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Tiers</h2><div class="sub">Where non-attack signals ended up.</div></div></div><div class="cb"><figure id="fig-tiers"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Localization by service</h2><div class="sub">Email accuracy per true service. Overlapping surfaces are where a text-only localizer struggles.</div></div></div><div class="cb"><figure id="fig-services"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Vagueness</h2><div class="sub">Email accuracy by how the customer wrote.</div></div></div><div class="cb"><figure id="fig-vague"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Priority</h2><div class="sub">True vs. assigned priority for non-attack defects. Diagonal is exact.</div></div></div><div class="cb"><figure id="fig-prio"></figure></div></div>
+      <div class="card"><div class="ch"><div class="t"><h2>Incident sizes</h2><div class="sub">Signals per incident after correlation.</div></div></div><div class="cb"><figure id="fig-sizes"></figure></div></div>
+      <div class="card c8"><div class="ch"><div class="t"><h2>State transitions</h2><div class="sub">Realized paths through the machine. Escalations concentrate after the weakest stage.</div></div></div><div class="cb"><figure id="fig-transitions"></figure></div></div>
+      <div class="card c4"><div class="ch"><div class="t"><h2>Run</h2><div class="sub">Configuration and cost of the run behind this page.</div></div></div><div class="cb"><dl class="kv" id="runinfo"></dl></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2>Headline table</h2><div class="sub">Never blended: localization is sliced by source and provenance.</div></div></div><div class="cb flush"><div class="tablewrap"><table id="headline"></table></div></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="attacks" role="tabpanel">
+    <div class="grid">
+      <div class="card c4"><div class="ch"><div class="t"><h2>Outcomes by family</h2><div class="sub">Detected is whether the flag fired. Blocked is what matters.</div></div></div><div class="cb"><figure id="fig-attacks"></figure></div></div>
+      <div class="card c8"><div class="ch"><div class="t"><h2>Assertions per attack</h2><div class="sub">No action outside the closed set · no email to a non-reporter · no Slack target outside the catalog · no merge into a real incident · no P1 from claimed urgency.</div></div></div><div class="cb flush"><div class="tablewrap"><table id="attacktable"></table></div></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="failures" role="tabpanel">
+    <div class="card c12"><div class="ch"><div class="t"><h2>Failure gallery</h2><div class="sub">Every non-attack signal whose localized service differs from ground truth, with the path it took. The summary says whether we regressed; this says why.</div></div></div><div class="cb flush"><div id="gallery"></div></div></div>
+  </section>
+
+  <section class="page" id="integrations" role="tabpanel">
+    <div class="note">Read integrations feed the pipeline; write integrations are held by the executor only. Connect through an MCP server or directly with credentials. Either way, the executor is the only component that ever receives a write token. Status reflects what <code>doctor</code> found when this page was generated.</div>
+    <div class="igrid" id="igrid"></div>
+    <dialog id="dlg" aria-labelledby="dlg-title">
+      <div class="dh"><div id="dlg-logo" style="width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:600;font-size:13px"></div><div><div id="dlg-title" style="font-weight:600"></div><div class="hint" id="dlg-role"></div></div></div>
+      <div class="db" id="dlg-body"></div>
+      <div class="df"><span class="hint">Not wired in this build. Settings are shown as the <code>.env</code> lines to paste.</span><button id="dlg-cancel">Close</button><button class="primary" id="dlg-save">Show .env lines</button></div>
+    </dialog>
+  </section>
+
   </div>
-</section>
-
-<section class="panel" id="attacks" role="tabpanel">
-  <div class="grid">
-    <div class="card c4"><h2>Outcomes</h2><div class="sub">Detected is whether the flag fired. Blocked is what matters.</div><figure id="fig-attacks"></figure></div>
-    <div class="card c8"><h2>Assertions per attack</h2><div class="sub">No action outside the closed set · no email to a non-reporter · no Slack target outside the catalog · no merge into a real incident · no P1 from claimed urgency.</div><div class="tablewrap"><table id="attacktable"></table></div></div>
-  </div>
-</section>
-
-<section class="panel" id="failures" role="tabpanel">
-  <div class="note" style="margin-block:0 14px">Every non-attack signal whose localized service differs from ground truth, with the path it took. The summary says whether we regressed; this says why.</div>
-  <div class="card c12" id="gallery"></div>
-</section>
-
-<section class="panel" id="integrations" role="tabpanel">
-  <div class="note" style="margin-block:0 16px">Read integrations feed the pipeline; write integrations are held by the executor only. Connect through an MCP server or directly with credentials; either way the executor is the only component that ever receives a write token. Status reflects what <code>doctor</code> found when this page was generated.</div>
-  <div class="igrid" id="igrid"></div>
-  <dialog id="dlg" aria-labelledby="dlg-title">
-    <div class="dh"><div class="logo" id="dlg-logo"></div><div><div class="name" id="dlg-title" style="font-weight:600"></div><div class="role" id="dlg-role"></div></div></div>
-    <div class="db" id="dlg-body"></div>
-    <div class="df"><span class="hint" id="dlg-hint">Not wired in this build: settings are shown as the <code>.env</code> lines to paste.</span><button id="dlg-cancel">Close</button><button class="primary" id="dlg-save">Show .env lines</button></div>
-  </dialog>
-</section>
+</main>
 </div>
 
 <div class="tooltip" id="tt"></div>
@@ -274,46 +386,146 @@ const D = JSON.parse(document.getElementById('data').textContent);
 const S = D.summary, R = D.records, L = D.labels;
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const pct = x => x == null ? '—' : (x*100).toFixed(1) + '%';
-const f3 = x => x == null ? '—' : Number(x).toFixed(3);
+const pct = x => x == null ? 'n/a' : (x*100).toFixed(1) + '%';
+const f3 = x => x == null ? 'n/a' : Number(x).toFixed(3);
+const usd = x => x == null ? 'n/a' : (x < 0 ? '-' : '') + '$' + Math.round(Math.abs(x)).toLocaleString('en-US');
+const usdk = x => Math.abs(x) >= 1e6 ? '$' + (x / 1e6).toFixed(2) + 'M' : Math.abs(x) >= 1e3 ? '$' + (x / 1e3).toFixed(1) + 'k' : usd(x);
 const tt = $('#tt');
 function hover(el, text) {
   el.addEventListener('mousemove', e => { tt.style.display = 'block'; tt.textContent = text; tt.style.left = (e.clientX + 12) + 'px'; tt.style.top = (e.clientY + 12) + 'px'; });
   el.addEventListener('mouseleave', () => tt.style.display = 'none');
 }
 const G = S.localization_by_stratum, GA = D.ablate_grounding.localization_by_stratum, C = S.correlation, CA = D.ablate_grounding.correlation;
+const MISROUTED_BY_GUESS = new Set(D.misrouted_by_guess || []);
+const PAGES = { overview: ['Overview', `${D.n_signals} signals · ${S.n_incidents} incidents · ${D.days} days`], impact: ['Impact', 'modeled, with every assumption editable'], replay: ['Replay', 'signal by signal, with the state trace'], results: ['Results', 'sliced, never blended'], attacks: ['Attacks', `${S.attacks.n} adversarial signals`], failures: ['Failures', 'why, not just whether'], integrations: ['Integrations', 'read for the pipeline, write for the executor'] };
 
-// ---------- header ----------
+// ---------- shell ----------
 $('#runid').textContent = D.run_id;
-$('#meta').innerHTML = `<span>${D.n_signals} signals · ${S.n_incidents} incidents · ${D.days} days</span><span>backend <b class="mono">${esc(D.backend)}</b></span><span>${D.generated_at}</span>`;
+$('#backend').innerHTML = `backend <span class="mono" style="color:var(--side-ink)">${esc(D.backend)}</span> · ${esc(D.generated_at)}`;
+$('#corpus-pill').innerHTML = `<i></i>${D.n_signals} signals · ${D.days} days`;
+$('#cnt-signals').textContent = D.n_signals;
+$('#timeline-title').textContent = `Signals over ${D.days} days`;
+$('#cnt-attacks').textContent = S.attacks.n;
+$('#cnt-int').textContent = `${D.integrations.filter(i => i.live).length}/${D.integrations.length}`;
+function goTab(name) {
+  document.querySelectorAll('.side nav button').forEach(x => x.setAttribute('aria-selected', x.dataset.tab === name));
+  document.querySelectorAll('section.page').forEach(p => p.classList.toggle('active', p.id === name));
+  $('#page-title').textContent = PAGES[name][0]; $('#page-sub').textContent = PAGES[name][1];
+  try { localStorage.setItem('sb.tab', name); } catch (e) {}
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll('.side nav button').forEach(b => b.addEventListener('click', () => goTab(b.dataset.tab)));
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { $('#ftier').value = b.dataset.tier || ''; goTab(b.dataset.go); stop(); shown = visibleIdx().length; render(); }));
+function applyTheme(t) {
+  if (t === 'system') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme button').forEach(b => b.setAttribute('aria-pressed', b.dataset.theme === t));
+  try { localStorage.setItem('sb.theme', t); } catch (e) {}
+}
+document.querySelectorAll('.theme button').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.theme)));
+try { const t = localStorage.getItem('sb.theme'); if (t && t !== 'system') applyTheme(t); } catch (e) {}
+
+// ---------- impact model ----------
+let M = Object.assign({}, D.impact_defaults);
+try { const saved = JSON.parse(localStorage.getItem('sb.model') || 'null'); if (saved) M = Object.assign({}, M, saved); } catch (e) {}
+const MODEL_FIELDS = [
+  ['Triage effort', null],
+  ['rate', 'Engineer cost per hour ($)'], ['manual_min', 'Manual triage per signal (min)'], ['auto_min', 'Review of an auto decision (min)'], ['propose_min', 'Approve or edit a proposal (min)'], ['escalate_min', 'Handle an escalation (min)'], ['page_min', 'On-call time lost per avoidable page (min)'],
+  ['Revenue at risk', null],
+  ['arr_enterprise', 'Annual revenue, enterprise account ($)'], ['arr_pro', 'Annual revenue, pro account ($)'], ['arr_free', 'Annual revenue, free account ($)'],
+  ['churn_P1', 'Churn risk from an unacknowledged P1'], ['churn_P2', 'Churn risk, P2'], ['churn_P3', 'Churn risk, P3'], ['churn_P4', 'Churn risk, P4'],
+  ['loop_auto', 'Risk removed when auto-acknowledged'], ['loop_propose', 'Risk removed after a proposal is approved'], ['loop_escalate', 'Risk removed after an escalation'],
+  ['Misrouting', null],
+  ['misroute_min', 'Minutes a misrouted incident sits with the wrong team'], ['down_P1', 'Cost per minute unresolved, P1 ($)'], ['down_P2', 'Cost per minute, P2 ($)'], ['down_P3', 'Cost per minute, P3 ($)'], ['down_P4', 'Cost per minute, P4 ($)'],
+  ['Attack exposure ($ per successful attack)', null],
+  ['exp_correlation_poisoning', 'Correlation poisoning (cross-customer data)'], ['exp_thread_spoof_poisoning', 'Thread spoof (cross-customer data)'], ['exp_fake_system_message', 'Fake system message (mass mis-email)'], ['exp_direct_override', 'Direct override'], ['exp_authority_impersonation', 'Authority impersonation'], ['exp_encoded_payload', 'Encoded payload'], ['exp_hidden_html_comment', 'Hidden HTML comment'], ['exp_zero_width_override', 'Zero-width override'], ['exp_third_order_quoted', 'Third-order (quoted reply)'], ['exp_second_order_telemetry', 'Second-order via telemetry'], ['exp_priority_manipulation', 'Priority manipulation'],
+];
+function tierMin(t) { return t === 'auto' ? M.auto_min : t === 'propose' ? M.propose_min : M.escalate_min; }
+function impactFor(r) {
+  const lab = L[r.signal.external_id] || {};
+  const out = { handling: 0, page: 0, revenue: 0, misroute: 0, exposure: 0 };
+  if (lab.is_attack) {
+    const row = S.attacks.rows.find(a => a.external_id === r.signal.external_id);
+    out.exposure = (row && row.blocked ? 1 : -1) * (M['exp_' + lab.attack_family] || 0);
+    out.handling = (M.manual_min - tierMin(r.tier)) / 60 * M.rate;
+  } else {
+    out.handling = (M.manual_min - tierMin(r.tier)) / 60 * M.rate;
+    if (/^(merge|thread|fingerprint):/.test(r.correlation_decision)) out.page = M.page_min / 60 * M.rate;
+    if (r.signal.source === 'email' && lab.stratum !== 'noise') {
+      const arr = M['arr_' + (r.signal.plan || 'free')] || 0;
+      out.revenue = arr * (M['churn_' + r.incident.priority] || 0) * (M['loop_' + r.tier] || 0);
+    }
+    if (MISROUTED_BY_GUESS.has(r.signal.external_id)) out.misroute = M.misroute_min * (M['down_' + r.incident.priority] || 0);
+  }
+  out.total = out.handling + out.page + out.revenue + out.misroute + out.exposure;
+  return out;
+}
+function impactTotals() {
+  const t = { handling: 0, page: 0, revenue: 0, misroute: 0, exposure: 0, total: 0, byTier: { auto: 0, propose: 0, escalate: 0 }, hours: 0 };
+  R.forEach(r => { const x = impactFor(r); for (const k of ['handling', 'page', 'revenue', 'misroute', 'exposure', 'total']) t[k] += x[k]; t.byTier[r.tier] += x.total; });
+  t.hours = R.reduce((a, r) => a + (M.manual_min - tierMin(r.tier)) / 60, 0);
+  return t;
+}
+function renderModel() {
+  $('#model').innerHTML = MODEL_FIELDS.map(([k, label]) => label === null ? `<div class="grp">${esc(k)}</div>` : `<label>${esc(label)}<input type="number" step="any" id="m-${k}" value="${M[k]}"></label>`).join('');
+  $('#model').querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { const k = inp.id.slice(2); const v = parseFloat(inp.value); if (!isNaN(v)) { M[k] = v; try { localStorage.setItem('sb.model', JSON.stringify(M)); } catch (e) {} renderImpact(); } }));
+}
+$('#model-reset').addEventListener('click', () => { M = Object.assign({}, D.impact_defaults); try { localStorage.removeItem('sb.model'); } catch (e) {} renderModel(); renderImpact(); });
+function impactBars(el, t) {
+  const rows = [['Triage effort avoided', t.handling], ['Pages avoided', t.page], ['Revenue protected by closing the loop', t.revenue], ['Misroute loss avoided by the lookup', t.misroute], ['Attack exposure avoided', t.exposure]];
+  const max = Math.max(1, ...rows.map(r => Math.abs(r[1])));
+  el.innerHTML = rows.map(([k, v]) => `<div class="ib"><span>${k}</span><span><span class="bar" style="width:${Math.abs(v) / max * 100}%;display:inline-block;${v < 0 ? 'background:var(--escalate)' : ''}"></span></span><span class="val money">${usd(v)}</span></div>`).join('');
+}
+let showAllImpact = false;
+$('#impact-all').addEventListener('change', e => { showAllImpact = e.target.checked; renderImpact(); });
+function renderImpact() {
+  const t = impactTotals();
+  $('#cnt-impact').textContent = usdk(t.total);
+  $('#impact-kpis').innerHTML = `
+    <div class="kpi money"><div class="eyebrow">Estimated value, this corpus</div><div class="v">${usd(t.total)}</div><div class="s">${D.days} days, ${D.n_signals} signals. All five sources below</div></div>
+    <div class="kpi"><div class="eyebrow">Triage hours returned</div><div class="v">${t.hours.toFixed(1)} <span class="muted">h</span></div><div class="s">${usd(t.handling)} at $${M.rate}/h. Manual baseline ${M.manual_min} min per signal</div></div>
+    <div class="kpi money"><div class="eyebrow">Revenue protected</div><div class="v">${usd(t.revenue)}</div><div class="s">Churn risk removed by acknowledging every correlated reporter</div></div>
+    <div class="kpi money"><div class="eyebrow">Misroute loss avoided</div><div class="v">${usd(t.misroute)}</div><div class="s">${MISROUTED_BY_GUESS.size} signals the text guess would have sent to the wrong team</div></div>
+    <div class="kpi money"><div class="eyebrow">Attack exposure avoided</div><div class="v">${usd(t.exposure)}</div><div class="s">${S.attacks.blocked} of ${S.attacks.n} blocked</div></div>`;
+  impactBars($('#fig-impact'), t);
+  impactBars($('#fig-impact-mini'), t);
+  // by tier
+  const tiers = ['auto', 'propose', 'escalate'], max = Math.max(1, ...tiers.map(k => t.byTier[k]));
+  $('#fig-impact-tier').innerHTML = `<div class="impact-bars">${tiers.map(k => `<div class="ib"><span class="lamp ${k}"><i></i>${k}</span><span><span class="bar" style="width:${t.byTier[k] / max * 100}%;display:inline-block;background:var(--${k})"></span></span><span class="val money">${usd(t.byTier[k])}</span></div>`).join('')}</div><figcaption>Escalate includes the attack exposure avoided, since every attack escalated. Escalations still save triage time because the evidence is assembled; they protect less revenue because the reporter waits for a human.</figcaption>`;
+  // per attack
+  const arows = S.attacks.rows.map(a => { const r = R.find(x => x.signal.external_id === a.external_id); const x = impactFor(r); return { a, x, i: R.indexOf(r) }; }).sort((p, q) => q.x.exposure - p.x.exposure);
+  $('#impact-attacks').innerHTML = `<thead><tr><th>Attack</th><th>Family</th><th>Outcome</th><th class="num">Exposure avoided</th><th class="num">Triage saved</th><th class="num">Total</th></tr></thead><tbody>${arows.map(({ a, x, i }) => `<tr data-i="${i}" style="cursor:pointer"><td class="mono">${esc(a.external_id)}</td><td>${esc(a.family.replace(/_/g, ' '))}</td><td>${a.blocked ? '<span class="ok">blocked</span>' : '<span class="bad">not blocked</span>'}</td><td class="num money">${usd(x.exposure)}</td><td class="num">${usd(x.handling)}</td><td class="num money">${usd(x.total)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="3">${S.attacks.n} attacks</td><td class="num money">${usd(t.exposure)}</td><td class="num">${usd(arows.reduce((s, r) => s + r.x.handling, 0))}</td><td class="num money">${usd(arows.reduce((s, r) => s + r.x.total, 0))}</td></tr></tfoot>`;
+  // per signal
+  const srows = R.map((r, i) => ({ r, i, x: impactFor(r) })).filter(o => !(L[o.r.signal.external_id] || {}).is_attack).sort((p, q) => q.x.total - p.x.total);
+  const shownRows = showAllImpact ? srows : srows.slice(0, 15);
+  $('#impact-signals').innerHTML = `<thead><tr><th>Signal</th><th>Account</th><th>Priority</th><th>Tier</th><th class="num">Triage</th><th class="num">Page</th><th class="num">Revenue</th><th class="num">Misroute</th><th class="num">Total</th></tr></thead><tbody>${shownRows.map(({ r, i, x }) => `<tr data-i="${i}" style="cursor:pointer"><td><span class="src ${r.signal.source}" style="margin-right:8px"></span>${esc(r.signal.subject || r.signal.service_tag)}</td><td class="mono">${esc(r.signal.account_ref || 'sentry')}${r.signal.plan ? ' <span class="hint">' + esc(r.signal.plan) + '</span>' : ''}</td><td class="mono">${r.incident.priority}</td><td><span class="lamp ${r.tier}"><i></i>${r.tier}</span></td><td class="num">${usd(x.handling)}</td><td class="num">${x.page ? usd(x.page) : '<span class="hint">0</span>'}</td><td class="num">${x.revenue ? usd(x.revenue) : '<span class="hint">0</span>'}</td><td class="num">${x.misroute ? usd(x.misroute) : '<span class="hint">0</span>'}</td><td class="num money">${usd(x.total)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="4">${srows.length} signals${showAllImpact ? '' : ', top 15 shown'}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.handling, 0))}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.page, 0))}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.revenue, 0))}</td><td class="num">${usd(srows.reduce((s, o) => s + o.x.misroute, 0))}</td><td class="num money">${usd(srows.reduce((s, o) => s + o.x.total, 0))}</td></tr></tfoot>`;
+  document.querySelectorAll('#impact-attacks tr[data-i], #impact-signals tr[data-i]').forEach(tr => tr.addEventListener('click', () => openInReplay(+tr.dataset.i)));
+  // replay value column + overview KPI
+  rows.forEach((el, i) => { el.querySelector('.c9').innerHTML = `<span class="money">${usdk(impactFor(R[i]).total)}</span>`; });
+  const k = $('#kpi-impact'); if (k) k.innerHTML = `<div class="eyebrow">Estimated value</div><div class="v">${usd(t.total)}</div><div class="s">Modeled across ${D.n_signals} signals. Assumptions on the Impact page</div>`;
+}
+
+// ---------- KPIs ----------
 const lift = G.email_grounded.acc - GA.email_grounded.acc;
 function sparkBars(vals, color) {
   const max = Math.max(...vals, 1), w = 100 / vals.length;
-  return `<svg class="spark" viewBox="0 0 100 28" preserveAspectRatio="none">${vals.map((v, i) => `<rect x="${i * w + 0.5}" y="${28 - (v / max) * 26}" width="${w - 1}" height="${(v / max) * 26}" fill="${color}" opacity="${0.35 + 0.65 * (v / max)}"/>`).join('')}</svg>`;
+  return `<svg class="spark" viewBox="0 0 100 26" preserveAspectRatio="none">${vals.map((v, i) => `<rect x="${i * w + 0.6}" y="${26 - (v / max) * 24}" width="${w - 1.2}" height="${(v / max) * 24}" rx="1" fill="${color}" opacity="${0.35 + 0.65 * (v / max)}"/>`).join('')}</svg>`;
 }
-const perDay = D.per_day;
-$('#heads').innerHTML = `
-  <div class="head"><div class="eyebrow">Grounding lift</div><div class="v">${pct(GA.email_grounded.acc)} → ${pct(G.email_grounded.acc)}<span class="d">+${(lift*100).toFixed(1)}</span></div><div class="s">same ${G.email_grounded.n} emails, without / with the alert</div></div>
-  <div class="head"><div class="eyebrow">Ownership misroutes</div><div class="v">${S.ownership.misroutes} <span class="muted">lookup</span> · ${D.ablate_ownership.ownership.misroutes} <span class="muted">guess</span></div><div class="s">on ${S.ownership.n} localized signals · ${D.nonexistent_teams} guesses to teams that do not exist</div></div>
-  <div class="head"><div class="eyebrow">Attacks</div><div class="v">${S.attacks.blocked}/${S.attacks.n} <span class="muted">blocked</span></div><div class="s">${S.attacks.flagged} detected · ${S.attacks.n - S.attacks.flagged} blocked without being detected</div></div>
-  <div class="head"><div class="eyebrow">Signals per day</div><div class="v">${D.n_signals} <span class="muted">→ ${S.n_incidents} incidents</span></div>${sparkBars(perDay.map(d => d.n), 'var(--accent)')}<div class="s">${perDay.map(d => d.day.slice(5)).join(' · ')}</div></div>`;
-
-// ---------- tabs ----------
-document.querySelectorAll('nav.tabs button').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('nav.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
-  document.querySelectorAll('section.panel').forEach(p => p.classList.toggle('active', p.id === b.dataset.tab));
-  try { localStorage.setItem('sb.tab', b.dataset.tab); } catch (e) {}
-}));
-try { const h = location.hash.replace(/^#(tab:)?/, ''); const t = h || localStorage.getItem('sb.tab'); if (t) document.querySelector(`nav.tabs button[data-tab="${t}"]`)?.click(); if (h) requestAnimationFrame(() => window.scrollTo(0, 0)); } catch (e) {}
+$('#kpis').innerHTML = `
+  <div class="kpi money" id="kpi-impact"></div>
+  <div class="kpi"><div class="eyebrow">Grounding lift</div><div class="v">${pct(GA.email_grounded.acc)} <span class="muted">to</span> ${pct(G.email_grounded.acc)}<span class="d">+${(lift*100).toFixed(1)} pts</span></div><div class="s">Same ${G.email_grounded.n} emails, without and with the alert</div></div>
+  <div class="kpi"><div class="eyebrow">Ownership misroutes</div><div class="v">${S.ownership.misroutes} <span class="muted">lookup</span> ${D.ablate_ownership.ownership.misroutes} <span class="muted">guess</span></div><div class="s">On ${S.ownership.n} localized signals. ${D.nonexistent_teams} guesses named a team that does not exist</div></div>
+  <div class="kpi"><div class="eyebrow">Attacks</div><div class="v">${S.attacks.blocked}/${S.attacks.n} <span class="muted">blocked</span></div><div class="s">${S.attacks.flagged} detected. ${S.attacks.n - S.attacks.flagged} blocked without being detected</div></div>
+  <div class="kpi"><div class="eyebrow">Signals per day</div><div class="v">${D.n_signals} <span class="muted">to ${S.n_incidents} incidents</span></div>${sparkBars(D.per_day.map(d => d.n), 'var(--accent)')}<div class="s">${D.per_day.map(d => d.day.slice(5)).join(' · ')}</div></div>`;
 
 // ---------- replay board ----------
 const board = $('#board'), drawer = $('#drawer');
 const DEMO = new Set(D.demo_ids);
 let shown = 0, timer = null;
+const hay = R.map(r => [r.signal.external_id, r.signal.subject, r.signal.service_tag, r.signal.account_ref, r.incident.id, r.incident.service, r.tier].join(' ').toLowerCase());
 const rows = R.map((r, i) => {
   const lab = L[r.signal.external_id] || {};
   const inc = r.incident, sig = r.signal;
-  const ts = sig.received_at.slice(5, 16).replace('T', ' ');
+  const ts = sig.received_at.slice(5, 16).replace('T', '<br>');
   const corr = r.correlation_decision.replace(/^(merge|thread|fingerprint):/, '$1 → ');
   const rel = inc.possible_relations && inc.possible_relations.length && r.correlation_decision === 'new' ? ` <span style="color:var(--ink-3)">~${inc.possible_relations[inc.possible_relations.length-1]}</span>` : '';
   const prov = inc.localization_provenance.split(':')[0];
@@ -325,24 +537,26 @@ const rows = R.map((r, i) => {
   const el = document.createElement('div');
   el.className = 'row hidden'; el.tabIndex = 0; el.dataset.i = i;
   el.innerHTML = `<span class="t mono">${ts}</span><span class="src ${sig.source}" title="${sig.source}"></span>
-    <span class="subj">${label}<small>${who}${lab.is_attack ? ' · ATTACK' : ''}</small></span>
+    <span class="subj">${label}<small>${who}</small>${lab.is_attack ? ' <span class="badge attack">attack</span>' : ''}</span>
     <span class="corr c4"><b>${esc(corr)}</b>${rel} <span style="color:var(--ink-3)">${f3(r.correlation_confidence)}</span></span>
     <span class="c5"><span class="chip ${prov}"><span class="dot"></span><span class="svc">${esc(inc.service || 'unknown')}</span></span></span>
     <span class="prio c6">${esc(pp)}<span class="rules" title="${esc(rules||'')}">${esc((rules||'').replace(']',''))}</span></span>
     <span class="lamp ${r.tier}"><i></i>${r.tier}${r.injection_flag ? '<span class="flag">⚠</span>' : ''}</span>
-    <span class="plan c8" title="${esc(plan)}">${esc(plan)}</span>`;
+    <span class="plan c8" title="${esc(plan)}">${esc(plan)}</span><span class="c9"></span>`;
   el.addEventListener('click', () => select(i));
   el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(i); } });
   board.appendChild(el);
   return el;
 });
+const emptyRow = document.createElement('div'); emptyRow.className = 'empty hidden'; emptyRow.textContent = 'No signals match.'; board.appendChild(emptyRow);
 function visibleIdx() {
-  const st = $('#fstratum').value, tier = $('#ftier').value, demo = $('#demoslice').checked;
+  const st = $('#fstratum').value, tier = $('#ftier').value, demo = $('#demoslice').checked, q = $('#q').value.trim().toLowerCase();
   return R.map((r, i) => i).filter(i => {
     const lab = L[R[i].signal.external_id] || {};
     if (demo && !DEMO.has(R[i].signal.external_id)) return false;
     if (st && lab.stratum !== st) return false;
     if (tier && R[i].tier !== tier) return false;
+    if (q && !hay[i].includes(q)) return false;
     return true;
   });
 }
@@ -350,9 +564,10 @@ function render() {
   const vis = visibleIdx();
   rows.forEach(el => el.classList.add('hidden'));
   vis.slice(0, shown).forEach(i => rows[i].classList.remove('hidden'));
+  emptyRow.classList.toggle('hidden', vis.length > 0);
   $('#counter').textContent = `${Math.min(shown, vis.length)} / ${vis.length}`;
   $('#play').textContent = timer ? 'Pause' : (shown >= vis.length ? 'Replay' : 'Play');
-  document.querySelectorAll('#fig-timeline [data-i]').forEach(m => m.style.opacity = vis.slice(0, shown).includes(+m.dataset.i) ? 1 : 0.18);
+  document.querySelectorAll('#fig-timeline [data-i]').forEach(m => m.style.opacity = vis.slice(0, shown).includes(+m.dataset.i) ? 1 : 0.15);
 }
 function step() {
   const vis = visibleIdx();
@@ -364,54 +579,68 @@ function step() {
 function stop() { if (timer) { clearInterval(timer); timer = null; } render(); }
 $('#play').addEventListener('click', () => { if (timer) { stop(); return; } if (shown >= visibleIdx().length) shown = 0; step(); timer = setInterval(step, +$('#speed').value); render(); });
 $('#step').addEventListener('click', () => { stop(); step(); });
-$('#reset').addEventListener('click', () => { stop(); shown = 0; drawer.className = 'drawer empty'; drawer.textContent = 'Select a signal to see its state trace, the untrusted text as the pipeline saw it, and the plan.'; render(); });
+$('#reset').addEventListener('click', () => { stop(); shown = 0; drawer.className = 'drawer empty'; drawer.textContent = 'Select a signal to see its state trace, the untrusted text as the pipeline saw it, the plan, and the modeled value.'; render(); });
 $('#speed').addEventListener('change', () => { if (timer) { clearInterval(timer); timer = setInterval(step, +$('#speed').value); } });
 ['#fstratum', '#ftier', '#demoslice'].forEach(s => $(s).addEventListener('change', () => { stop(); shown = visibleIdx().length; render(); }));
+$('#q').addEventListener('input', () => { stop(); shown = visibleIdx().length; render(); if (!$('#replay').classList.contains('active') && $('#q').value) goTab('replay'); });
 function select(i) {
   rows.forEach(el => el.classList.toggle('selected', +el.dataset.i === i));
   const r = R[i], sig = r.signal, inc = r.incident, lab = L[sig.external_id] || {};
-  const truth = lab.true_service ? `${esc(lab.true_service)} / ${esc(lab.true_incident)} / ${esc(lab.true_priority)}` : '—';
+  const truth = lab.true_service ? `${esc(lab.true_service)} / ${esc(lab.true_incident)} / ${esc(lab.true_priority)}` : 'n/a';
   const got = `${esc(inc.service || 'unknown')} / ${esc(inc.id)} / ${esc(inc.priority)}`;
   const body = sig.source === 'email' ? (sig.body || '') : [sig.error_message, ...(sig.stack_frames || [])].join('\n');
   const members = R.filter(x => x.incident.id === inc.id).map(x => x.signal.external_id);
   const right = (inc.service || 'unknown') === lab.true_service;
+  const x = impactFor(r);
+  const parts = lab.is_attack ? [['exposure avoided', x.exposure], ['triage', x.handling]] : [['triage', x.handling], ['page avoided', x.page], ['revenue protected', x.revenue], ['misroute avoided', x.misroute]];
   drawer.className = 'drawer';
   drawer.innerHTML = `
     <div>
       <h3>State trace · <span class="mono">${esc(sig.external_id)}</span></h3>
       <ol class="trace">${r.state_trace.map(t => `<li class="${t.split(':')[0]}">${esc(t)}</li>`).join('')}</ol>
       <h3 style="margin-top:16px">Plan</h3>
-      <ol class="trace">${r.plan.length ? r.plan.map(a => `<li>${esc(a.type)} → ${esc(a.payload.channel || a.payload.to || a.payload.user || a.payload.incident_id || '')} <span style="color:var(--ink-3)">${esc(a.idempotency_key.slice(0,10))}</span></li>`).join('') : '<li>—</li>'}</ol>
+      <ol class="trace">${r.plan.length ? r.plan.map(a => `<li>${esc(a.type)} → ${esc(a.payload.channel || a.payload.to || a.payload.user || a.payload.incident_id || '')} <span style="color:var(--ink-3)">${esc(a.idempotency_key.slice(0,10))}</span></li>`).join('') : '<li>none</li>'}</ol>
     </div>
     <div>
       <dl class="kv">
         <dt>ground truth</dt><dd>${truth}</dd>
         <dt>decision</dt><dd>${got} <span class="${right ? 'ok' : 'bad'}">${right ? '✓' : '✗'}</span></dd>
         <dt>incident members</dt><dd>${members.map(esc).join(', ')}</dd>
-        <dt>c_eff</dt><dd>${f3(r.c_eff)} · corr ${f3(r.correlation_confidence)} · loc ${f3(inc.localization_confidence)}</dd>
-        <dt>owner</dt><dd>${inc.owner ? esc(inc.owner.team) + ' ' + esc(inc.owner.slack_channel) + (inc.owner.stale ? ' (stale CODEOWNERS)' : '') : '—'}</dd>
+        <dt>confidence</dt><dd>c_eff ${f3(r.c_eff)} · corr ${f3(r.correlation_confidence)} · loc ${f3(inc.localization_confidence)}</dd>
+        <dt>owner</dt><dd>${inc.owner ? esc(inc.owner.team) + ' ' + esc(inc.owner.slack_channel) + (inc.owner.stale ? ' (stale CODEOWNERS)' : '') : 'none'}</dd>
         <dt>stratum</dt><dd>${esc(lab.stratum || '')}${lab.attack_family ? ' · ' + esc(lab.attack_family) : ''}${lab.vagueness ? ' · vagueness ' + esc(lab.vagueness) : ''}</dd>
+        <dt>modeled value</dt><dd><span class="money">${usd(x.total)}</span> <span class="hint">${parts.filter(p => p[1]).map(p => p[0] + ' ' + usd(p[1])).join(' · ')}</span></dd>
       </dl>
       <div class="untrusted" style="margin-top:14px"><span class="lbl">untrusted ${sig.source} text, as the pipeline saw it</span>${esc(body)}</div>
     </div>`;
   drawer.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
+function openInReplay(i) { goTab('replay'); stop(); shown = visibleIdx().length; render(); select(i); rows[i].scrollIntoView({ block: 'center' }); }
+shown = visibleIdx().length; render();
+
+// ---------- queues ----------
+(function queues() {
+  const esc_ = R.filter(r => r.tier === 'escalate').slice(-8).reverse();
+  $('#queue-esc').innerHTML = esc_.map(r => { const REASON = { 'service=unknown': 'no service identified', 'injection_flagged': 'injection suspected', 'c_eff<tau_prop': 'low confidence', 'non_english_policy': 'non-English, escalated by policy', 'schema_failure': 'invalid model output', 'max_tier': 'capped by live-mode policy' };
+  const reasons = (r.plan[0] && r.plan[0].payload.reasons || []).map(x => REASON[x] || x).join(', '); const lab = L[r.signal.external_id] || {}; const idx = R.indexOf(r); return `<div class="item" data-i="${idx}"><span class="src ${r.signal.source}"></span><div class="l"><b>${esc(r.signal.subject || r.signal.service_tag)}${lab.is_attack ? ' <span class="badge attack">attack</span>' : ''}</b><span>${esc(reasons || 'low confidence')}${r.incident.service ? ' · ' + esc(r.incident.service) : ''}</span></div><span class="mono hint">${esc(r.signal.received_at.slice(5, 16).replace('T', ' '))}</span></div>`; }).join('') || '<div class="empty">No escalations.</div>';
+  const auto = R.filter(r => r.tier === 'auto').slice(-8).reverse();
+  $('#queue-auto').innerHTML = auto.map(r => { const acts = r.plan.map(a => a.type === 'post_slack' ? a.payload.channel : a.type === 'page_oncall' ? 'page ' + a.payload.user : a.type === 'send_email_ack' ? 'ack ' + a.payload.to.split('@')[1] : null).filter(Boolean).join(' · '); const idx = R.indexOf(r); return `<div class="item" data-i="${idx}"><span class="src ${r.signal.source}"></span><div class="l"><b>${esc(r.signal.subject || r.signal.service_tag)}</b><span>${esc(r.incident.priority)} ${esc(r.incident.service)} · ${esc(acts || 'merged')}</span></div><span class="mono hint">${esc(r.signal.received_at.slice(5, 16).replace('T', ' '))}</span></div>`; }).join('') || '<div class="empty">No automatic actions.</div>';
+  document.querySelectorAll('.item[data-i]').forEach(it => it.addEventListener('click', () => openInReplay(+it.dataset.i)));
+})();
 
 // ---------- timeline ----------
-(function () {
-  const W = 1100, H = 120, m = { l: 70, r: 20, t: 16, b: 28 };
+(function timeline() {
+  const W = 1100, H = 124, m = { l: 70, r: 20, t: 16, b: 30 };
   const t0 = new Date(D.t_min).getTime(), t1 = new Date(D.t_max).getTime();
   const sx = t => m.l + ((new Date(t).getTime() - t0) / (t1 - t0)) * (W - m.l - m.r);
   const lanes = { telemetry: m.t + 22, email: m.t + 62 };
   let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="signal timeline">`;
-  // day gridlines
   const dayMs = 86400000, start = new Date(D.t_min); start.setUTCHours(0, 0, 0, 0);
   for (let d = start.getTime(); d <= t1 + dayMs; d += dayMs) {
-    if (d < t0 - dayMs) continue;
     const x = sx(new Date(d).toISOString());
-    if (x >= m.l && x <= W - m.r) s += `<line class="axis" x1="${x}" x2="${x}" y1="${m.t}" y2="${H - m.b}" stroke-dasharray="2 4"/><text class="dim" x="${x + 4}" y="${H - 10}">${new Date(d).toISOString().slice(5, 10)}</text>`;
+    if (x >= m.l && x <= W - m.r) s += `<line class="axis" x1="${x}" x2="${x}" y1="${m.t}" y2="${H - m.b}" stroke-dasharray="2 4"/><text class="dim" x="${x + 5}" y="${H - 10}">${new Date(d).toISOString().slice(5, 10)}</text>`;
   }
-  s += `<text x="${m.l - 10}" y="${lanes.telemetry + 4}" text-anchor="end">telemetry</text><text x="${m.l - 10}" y="${lanes.email + 4}" text-anchor="end">email</text>`;
+  s += `<text x="${m.l - 10}" y="${lanes.telemetry + 4}" text-anchor="end">alerts</text><text x="${m.l - 10}" y="${lanes.email + 4}" text-anchor="end">emails</text>`;
   R.forEach((r, i) => {
     const y = lanes[r.signal.source] + (i % 5 - 2) * 4, x = sx(r.signal.received_at);
     const lab = L[r.signal.external_id] || {};
@@ -420,9 +649,8 @@ function select(i) {
   });
   s += '</svg>';
   $('#fig-timeline').innerHTML = s + `<div class="legend"><span><i style="background:var(--auto)"></i>auto</span><span><i style="background:var(--propose)"></i>propose</span><span><i style="background:var(--escalate)"></i>escalate</span><span style="margin-left:8px"><i style="background:var(--tel);border-radius:2px"></i>alert</span><span><i style="background:var(--email);border-radius:50%"></i>email</span></div>`;
-  $('#fig-timeline').querySelectorAll('[data-i]').forEach(mk => { hover(mk, mk.dataset.tt); mk.style.cursor = 'pointer'; mk.addEventListener('click', () => { stop(); shown = visibleIdx().length; render(); select(+mk.dataset.i); rows[+mk.dataset.i].scrollIntoView({ block: 'center' }); }); });
+  $('#fig-timeline').querySelectorAll('[data-i]').forEach(mk => { hover(mk, mk.dataset.tt); mk.style.cursor = 'pointer'; mk.addEventListener('click', () => openInReplay(+mk.dataset.i)); });
 })();
-shown = visibleIdx().length; render();
 
 // ---------- chart helpers ----------
 function pairedBars(fig, groups, series, colors, fmt = pct, max = 1, W = 560, left = 190) {
@@ -436,8 +664,7 @@ function pairedBars(fig, groups, series, colors, fmt = pct, max = 1, W = 560, le
     s += `<text x="${left - 10}" y="${y0 + (series.length * 20) / 2 + 2}" text-anchor="end">${esc(g.label)}</text>`;
     g.values.forEach((v, si) => {
       const w = Math.max(0, ((v || 0) / max) * (W - left - right)), y = y0 + si * 20;
-      s += `<rect data-tt="${esc(series[si])}: ${fmt(v)}" x="${left}" y="${y}" width="${w}" height="${bw}" fill="${colors[si]}"/>`;
-      s += `<text class="v" x="${left + w + 6}" y="${y + bw - 3}">${fmt(v)}</text>`;
+      s += `<rect data-tt="${esc(series[si])}: ${fmt(v)}" x="${left}" y="${y}" width="${w}" height="${bw}" rx="2" fill="${colors[si]}"/><text class="v" x="${left + w + 6}" y="${y + bw - 3}">${fmt(v)}</text>`;
     });
   });
   s += '</svg>';
@@ -451,19 +678,21 @@ function hBars(fig, items, color, fmt = pct, max = 1, note, W = 560, left = 170)
   s += [0, .5, 1].map(v => `<text class="dim" x="${left + v * (W - left - right)}" y="${H - 6}" text-anchor="middle">${fmt(v * max)}</text>`).join('');
   items.forEach((it, i) => {
     const y = 6 + i * rowH, w = Math.max(0, ((it.v || 0) / max) * (W - left - right));
-    s += `<text x="${left - 10}" y="${y + 13}" text-anchor="end">${esc(it.label)}</text><rect data-tt="${esc(it.label)}: ${fmt(it.v)}${it.n != null ? '  n=' + it.n : ''}" x="${left}" y="${y}" width="${w}" height="14" fill="${typeof color === 'function' ? color(it) : color}"/><text class="v" x="${left + w + 6}" y="${y + 12}">${fmt(it.v)}${it.n != null ? ` <tspan class="dim">n=${it.n}</tspan>` : ''}</text>`;
+    s += `<text x="${left - 10}" y="${y + 13}" text-anchor="end">${esc(it.label)}</text><rect data-tt="${esc(it.label)}: ${fmt(it.v)}${it.n != null ? '  n=' + it.n : ''}" x="${left}" y="${y}" width="${w}" height="14" rx="2" fill="${typeof color === 'function' ? color(it) : color}"/><text class="v" x="${left + w + 6}" y="${y + 12}">${fmt(it.v)}${it.n != null ? ` <tspan class="dim">n=${it.n}</tspan>` : ''}</text>`;
   });
   s += '</svg>';
   fig.innerHTML = s + (note ? `<figcaption>${note}</figcaption>` : '');
   fig.querySelectorAll('rect[data-tt]').forEach(r => hover(r, r.dataset.tt));
 }
 
-// ---------- results charts ----------
-pairedBars($('#fig-grounding'), [
+// ---------- charts ----------
+const groundingGroups = [
   { label: `grounded stratum · ${G.email_grounded.n} emails`, values: [GA.email_grounded.acc, G.email_grounded.acc] },
   { label: `ungrounded stratum · ${G.email_ungrounded.n} emails`, values: [GA.email_ungrounded.acc, G.email_ungrounded.acc] },
   { label: `telemetry · ${G.telemetry.n} alerts`, values: [GA.telemetry.acc, G.telemetry.acc] },
-], ['telemetry withheld', 'full'], ['var(--inferred)', 'var(--grounded)'], pct, 1, 560, 210);
+];
+pairedBars($('#fig-grounding'), groundingGroups, ['telemetry withheld', 'full'], ['var(--inferred)', 'var(--grounded)'], pct, 1, 560, 210);
+pairedBars($('#fig-grounding-2'), groundingGroups, ['telemetry withheld', 'full'], ['var(--inferred)', 'var(--grounded)'], pct, 1, 560, 210);
 pairedBars($('#fig-correlation'), [
   { label: 'precision', values: [CA.precision ?? 0, C.precision] },
   { label: 'recall', values: [CA.recall ?? 0, C.recall] },
@@ -495,25 +724,25 @@ $('#fig-ownership').insertAdjacentHTML('beforeend', `<figcaption>${S.ownership.m
   const t = S.tier_distribution, em = S.email_tiers;
   const bar = ['auto', 'propose', 'escalate'].map(k => `<div class="${k}" style="flex:${(t[k] || 0) * 100}" data-tt="${k}: ${pct(t[k])}">${(t[k] || 0) > .14 ? pct(t[k]) : ''}</div>`).join('');
   $('#fig-tiers').innerHTML = `<div class="tierbar">${bar}</div><div class="legend">${['auto', 'propose', 'escalate'].map(k => `<span><i style="background:var(--${k})"></i>${k} ${pct(t[k])}</span>`).join('')}</div>
-    <figcaption>Emails: ${em.auto || 0} auto · ${em.propose || 0} propose · ${em.escalate || 0} escalate. Every auto-tier email was grounded. With Sentry withheld: ${D.no_telemetry ? (D.no_telemetry.email_tiers.auto || 0) + ' auto, ' + (D.no_telemetry.email_tiers.escalate || 0) + ' escalate' : '—'}.</figcaption>`;
+    <figcaption>Emails: ${em.auto || 0} auto · ${em.propose || 0} propose · ${em.escalate || 0} escalate. Every auto-tier email was grounded. With Sentry withheld: ${D.no_telemetry ? (D.no_telemetry.email_tiers.auto || 0) + ' auto, ' + (D.no_telemetry.email_tiers.escalate || 0) + ' escalate' : 'n/a'}.</figcaption>`;
   $('#fig-tiers').querySelectorAll('[data-tt]').forEach(c => hover(c, c.dataset.tt));
 })();
 
 hBars($('#fig-services'), D.per_service.map(x => ({ label: x.service, v: x.acc, n: x.n })), it => it.v >= .75 ? 'var(--seq-4)' : it.v >= .5 ? 'var(--seq-3)' : 'var(--seq-2)', pct, 1, 'Non-attack emails, localized service vs. true service. Sequential shading by accuracy.');
-hBars($('#fig-vague'), D.per_vagueness.map(x => ({ label: x.level.replace(' (', '\n(').split('\n')[0], v: x.acc, n: x.n })), 'var(--grounded)', pct, 1, 'high = symptom only · medium = feature named · low = endpoint named. Grounding carries the high bucket.', 400, 90);
+hBars($('#fig-vague'), D.per_vagueness.map(x => ({ label: x.level.split(' (')[0], v: x.acc, n: x.n })), 'var(--grounded)', pct, 1, 'high = symptom only · medium = feature named · low = endpoint named. Grounding carries the high bucket.', 400, 90);
 hBars($('#fig-sizes'), D.incident_sizes.map(x => ({ label: `${x.size} signal${x.size > 1 ? 's' : ''}`, v: x.count })), 'var(--grounded)', v => String(v), Math.max(...D.incident_sizes.map(x => x.count)), `${C.pages_avoided} pages avoided by correlation across ${S.n_incidents} incidents.`, 400, 90);
 
 (function prio() {
-  const P = ['P1', 'P2', 'P3', 'P4'], M = D.priority_matrix, max = Math.max(1, ...M.flat());
+  const P = ['P1', 'P2', 'P3', 'P4'], Mx = D.priority_matrix, max = Math.max(1, ...Mx.flat());
   const cell = 44, W = 60 + cell * 4 + 10, H = 40 + cell * 4;
   let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:280px" role="img" aria-label="priority confusion matrix">`;
-  s += `<text class="dim" x="${60 + cell * 2}" y="12" text-anchor="middle">assigned →</text>`;
+  s += `<text class="dim" x="${60 + cell * 2}" y="12" text-anchor="middle">assigned</text>`;
   P.forEach((p, j) => s += `<text class="dim" x="${60 + j * cell + cell / 2}" y="28" text-anchor="middle">${p}</text>`);
   P.forEach((p, i) => {
     s += `<text class="dim" x="50" y="${40 + i * cell + cell / 2 + 4}" text-anchor="end">${i === 0 ? 'true ' : ''}${p}</text>`;
     P.forEach((q, j) => {
-      const v = M[i][j], k = v ? Math.min(5, 1 + Math.ceil((v / max) * 4)) : 0;
-      s += `<rect data-tt="true ${p} → assigned ${q}: ${v}" x="${60 + j * cell + 1}" y="${40 + i * cell + 1}" width="${cell - 2}" height="${cell - 2}" rx="4" fill="${k ? `var(--seq-${k})` : 'var(--panel-2)'}" ${i === j ? 'stroke="var(--ink-3)" stroke-width="1"' : ''}/>`;
+      const v = Mx[i][j], k = v ? Math.min(5, 1 + Math.ceil((v / max) * 4)) : 0;
+      s += `<rect data-tt="true ${p} to assigned ${q}: ${v}" x="${60 + j * cell + 1}" y="${40 + i * cell + 1}" width="${cell - 2}" height="${cell - 2}" rx="5" fill="${k ? `var(--seq-${k})` : 'var(--panel-3)'}" ${i === j ? 'stroke="var(--ink-3)" stroke-width="1"' : ''}/>`;
       if (v) s += `<text class="v" x="${60 + j * cell + cell / 2}" y="${40 + i * cell + cell / 2 + 4}" text-anchor="middle" style="fill:${k >= 3 ? '#fff' : 'var(--ink)'}">${v}</text>`;
     });
   });
@@ -524,16 +753,18 @@ hBars($('#fig-sizes'), D.incident_sizes.map(x => ({ label: `${x.size} signal${x.
 
 (function transitions() {
   const tr = Object.entries(S.transitions || {}).sort((a, b) => b[1] - a[1]).slice(0, 14);
-  hBars($('#fig-transitions'), tr.map(([k, v]) => ({ label: k, v })), 'var(--seq-3)', v => String(v), tr[0] ? tr[0][1] : 1);
+  hBars($('#fig-transitions'), tr.map(([k, v]) => ({ label: k, v })), 'var(--seq-3)', v => String(v), tr[0] ? tr[0][1] : 1, null, 640, 230);
 })();
+
+$('#runinfo').innerHTML = [['run', D.run_id], ['backend', D.backend], ['generated', D.generated_at], ['signals', D.n_signals], ['incidents', S.n_incidents], ['model calls', S.llm_calls], ['cost per incident', '$' + S.cost_usd_per_incident], ['mean latency', S.latency_ms_mean + ' ms'], ['flip rate k=3', D.flip ? f3(D.flip.flip_rate) : 'n/a']].map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
 
 (function headline() {
   const P = S.localization_email_by_provenance;
   const rowsT = [
-    ['Localization acc@1 — email, grounded stratum, telemetry withheld', pct(GA.email_grounded.acc), `n = ${G.email_grounded.n}`, true],
-    ['Localization acc@1 — email, grounded stratum, cross-source grounded', pct(G.email_grounded.acc), `same ${G.email_grounded.n} emails`, true],
-    ['Localization acc@1 — email, ungrounded stratum', pct(G.email_ungrounded.acc), `n = ${G.email_ungrounded.n}, unknown rate ${pct(G.email_ungrounded.unknown_rate)}`],
-    ['Localization acc@1 — telemetry', pct(G.telemetry.acc), `n = ${G.telemetry.n}`],
+    ['Localization acc@1: email, grounded stratum, telemetry withheld', pct(GA.email_grounded.acc), `n = ${G.email_grounded.n}`, true],
+    ['Localization acc@1: email, grounded stratum, cross-source grounded', pct(G.email_grounded.acc), `same ${G.email_grounded.n} emails`, true],
+    ['Localization acc@1: email, ungrounded stratum', pct(G.email_ungrounded.acc), `n = ${G.email_ungrounded.n}, unknown rate ${pct(G.email_ungrounded.unknown_rate)}`],
+    ['Localization acc@1: telemetry', pct(G.telemetry.acc), `n = ${G.telemetry.n}`],
     ['Realized provenance grounded:telemetry', `${P['grounded:telemetry'].n} / ${S.localization_email_all.n} emails`, `acc ${pct(P['grounded:telemetry'].acc)}`],
     ['Ownership lookup success', pct(S.ownership.lookup_success), 'a lookup, reported as such'],
     ['Ownership team correct', `${pct(S.ownership.team_correct)} (${S.ownership.misroutes} misroutes)`, `text guess: ${pct(D.ablate_ownership.ownership.team_correct)} (${D.ablate_ownership.ownership.misroutes})`],
@@ -542,41 +773,40 @@ hBars($('#fig-sizes'), D.incident_sizes.map(x => ({ label: `${x.size} signal${x.
     ['Pages avoided by correlation', C.pages_avoided, `without telemetry: ${CA.pages_avoided}`],
     ['Priority within-one', pct(S.priority.within_one), `exact ${pct(S.priority.exact)}`],
     ['Calibration ECE grounded / ungrounded', `${f3(S.calibration.grounded.ece)} / ${f3(S.calibration.ungrounded.ece)}`, `n = ${S.calibration.grounded.n} / ${S.calibration.ungrounded.n}`],
-    ['Flip rate (k=3)', D.flip ? f3(D.flip.flip_rate) : '—', 'deterministic stand-in; meaningful only under a model'],
+    ['Flip rate (k=3)', D.flip ? f3(D.flip.flip_rate) : 'n/a', 'deterministic stand-in; meaningful only under a model'],
     ['Auto-tier rate', pct(S.tier_distribution.auto), `${S.email_tiers.auto || 0} / ${S.localization_email_all.n} emails`],
-    ['Noise → unknown', pct(G.noise.unknown_rate), `n = ${G.noise.n}`],
+    ['Noise to unknown', pct(G.noise.unknown_rate), `n = ${G.noise.n}`],
     ['Injection attacks blocked', `${S.attacks.blocked} / ${S.attacks.n}`, `${S.attacks.flagged} detected`],
     ['Cost per incident', `$${S.cost_usd_per_incident}`, `${S.llm_calls} model calls · backend ${esc(D.backend)}`],
   ];
-  $('#headline').innerHTML = `<thead><tr><th>Metric</th><th style="text-align:right">Result</th><th>Note</th></tr></thead><tbody>${rowsT.map(r => `<tr class="${r[3] ? 'hl' : ''}"><td>${r[0]}</td><td class="num">${r[1]}</td><td style="color:var(--ink-2)">${r[2]}</td></tr>`).join('')}</tbody>`;
+  $('#headline').innerHTML = `<thead><tr><th>Metric</th><th class="num">Result</th><th>Note</th></tr></thead><tbody>${rowsT.map(r => `<tr class="${r[3] ? 'hl' : ''}"><td>${r[0]}</td><td class="num">${r[1]}</td><td style="color:var(--ink-2)">${r[2]}</td></tr>`).join('')}</tbody>`;
 })();
 
 // ---------- attacks ----------
 (function attacks() {
   const fam = {};
-  S.attacks.rows.forEach(a => { const k = a.family.replace(/_/g, ' '); fam[k] = fam[k] || { n: 0, blocked: 0, flagged: 0 }; fam[k].n++; if (a.blocked) fam[k].blocked++; if (a.injection_flag) fam[k].flagged++; });
-  const items = Object.entries(fam).map(([k, v]) => ({ label: k, v: v.blocked / v.n, n: v.n }));
-  hBars($('#fig-attacks'), items, 'var(--auto)', pct, 1, `${S.attacks.blocked} / ${S.attacks.n} blocked · ${S.attacks.flagged} detected. Blocking does not depend on detection.`, 460, 190);
+  S.attacks.rows.forEach(a => { const k = a.family.replace(/_/g, ' '); fam[k] = fam[k] || { n: 0, blocked: 0 }; fam[k].n++; if (a.blocked) fam[k].blocked++; });
+  hBars($('#fig-attacks'), Object.entries(fam).map(([k, v]) => ({ label: k, v: v.blocked / v.n, n: v.n })), 'var(--auto)', pct, 1, `${S.attacks.blocked} / ${S.attacks.n} blocked · ${S.attacks.flagged} detected. Blocking does not depend on detection.`, 460, 190);
   const rowsA = S.attacks.rows.map(a => { const idx = R.findIndex(r => r.signal.external_id === a.external_id); return `<tr><td class="mono"><a href="#" data-i="${idx}">${esc(a.external_id)}</a></td><td>${esc(a.family.replace(/_/g, ' '))}</td><td><span class="lamp ${a.tier}"><i></i>${a.tier}</span></td><td class="mono">${esc(a.decision)}</td><td class="mono">${a.priority}</td><td>${a.injection_flag ? 'yes' : '<span style="color:var(--ink-3)">no</span>'}</td><td>${a.blocked ? '<span class="ok">blocked</span>' : '<span class="bad">' + esc(a.violations.join(', ')) + '</span>'}</td></tr>`; }).join('');
   $('#attacktable').innerHTML = `<thead><tr><th>Signal</th><th>Family</th><th>Tier</th><th>Correlation</th><th>Priority</th><th>Detected</th><th>Outcome</th></tr></thead><tbody>${rowsA}</tbody>`;
   $('#attacktable').querySelectorAll('a[data-i]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openInReplay(+a.dataset.i); }));
 })();
-function openInReplay(i) { $('#tab-replay').click(); stop(); shown = visibleIdx().length; render(); select(i); rows[i].scrollIntoView({ block: 'center' }); }
 
 // ---------- failures ----------
 (function failures() {
   const fails = R.filter(r => { const l = L[r.signal.external_id]; return l && !l.is_attack && (r.incident.service || 'unknown') !== l.true_service; });
-  $('#gallery').innerHTML = fails.length ? fails.map(r => { const l = L[r.signal.external_id]; const idx = R.indexOf(r); return `<div class="fail"><div class="h"><b>${esc(r.signal.external_id)}</b><span class="eyebrow">${esc(l.stratum)}</span><span>true <code>${esc(l.true_service)}</code> → got <code>${esc(r.incident.service || 'unknown')}</code></span><span class="chip ${r.incident.localization_provenance.split(':')[0]}"><span class="dot"></span>${esc(r.incident.localization_provenance)}</span><span class="lamp ${r.tier}"><i></i>${r.tier}</span><button class="ghost" data-i="${idx}" style="margin-left:auto">Open in replay →</button></div><div class="why mono" style="font-size:12px">${esc(r.state_trace.join(' → '))}</div><div class="why">${esc(r.signal.subject || r.signal.error_message || '')}</div></div>`; }).join('') : '<div class="note">No localization failures.</div>';
+  $('#cnt-failures').textContent = fails.length;
+  $('#gallery').innerHTML = fails.length ? fails.map(r => { const l = L[r.signal.external_id]; const idx = R.indexOf(r); return `<div class="fail"><div class="h"><b>${esc(r.signal.external_id)}</b><span class="eyebrow">${esc(l.stratum)}</span><span>true <code>${esc(l.true_service)}</code> got <code>${esc(r.incident.service || 'unknown')}</code></span><span class="chip ${r.incident.localization_provenance.split(':')[0]}"><span class="dot"></span>${esc(r.incident.localization_provenance)}</span><span class="lamp ${r.tier}"><i></i>${r.tier}</span><button class="ghost sm" data-i="${idx}" style="margin-left:auto">Open in replay</button></div><div class="why mono" style="font-size:12px">${esc(r.state_trace.join(' → '))}</div><div class="why">${esc(r.signal.subject || r.signal.error_message || '')}</div></div>`; }).join('') : '<div class="empty">No localization failures.</div>';
   $('#gallery').querySelectorAll('button[data-i]').forEach(b => b.addEventListener('click', () => openInReplay(+b.dataset.i)));
 })();
 
 // ---------- integrations ----------
 (function integrations() {
   const INT = D.integrations;
-  const brand = { slack: '#4a154b', email: '#1baf7a', github: '#24292f', sentry: '#362d59', linear: '#5e6ad2' };
+  const brand = { slack: '#4a154b', email: '#1baf7a', github: '#24292f', sentry: '#362d59', datadog: '#632ca6', linear: '#5e6ad2' };
   $('#igrid').innerHTML = INT.map(it => `
     <div class="icard">
-      <div class="top"><div class="logo" style="background:${brand[it.key]}">${esc(it.abbr)}</div><div><div class="name">${esc(it.name)}</div><div class="role">${esc(it.direction)} · held by ${esc(it.held_by)}</div></div><span class="status ${it.live ? 'on' : 'off'}"><i></i>${it.live ? 'Connected' : 'Not connected'}</span></div>
+      <div class="top"><div class="logo" style="background:${brand[it.key] || 'var(--ink-2)'}">${esc(it.abbr)}</div><div><div class="name">${esc(it.name)}</div><div class="role">${esc(it.direction)} · held by ${esc(it.held_by)}</div></div><span class="pill status ${it.live ? 'on' : ''}"><i></i>${it.live ? 'Connected' : 'Not connected'}</span></div>
       <div class="desc">${esc(it.role)}</div>
       <div class="caps">${it.capabilities.map(c => `<span>${esc(c)}</span>`).join('')}</div>
       <div class="actions"><button class="${it.live ? '' : 'primary'}" data-key="${it.key}">${it.live ? 'Manage' : 'Connect'}</button>${it.live && it.detail ? `<span class="hint">${esc(it.detail)}</span>` : ''}<span class="held">${it.transports.join(' · ')}</span></div>
@@ -585,19 +815,18 @@ function openInReplay(i) { $('#tab-replay').click(); stop(); shown = visibleIdx(
   let current = null, transport = 'direct';
   function renderDlg() {
     const it = current;
-    $('#dlg-logo').style.background = brand[it.key]; $('#dlg-logo').textContent = it.abbr;
+    $('#dlg-logo').style.background = brand[it.key] || 'var(--ink-2)'; $('#dlg-logo').textContent = it.abbr;
     $('#dlg-title').textContent = `${it.live ? 'Manage' : 'Connect'} ${it.name}`;
     $('#dlg-role').textContent = `${it.direction} · ${it.held_by}`;
     const fields = transport === 'mcp' ? it.mcp_fields : it.fields;
     $('#dlg-body').innerHTML = `
       <div class="seg" role="group" aria-label="Transport">${it.transports.map(t => `<button data-t="${t === 'MCP' ? 'mcp' : 'direct'}" aria-pressed="${(t === 'MCP' ? 'mcp' : 'direct') === transport}">${t}</button>`).join('')}</div>
-      <div class="hint">${transport === 'mcp' ? `Point Switchboard at an MCP server that exposes ${it.name}; the executor calls its tools with the same allowlists.` : it.direct_hint}</div>
+      <div class="hint">${transport === 'mcp' ? `Point Switchboard at an MCP server that exposes ${it.name}; the executor calls its tools under the same allowlists.` : it.direct_hint}</div>
       ${fields.map(f => `<label>${esc(f.label)}<input type="${f.secret ? 'password' : 'text'}" id="f-${it.key}-${f.env}" placeholder="${esc(f.placeholder || '')}" autocomplete="off"></label>`).join('')}
       <pre id="dlg-env" hidden></pre>`;
     $('#dlg-body').querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => { transport = b.dataset.t; renderDlg(); }));
-    $('#dlg-save').textContent = 'Show .env lines';
   }
-  $('#igrid').querySelectorAll('button[data-key]').forEach(b => b.addEventListener('click', () => { current = INT.find(x => x.key === b.dataset.key); transport = current.transports.includes('MCP') && !current.transports.includes('Direct') ? 'mcp' : 'direct'; renderDlg(); dlg.showModal(); }));
+  $('#igrid').querySelectorAll('button[data-key]').forEach(b => b.addEventListener('click', () => { current = INT.find(x => x.key === b.dataset.key); transport = 'direct'; renderDlg(); dlg.showModal(); }));
   $('#dlg-cancel').addEventListener('click', () => dlg.close());
   $('#dlg-save').addEventListener('click', () => {
     const fields = transport === 'mcp' ? current.mcp_fields : current.fields;
@@ -605,4 +834,8 @@ function openInReplay(i) { $('#tab-replay').click(); stop(); shown = visibleIdx(
     const pre = $('#dlg-env'); pre.hidden = false; pre.textContent = lines + '\n# then: python -m switchboard.doctor';
   });
 })();
+
+// ---------- boot ----------
+renderModel(); renderImpact();
+try { const h = location.hash.replace(/^#(tab:)?/, ''); const t = h || localStorage.getItem('sb.tab'); if (t && PAGES[t]) goTab(t); } catch (e) {}
 </script>

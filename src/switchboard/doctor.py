@@ -1,4 +1,4 @@
-"""python -m switchboard.doctor — credential, scope, and enum preflight."""
+"""python -m switchboard.doctor - credential, scope, and enum preflight."""
 
 from __future__ import annotations
 

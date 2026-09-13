@@ -92,7 +92,7 @@ def main() -> None:
 
     # Failure gallery: every wrong case with its trace.
     with open(run_dir / "failures.md", "w") as f:
-        f.write(f"# Failure gallery — {name}\n\n")
+        f.write(f"# Failure gallery - {name}\n\n")
         for r in runs[0]:
             e = r["signal"]["external_id"]
             l = labels[e]

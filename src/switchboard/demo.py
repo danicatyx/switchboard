@@ -41,10 +41,10 @@ def show(rec: DecisionRecord) -> None:
     if inc.owner:
         print(f"   OWNERSHIP  {inc.owner.team}  {inc.owner.slack_channel}{'  (stale CODEOWNERS)' if inc.owner.stale else ''}")
     else:
-        print(f"   OWNERSHIP  —")
+        print(f"   OWNERSHIP - ")
     print(f"   PRIORITY   {t['PRIORITY'][9:]}")
     print(f"   GATE       {C[rec.tier]}{rec.tier}{R} (c_eff {rec.c_eff})" + (f"  {D}injection flagged{R}" if rec.injection_flag else ""))
-    print(f"   PLAN       " + " · ".join(f"{a.type}{D}→{a.payload.get('channel') or a.payload.get('to') or a.payload.get('user') or a.payload.get('incident_id')}{R}" for a in rec.plan) or "—")
+    print(f"   PLAN       " + " · ".join(f"{a.type}{D}→{a.payload.get('channel') or a.payload.get('to') or a.payload.get('user') or a.payload.get('incident_id')}{R}" for a in rec.plan) or " - ")
 
 
 def main() -> None:
@@ -57,7 +57,7 @@ def main() -> None:
     creds = WriteCredentials.from_env()
     executor = Executor(creds, WAL(wal_path), lambda inc_id: store.incidents[inc_id].reporters)
 
-    print(f"\n{B}Switchboard demo{R} — {len(DEMO_IDS)} signals · executor {creds.describe()}\n")
+    print(f"\n{B}Switchboard demo{R} - {len(DEMO_IDS)} signals · executor {creds.describe()}\n")
     records: list[DecisionRecord] = []
     for ext in DEMO_IDS:
         raw = raws[ext]
