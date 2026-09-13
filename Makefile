@@ -1,7 +1,7 @@
 PY := .venv/bin/python
 RUNS ?= 1
 
-.PHONY: setup test eval ablate demo doctor report check baseline clean
+.PHONY: setup test eval ablate demo doctor report check baseline dashboard clean
 
 setup:
 	python3 -m venv .venv && $(PY) -m pip install -q -e ".[dev]"
@@ -19,9 +19,15 @@ eval:
 	$(PY) -m evals.run --quiet --no-telemetry
 	$(PY) -m evals.report
 	$(PY) -m evals.check
+	$(PY) -m evals.dashboard
 
 report:
 	$(PY) -m evals.report
+
+## Self-contained console page from the latest runs: replay, results, attacks, failures, integrations.
+dashboard:
+	$(PY) -m evals.dashboard
+	open evals/reports/dashboard.html 2>/dev/null || true
 
 check:
 	$(PY) -m evals.check

@@ -491,6 +491,7 @@ python -m switchboard.doctor     # verifies scopes, resolves service→owner map
                                  # flags stale CODEOWNERS
 make eval                        # replay corpus, no external effects
 python -m switchboard.run --sources gmail,sentry --max-tier propose
+make dashboard                   # console page: replay, results, attacks, failures, integrations
 ```
 
 Run `doctor` first. Most setup friction is scope friction and it surfaces all of it in one pass.

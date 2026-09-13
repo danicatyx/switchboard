@@ -2,7 +2,7 @@
 
 **Team:** Danica T (solo)
 **Repo:** this repository
-**Demo:** `python -m switchboard.demo` (runs in ~5 s, no credentials needed)
+**Demo:** `python -m switchboard.demo` (terminal, ~5 s) and `make dashboard` (console page: signal replay with state traces, results charts, attack audit, failure gallery, integrations panel; opens offline)
 
 ---
 
@@ -10,7 +10,7 @@
 
 One day, one person, zero API spend. [README.md](../README.md) is the full design; this brief reports what exists and what was measured. Everything listed as cut is stated in the brief rather than implied.
 
-**Built and measured:** the fixed pipeline (normalize → correlate → localize → ownership → priority → gate → plan → execute) with a `state_trace` per signal; cross-source grounding; a live-enum localizer that cannot emit a service outside the catalog; ownership as a CODEOWNERS + catalog join with staleness surfaced; the YAML priority rule layer; three-tier gating with `c_eff = min(·)`; an executor that is the sole holder of write credentials, with a recipient allowlist, catalog-only channels, an idempotency WAL, and crash-safe retry; a 113-signal labeled corpus over five days; the replay harness with sliced metrics, two ablations, k=3 flip rate, ECE, a fault test, a 14-case attack corpus, a regression gate, and a failure gallery; incident resolution that emails every correlated reporter once; `doctor` with live credential checks; the demo.
+**Built and measured:** the fixed pipeline (normalize → correlate → localize → ownership → priority → gate → plan → execute) with a `state_trace` per signal; cross-source grounding; a live-enum localizer that cannot emit a service outside the catalog; ownership as a CODEOWNERS + catalog join with staleness surfaced; the YAML priority rule layer; three-tier gating with `c_eff = min(·)`; an executor that is the sole holder of write credentials, with a recipient allowlist, catalog-only channels, an idempotency WAL, and crash-safe retry; a 113-signal labeled corpus over five days; the replay harness with sliced metrics, two ablations, k=3 flip rate, ECE, a fault test, a 14-case attack corpus, a regression gate, and a failure gallery; incident resolution that emails every correlated reporter once; `doctor` with live credential checks; the terminal demo; and a self-contained console page (`make dashboard`).
 
 **Cut, and why:**
 - **No model was called.** The two LLM decision points (correlate judge, localizer) run on a deterministic stand-in (`heuristic.py`) behind the same `llm.call()` interface and schemas. Every number below therefore measures the *architecture* — what grounding, the lookup, and the gate do around a localizer — not model ability. Switching to Claude is `ANTHROPIC_API_KEY` in `.env`; nothing else changes.
