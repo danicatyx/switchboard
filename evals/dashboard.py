@@ -104,7 +104,7 @@ def integrations() -> list[dict]:
 IMPACT_DEFAULTS = {
     # Every figure is an assumption. The page exposes all of them as inputs.
     "rate": 150,            # loaded engineer cost per hour, USD
-    "manual_min": 15,       # minutes a human spends triaging one signal by hand
+    "manual_min": 45,       # minutes a human spends triaging one signal by hand (read, localize, find owner, page, reply)
     "auto_min": 1,          # minutes to glance at an auto-tier decision
     "propose_min": 4,       # minutes to approve or edit a proposal
     "escalate_min": 15,     # minutes for an escalation (same as manual)

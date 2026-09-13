@@ -14,12 +14,12 @@ Using the console's cost model with its default assumptions and the rates measur
 
 | Value | How it is computed | Annual, estimated |
 | --- | --- | --- |
-| Engineer triage time | 15 min manual per signal today; with Switchboard 1 min to glance at an auto-handled case, 4 to approve a proposal, 15 for an escalation. At the corpus's decision mix (34% auto, 32% propose, 33% escalate) that is 6.6 min average, 8.4 min saved. 10,000 signals × 8.4 min = 1,400 hours × $150/h. | **$210,000** |
+| Engineer triage time | 45 min manual per signal today (read it, work out the service, find the owner, page, reply); with Switchboard 1 min to glance at an auto-handled case, 4 to approve a proposal, 15 for an escalation that arrives with the evidence assembled. At the corpus's decision mix (34% auto, 32% propose, 33% escalate) that is 6.6 min average, 38.4 min saved. 10,000 signals × 38.4 min = 6,400 hours × $150/h. | **$960,000** |
 | On-call interruptions | 20% of signals fold into an incident that already exists (corpus: 20 of 99), so the team is not paged again. 2,000 avoided pages × 30 min of on-call time × $150/h. | **$150,000** |
 | Wrong-team delays | Ownership is a lookup, not a guess. Assume half of signals are localized confidently enough to route, humans misroute 15% of those today, and the lookup misroutes 9% (corpus, all of them upstream localization errors). 300 fewer misroutes × 45 min with the wrong team × a blended $40/min for a mostly P2/P3 mix. | **$540,000** |
 | Revenue protected | Every correlated reporter is acknowledged and told when it is fixed. 6,000 customer reports × $20,000 average ARR × 1% churn risk from an unacknowledged defect report × 70% of that risk removed by closing the loop. | **$840,000** |
 | Security exposure | Support inboxes and error payloads carry attacker-controlled text. The architecture blocked 14 of 14 attack families in the corpus without depending on detection. Assume 12 real attempts a year × $25,000 blended exposure per successful attack. | **$300,000** |
-| **Total** | Against roughly $2,000 a year of model calls at 10,000 signals and about 2 calls per signal. | **about $2.0M** |
+| **Total** | Against roughly $2,000 a year of model calls at 10,000 signals and about 2 calls per signal. | **about $2.8M** |
 
 Every figure is an assumption times a measured rate, and every assumption is an editable input on the console's **Business impact** page, which runs the same model over the actual corpus signal by signal. The largest levers are the cost of a misrouted incident and the churn risk per unacknowledged report; if your numbers for those are lower, the total falls with them. The corpus itself is synthetic and the localizer behind it is a deterministic stand-in, so treat the rates as what the architecture does around a weak localizer, not as a benchmark of a model.
 
