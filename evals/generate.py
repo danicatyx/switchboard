@@ -4,7 +4,8 @@ Ground truth is the INCIDENTS script below, authored by hand. The model only
 drafts customer-email prose for non-attack incidents. Telemetry alerts and
 attack payloads are constructed deterministically so their content is exact.
 
-    python -m evals.generate            # writes evals/corpus/signals.jsonl + labels.jsonl
+    python -m evals.generate            # hand-written drafts (evals/drafts.py); no API call
+    python -m evals.generate --model    # draft email prose with the model instead
 """
 
 from __future__ import annotations
@@ -177,7 +178,10 @@ Rules by vagueness level:
 Style: sound like a real customer of a B2B SaaS product. Vary length (2-8 sentences). Include a plausible sign-off or signature for most. When a persona mentions a quoted reply, include a quoted earlier message below a line like "On Thu, Sep 11, 2026 at 8:02 AM Sam wrote:" using "> " prefixes. Mention roughly when it started if natural (e.g. "since this morning"). Never mention that this is synthetic."""
 
 
-def draft_emails(inc: dict) -> list[EmailDraft]:
+def draft_emails(inc: dict, use_model: bool = False) -> list[EmailDraft]:
+    if not use_model:
+        from .drafts import DRAFTS
+        return [EmailDraft(subject=DRAFTS[(inc["id"], i)][0], body=DRAFTS[(inc["id"], i)][1]) for i in range(len(inc["emails"]))]
     specs = "\n".join(
         f"{i+1}. account={e['account']} plan={e['plan']} vagueness={e['vagueness']} persona={e['persona']}"
         for i, e in enumerate(inc["emails"])
@@ -214,6 +218,7 @@ def telemetry_signal(ext_id: str, t: float, service_tag: str, tel: dict) -> dict
 
 
 def main() -> None:
+    use_model = "--model" in sys.argv
     random.seed(7)
     signals: list[dict] = []
     labels: list[dict] = []
@@ -227,7 +232,7 @@ def main() -> None:
             labels.append(dict(external_id=ext, true_service=inc["service"], true_incident=inc["id"],
                                true_priority=inc["priority"], is_attack=False, attack_family=None, stratum="telemetry"))
         print(f"drafting {inc['id']} ({len(inc['emails'])} emails)...", file=sys.stderr)
-        drafts = draft_emails(inc)
+        drafts = draft_emails(inc, use_model)
         for i, (spec, d) in enumerate(zip(inc["emails"], drafts)):
             ext = f"msg-{inc['id'].lower()}-{i+1}"
             signals.append(email_signal(ext, spec["t"], spec["account"], spec["plan"], spec["age"], d.subject, d.body))
