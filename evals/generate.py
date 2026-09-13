@@ -23,6 +23,8 @@ from pydantic import BaseModel
 from switchboard.catalog import service as catalog_service
 from switchboard.llm import call
 
+from .corpus_ext import ATTACKS_EXT, INCIDENTS_EXT, NOISE_EXT
+
 OUT = Path(__file__).resolve().parent / "corpus"
 T0 = datetime.fromisoformat("2026-09-11T06:00:00+00:00")
 
@@ -158,6 +160,11 @@ ATTACKS = [
 ]
 
 
+INCIDENTS += INCIDENTS_EXT
+NOISE += NOISE_EXT
+ATTACKS += ATTACKS_EXT
+
+
 class EmailDraft(BaseModel):
     subject: str
     body: str
@@ -203,11 +210,15 @@ Write exactly {len(inc['emails'])} emails."""
     return out.emails
 
 
-def email_signal(ext_id: str, t: float, account: str, plan: str, age: int, subject: str, body: str) -> dict:
-    return dict(kind="email", external_id=ext_id, received_at=iso(at(t)),
-                reporter_email=f"{hashlib.md5(account.encode()).hexdigest()[:6]}@{account}.example.com",
-                account_ref=account, plan=plan, account_age_days=age, subject=subject, body=body,
-                thread_ref=f"thr-{ext_id}")
+def email_signal(ext_id: str, t: float, account: str, plan: str | None, age: int | None, subject: str, body: str,
+                 thread_ref: str | None = None, language: str | None = None) -> dict:
+    d = dict(kind="email", external_id=ext_id, received_at=iso(at(t)),
+             reporter_email=f"{hashlib.md5(account.encode()).hexdigest()[:6]}@{account}.example.com",
+             account_ref=account, plan=plan, account_age_days=age, subject=subject, body=body,
+             thread_ref=thread_ref or f"thr-{ext_id}")
+    if language:
+        d["language"] = language
+    return d
 
 
 def telemetry_signal(ext_id: str, t: float, service_tag: str, tel: dict) -> dict:
@@ -241,22 +252,25 @@ def main() -> None:
         drafts = draft_emails(inc, use_model)
         for i, (spec, d) in enumerate(zip(inc["emails"], drafts)):
             ext = f"msg-{inc['id'].lower()}-{i+1}"
-            signals.append(email_signal(ext, spec["t"], spec["account"], spec["plan"], spec["age"], d.subject, d.body))
+            thread = f"thr-msg-{inc['id'].lower()}-{spec['reply_to']+1}" if "reply_to" in spec else None
+            signals.append(email_signal(ext, spec["t"], spec["account"], spec["plan"], spec["age"], d.subject, d.body,
+                                        thread_ref=thread, language=spec.get("language")))
             stratum = "email_grounded" if grounded else "email_ungrounded"
             labels.append(dict(external_id=ext, true_service=inc["service"], true_incident=inc["id"],
                                true_priority=inc["priority"], is_attack=False, attack_family=None, stratum=stratum,
-                               vagueness=spec["vagueness"], alert_after_email=grounded and spec["t"] < inc["telemetry"]["t"]))
+                               vagueness=spec["vagueness"], alert_after_email=grounded and spec["t"] < inc["telemetry"]["t"],
+                               thread_reply="reply_to" in spec, language=spec.get("language", "en")))
 
     for n in NOISE:
         ext = f"msg-{n['id'].lower()}"
-        signals.append(email_signal(ext, n["t"], n["account"], n["plan"], n["age"], n["subject"], n["body"]))
-        labels.append(dict(external_id=ext, true_service="unknown", true_incident=n["id"], true_priority="P4",
-                           is_attack=False, attack_family=None, stratum="noise"))
+        signals.append(email_signal(ext, n["t"], n["account"], n["plan"], n["age"], n["subject"], n["body"], thread_ref=n.get("thread_ref")))
+        labels.append(dict(external_id=ext, true_service=n.get("true_service", "unknown"), true_incident=n.get("true_incident", n["id"]),
+                           true_priority="P4", is_attack=False, attack_family=None, stratum=n.get("stratum", "noise")))
 
     for a in ATTACKS:
         if a["kind"] == "email":
             ext = f"msg-{a['id'].lower()}"
-            signals.append(email_signal(ext, a["t"], a["account"], a["plan"], a["age"], a["subject"], a["body"]))
+            signals.append(email_signal(ext, a["t"], a["account"], a["plan"], a["age"], a["subject"], a["body"], thread_ref=a.get("thread_ref")))
             true_service = "unknown"
         else:
             ext = f"sentry-{a['id'].lower()}"

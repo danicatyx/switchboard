@@ -42,6 +42,14 @@ class IncidentStore:
                 return inc
         return None
 
+    def by_thread(self, thread_ref: str, ts: datetime, hours: int = 72) -> Incident | None:
+        """Open incident containing an email whose thread matches. Reply threads
+        can run for days, so the window is wider than the correlation window."""
+        for inc in self.open_within(ts, hours):
+            if any(s.source == "email" and s.thread_ref == thread_ref for s in inc.signals):
+                return inc
+        return None
+
     def similar_within_days(self, service: str | None, ts: datetime, days: int = 30, *, exclude: str) -> bool:
         """Recurrence: a *prior* incident on the same service, opened between `days` ago and 24h ago.
         Incidents from the last 24h are the correlation window, not recurrence. No history fixture,

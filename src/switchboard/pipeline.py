@@ -117,7 +117,8 @@ def run_signal(raw: dict, store: IncidentStore, cfg: Config) -> DecisionRecord:
     degradations = [cfg.degradation_telemetry] if (not cfg.telemetry_available and signal.source == "email") else []
     g = gate(c_corr=corr.confidence, c_loc=inc.localization_confidence, c_pi=pr.c_pi, confidence_cap=pr.confidence_cap,
              service=inc.service if inc.owner is not None else None, injection_flag=injection,
-             schema_failed=corr.schema_failed or loc.schema_failed, degradations=degradations, cfg=cfg)
+             schema_failed=corr.schema_failed or loc.schema_failed, degradations=degradations, cfg=cfg,
+             non_english=signal.non_english)
     trace.append(f"GATE:{g.tier}:{g.c_eff}")
     clock.lap("gate")
 

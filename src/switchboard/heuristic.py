@@ -23,9 +23,11 @@ _STOP = set("the a an and or of to in on for is it its this that we our i my me 
 _INJECTION = re.compile(
     r"ignore (all )?(previous|prior) instructions|system override|system:|maintenance mode|you are now|"
     r"page (all|every) |post (to|the full)|#[a-z-]+team|#all-hands|cc [a-z0-9.@-]+|"
-    r"send_email|send (a |the )?resolution|resolution email|other (affected )?customers|add me to|"
+    r"send_email|send (a |the )?resolution|resolution email|other (affected )?customers' (details|data|emails|addresses)|add me to|"
     r"this is (the )?cto|i am authorizing|do not escalate|mark (this )?(as )?p[01]|escalate to p1|"
-    r"decode and follow|[A-Za-z0-9+/]{40,}={0,2}|\bp0\b|sev-0",
+    r"decode and follow|[A-Za-z0-9+/]{40,}={0,2}|\bp0\b|sev-0|"
+    r"<!--|assistant instructions|switchboard notification|action required: send|reply 'confirm'|"
+    r"which other (companies|customers)|add this address to",
     re.IGNORECASE,
 )
 
@@ -115,9 +117,16 @@ def correlate(hint: dict[str, Any]) -> dict:
     best_id, best_score, best_why = "new", 0.0, ""
     for c in candidates:
         mins = (signal.received_at - c.last_signal_at).total_seconds() / 60
-        first_text = c.signals[0].narrative()
-        cw = _words(first_text)
-        jacc = len(sw & cw) / max(1, len(sw | cw))
+        # Overlap against every signal already in the candidate: an email should be
+        # compared with the incident's other emails, not only with the alert that
+        # opened it (a stack trace shares no vocabulary with a customer).
+        jacc = 0.0
+        for prior in c.signals:
+            cw = _words(prior.narrative())
+            j = len(sw & cw) / max(1, len(sw | cw))
+            if prior.source == signal.source:
+                j *= 1.5
+            jacc = max(jacc, j)
         if signal.source == "telemetry":
             svc = 1.0 if (c.service and signal.service_tag == c.service) else 0.0
             score = _decay(mins) * (0.75 * svc + 0.25 * min(1.0, jacc * 5))

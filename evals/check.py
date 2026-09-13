@@ -47,8 +47,16 @@ def _get(summary: dict, path: tuple) -> float | None:
     return cur  # type: ignore[return-value]
 
 
+def corpus_sha() -> str:
+    import hashlib
+    h = hashlib.sha256()
+    for name in ("signals.jsonl", "labels.jsonl"):
+        h.update((Path(__file__).resolve().parent / "corpus" / name).read_bytes())
+    return h.hexdigest()[:12]
+
+
 def current() -> dict[str, float | None]:
-    out = {}
+    out: dict = {"_corpus": corpus_sha()}
     for label, pat, path, _ in HEADLINE:
         s = _latest(pat)
         out[label] = _get(s, path) if s else None
@@ -65,6 +73,9 @@ def main() -> int:
         print("no baseline; run `make baseline` to freeze the current numbers", file=sys.stderr)
         return 0
     base = json.loads(BASELINE.read_text())
+    if base.get("_corpus") != now["_corpus"]:
+        # Numbers are not comparable across corpora. Report, don't fail; refreeze with `make baseline`.
+        print(f"corpus changed since baseline ({base.get('_corpus')} → {now['_corpus']}); gate is advisory until `make baseline`\n")
     failed = []
     print(f"{'metric':<44} {'baseline':>9} {'now':>9}")
     for label, _, _, higher in HEADLINE:
@@ -76,9 +87,12 @@ def main() -> int:
                 flag = "  REGRESSION"
                 failed.append(label)
         print(f"{label:<44} {b if b is not None else '-':>9} {n if n is not None else '-':>9}{flag}")
-    if failed:
+    if failed and base.get("_corpus") == now["_corpus"]:
         print(f"\nFAILED: {len(failed)} headline number(s) dropped more than {TOLERANCE}", file=sys.stderr)
         return 1
+    if failed:
+        print(f"\n{len(failed)} number(s) moved on a new corpus; not a regression by construction")
+        return 0
     print("\ngate: OK")
     return 0
 

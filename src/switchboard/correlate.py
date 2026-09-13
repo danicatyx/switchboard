@@ -47,6 +47,15 @@ def correlate(signal: Signal, store: IncidentStore, cfg: Config) -> CorrelationR
             inc = store.merge(signal, hit.id)
             return CorrelationResult(inc, f"fingerprint:{hit.id}", 0.99, None, False, usage)
 
+    # Deterministic shortcut: a reply in an existing thread. Guarded by reporter
+    # identity, because In-Reply-To is attacker-controlled: a stranger replying
+    # into a thread is a candidate like any other, never an automatic merge.
+    if signal.source == "email" and signal.thread_ref and signal.thread_ref != f"thr-{signal.external_id}":
+        hit = store.by_thread(signal.thread_ref, signal.received_at)
+        if hit is not None and signal.reporter_email in hit.reporters and not (cfg.ablate == "grounding" and hit.telemetry):
+            inc = store.merge(signal, hit.id)
+            return CorrelationResult(inc, f"thread:{hit.id}", 0.97, None, False, usage)
+
     # Grounding ablation: emails never see telemetry-backed incidents as candidates.
     exclude_tel = cfg.ablate == "grounding" and signal.source == "email"
     candidates = store.open_within(signal.received_at, exclude_telemetry_backed=exclude_tel)

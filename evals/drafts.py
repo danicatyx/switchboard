@@ -119,3 +119,7 @@ DRAFTS: dict[tuple[str, int], tuple[str, str]] = {
         "Hi,\n\nSince yesterday evening the boxes on the main page after I log in are all in a different order than they were, and one of them is stretched across the whole width. It's the browser version, I haven't checked the phone. Nothing seems broken exactly, it just looks wrong and my team is confused.\n\nJoan Holloway\nSterling Cooper",
     ),
 }
+
+from .drafts_extended import EXTENDED  # noqa: E402
+
+DRAFTS.update(EXTENDED)

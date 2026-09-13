@@ -20,7 +20,8 @@ class GateResult:
 
 
 def gate(*, c_corr: float, c_loc: float, c_pi: float, confidence_cap: float | None, service: str | None,
-         injection_flag: bool, schema_failed: bool, degradations: list[float], cfg: Config) -> GateResult:
+         injection_flag: bool, schema_failed: bool, degradations: list[float], cfg: Config,
+         non_english: bool = False) -> GateResult:
     if confidence_cap is not None:
         c_loc = min(c_loc, confidence_cap)
     c_eff = min(c_corr, c_loc, c_pi)
@@ -35,6 +36,8 @@ def gate(*, c_corr: float, c_loc: float, c_pi: float, confidence_cap: float | No
         reasons.append("injection_flagged")
     if schema_failed:
         reasons.append("schema_failure")
+    if non_english:
+        reasons.append("non_english_policy")
     if reasons:
         return GateResult(c_eff, "escalate", reasons)
 

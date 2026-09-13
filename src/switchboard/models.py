@@ -46,6 +46,7 @@ class Signal(BaseModel):
     subject: str | None = None
     body: str | None = None                      # UNTRUSTED
     thread_ref: str | None = None
+    non_english: bool = False                    # policy: non-English signals escalate (README §7)
 
     # telemetry-only
     fingerprint: str | None = None
