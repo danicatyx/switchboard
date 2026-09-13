@@ -7,7 +7,8 @@ SRC = Path(__file__).resolve().parents[1] / "src" / "switchboard"
 def test_decision_stages_never_reference_write_credentials():
     offenders = []
     for py in SRC.rglob("*.py"):
-        if "execute" in py.parts:
+        # Entry points (demo, run) are allowed to construct the executor; decision stages are not.
+        if "execute" in py.parts or py.name in ("demo.py", "run.py"):
             continue
         text = py.read_text()
         if "WriteCredentials" in text or "from .execute" in text or "switchboard.execute" in text:
