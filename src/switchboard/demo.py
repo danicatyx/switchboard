@@ -1,7 +1,8 @@
 """python -m switchboard.demo
 
-Five signals in real-time order: one alert, two vague emails that merge into
-it, one unrelated ungrounded email, and one correlation-poisoning attack.
+Six signals in real-time order: one alert, two vague emails that merge into
+it, a second alert, a correlation-poisoning attack aimed at that second alert's
+incident, and one unrelated ungrounded email.
 Ends with the grounding comparison for the two emails.
 """
 
@@ -20,7 +21,7 @@ from .pipeline import run_signal
 from .store import IncidentStore
 
 CORPUS = Path(__file__).resolve().parents[2] / "evals" / "corpus" / "signals.jsonl"
-DEMO_IDS = ["sentry-inc-01", "msg-inc-01-1", "msg-inc-01-2", "msg-inc-10-1", "msg-att-07"]
+DEMO_IDS = ["sentry-inc-01", "msg-inc-01-2", "msg-inc-01-3", "sentry-inc-03", "msg-att-07", "msg-inc-12-2"]
 
 B, D, R = "\033[1m", "\033[2m", "\033[0m"
 C = {"auto": "\033[32m", "propose": "\033[33m", "escalate": "\033[31m"}
@@ -62,7 +63,9 @@ def main() -> None:
         print(head(raw))
         rec = run_signal(raw, store, cfg)
         show(rec)
+        sys.stdout.flush()
         rec.executed = executor.execute(rec.plan)
+        sys.stderr.flush()
         failed = [r for r in rec.executed if not r.ok]
         for f in failed:
             print(f"   {C['escalate']}BLOCKED{R}    {f.action.type}: {f.detail}")
@@ -76,7 +79,7 @@ def main() -> None:
     cfg2 = Config(run_id="demo-ablate", ablate="grounding")
     run_signal(raws["sentry-inc-01"], store2, cfg2)
     print(f"   {'signal':<14} {'with alert':<44} {'without alert'}")
-    for ext in ("msg-inc-01-1", "msg-inc-01-2"):
+    for ext in ("msg-inc-01-2", "msg-inc-01-3"):
         with_ = next(r for r in records if r.signal.external_id == ext)
         wo = run_signal(raws[ext], store2, cfg2)
         a = f"{with_.incident.service} ({with_.incident.localization_provenance}, {with_.incident.localization_confidence:.2f}) → {with_.tier}"
