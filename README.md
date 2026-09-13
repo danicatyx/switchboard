@@ -560,7 +560,7 @@ Names on the console are written for a product reader first; the technical term 
 
 ### Hosting
 
-The artifact link from the build session is a private hosted copy that can be shared from its share menu. For a public deploy, push to GitHub and enable Pages once (Settings → Pages → Source: GitHub Actions). `.github/workflows/pages.yml` reruns the tests and evals and publishes `site/` on every push to `main`; add `ANTHROPIC_API_KEY` as a repository secret to build against a real model instead of the heuristic stand-in.
+The artifact link from the build session is a private hosted copy that can be shared from its share menu. For a public deploy, push to GitHub. `.github/workflows/pages.yml` reruns the tests and evals and publishes `site/` to the `gh-pages` branch on every push to `main`, which GitHub serves at `https://<you>.github.io/<repo>/` (if it does not appear after the first run: Settings > Pages > Source: Deploy from a branch > gh-pages); add `ANTHROPIC_API_KEY` as a repository secret to build against a real model instead of the heuristic stand-in.
 
 ---
 
