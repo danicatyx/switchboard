@@ -84,3 +84,23 @@ services:
     team: core-infra
     tier: tier-0
     description: "Blob storage service for uploads, attachments, and generated exports."
+
+# Symptom lexicon per service: how customers describe failures on this surface.
+# Used as evidence by the localizer (both the model prompt and the heuristic
+# stand-in). Terms are matched as lowercase substrings; phrases allowed.
+symptoms:
+  exports-scheduler: [scheduled, schedule, every morning, weekly, didn't run, never ran, didn't fire, hasn't shown up, kick it off, spinner, spinning]
+  exports-renderer: [export, csv, file contents, corrupted, split, row, column, line break, pdf export, download the file]
+  reports-api: [report, saved report, won't load, spinning, error loading, query, history, chart]
+  search-indexer: [search, find, can't find, results, doesn't come up, type in the box, missing from results]
+  auth-service: [password, six digit, code, 2fa, two-factor, authenticator, mfa, says it's wrong, can't get in, log in, sign in, locked out]
+  sso-gateway: [sso, single sign-on, company login, identity provider, idp, bounces, redirect, loop, saml, whole team, nobody can get in]
+  session-store: [signed out, logged out, kicked out, log in again, sign in again, thrown back, session, every couple of hours, repeatedly]
+  billing-api: [plan, seats, seat count, upgrade, subscription, limit, billing page, invoice preview]
+  invoice-worker: [invoice, monthly invoice, pdf, not received, never arrived, accounts payable, 1st of the month]
+  payments-gateway: [charged, charge, card, twice, double, refund, payment, taken from, order]
+  web-bff: [browser, web app, main page, home screen, layout, boxes, widgets, order than, stretched, looks off, looks wrong]
+  mobile-bff: [app, iphone, android, phone, pull down, refresh, sync, not updating, won't update, mobile]
+  notifications: [notification, alert, email when, popup, tagged, comment, mention, told when, not hearing]
+  dashboard-api: [numbers, figures, first screen, dashboard, counts, don't match, behind, stale, totals]
+  file-storage: [upload, attach, attachment, add a file, video, footage, progress bar, big files, large files, fails at the end]

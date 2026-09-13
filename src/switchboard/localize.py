@@ -13,7 +13,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, create_model
 
-from .catalog import service_names
+from .catalog import deploys_near, service_names
 from .config import Config
 from .llm import SchemaFailure, Usage, call
 from .models import Incident, Priority, Signal
@@ -80,7 +80,8 @@ def localize(inc: Incident, signal: Signal, cfg: Config) -> LocalizationResult:
 
     # Inferred path. Model selects from the enum or abstains.
     try:
-        out, u = call(LocalizeOut, LOCALIZE_SYSTEM, localize_user(inc, signal))
+        out, u = call(LocalizeOut, LOCALIZE_SYSTEM, localize_user(inc, signal),
+                      hint={"incident": inc, "signal": signal, "deploys": deploys_near(signal.received_at, 24)})
         usage.add(u)
     except SchemaFailure as e:
         return LocalizationResult(None, 0.0, "unknown", "P4", f"schema failure: {e}", False, usage, schema_failed=True)

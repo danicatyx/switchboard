@@ -52,7 +52,7 @@ INCIDENTS = [
                  dict(t=0.55, account="brightline", plan="free", age=120, vagueness="high", persona="small business owner, friendly"),
                  dict(t=1.40, account="northwind", plan="pro", age=400, vagueness="medium", persona="analyst, includes a quoted reply from a colleague")]),
     dict(id="INC-02", service="sso-gateway", priority="P1", symptom="enterprise SSO logins loop back to the identity provider; whole teams locked out",
-         telemetry=dict(t=1.17, fingerprint="fp-sso-clockskew", release="4.2.0", error_rate_delta=22.0, affected_users=1250,
+         telemetry=dict(t=1.17, repeat_t=2.05, fingerprint="fp-sso-clockskew", release="4.2.0", error_rate_delta=22.0, affected_users=1250,
                         error_message="SAMLAssertionError: NotBefore condition not met (clock skew 41s > 30s)",
                         frames=["sso_gateway/saml/validate.py:145 in check_conditions", "sso_gateway/handlers/acs.py:61 in post", "starlette/routing.py:72 in app"]),
          emails=[dict(t=1.30, account="globex", plan="enterprise", age=1500, vagueness="high", persona="IT admin, frustrated, mentions the whole team"),
@@ -69,7 +69,7 @@ INCIDENTS = [
          emails=[dict(t=6.60, account="umbrella", plan="pro", age=250, vagueness="high", persona="field technician on iPhone, short message"),
                  dict(t=7.30, account="hooli", plan="enterprise", age=1100, vagueness="medium", persona="support lead aggregating reports from android users")]),
     dict(id="INC-05", service="file-storage", priority="P1", symptom="large file uploads fail near the end",
-         telemetry=dict(t=9.67, fingerprint="fp-storage-multipart-race", release="5.4.0", error_rate_delta=11.0, affected_users=560,
+         telemetry=dict(t=9.67, repeat_t=10.90, fingerprint="fp-storage-multipart-race", release="5.4.0", error_rate_delta=11.0, affected_users=560,
                         error_message="MultipartCompletionError: part 7 of 9 not found for upload u_3c1e",
                         frames=["file_storage/multipart.py:167 in complete_upload", "file_storage/api.py:92 in post_complete", "grpc/_server.py:552 in _call_behavior"]),
          emails=[dict(t=9.90, account="stark", plan="enterprise", age=2000, vagueness="high", persona="video producer, exasperated"),
@@ -231,6 +231,12 @@ def main() -> None:
             signals.append(telemetry_signal(ext, tel["t"], inc["service"], tel))
             labels.append(dict(external_id=ext, true_service=inc["service"], true_incident=inc["id"],
                                true_priority=inc["priority"], is_attack=False, attack_family=None, stratum="telemetry"))
+            if tel.get("repeat_t"):
+                # Same fingerprint fires again: exercises the deterministic correlation shortcut.
+                ext2 = ext + "-r"
+                signals.append(telemetry_signal(ext2, tel["repeat_t"], inc["service"], tel))
+                labels.append(dict(external_id=ext2, true_service=inc["service"], true_incident=inc["id"],
+                                   true_priority=inc["priority"], is_attack=False, attack_family=None, stratum="telemetry"))
         print(f"drafting {inc['id']} ({len(inc['emails'])} emails)...", file=sys.stderr)
         drafts = draft_emails(inc, use_model)
         for i, (spec, d) in enumerate(zip(inc["emails"], drafts)):

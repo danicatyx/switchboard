@@ -41,8 +41,10 @@ class IncidentStore:
         return None
 
     def similar_within_days(self, service: str | None, ts: datetime, days: int = 30, *, exclude: str) -> bool:
-        """Recurrence: another incident on the same service opened within `days`. No history fixture, so this only sees the current run."""
+        """Recurrence: a *prior* incident on the same service, opened between `days` ago and 24h ago.
+        Incidents from the last 24h are the correlation window, not recurrence. No history fixture,
+        so this only sees the current run."""
         if not service:
             return False
-        lo = ts - timedelta(days=days)
-        return any(i.service == service and i.id != exclude and lo <= i.opened_at < ts for i in self.incidents.values())
+        lo, hi = ts - timedelta(days=days), ts - timedelta(hours=24)
+        return any(i.service == service and i.id != exclude and lo <= i.opened_at < hi for i in self.incidents.values())

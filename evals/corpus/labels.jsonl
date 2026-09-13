@@ -3,6 +3,7 @@
 {"external_id": "msg-inc-01-2", "true_service": "exports-scheduler", "true_incident": "INC-01", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "email_grounded", "vagueness": "high", "alert_after_email": false}
 {"external_id": "msg-inc-01-3", "true_service": "exports-scheduler", "true_incident": "INC-01", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "email_grounded", "vagueness": "medium", "alert_after_email": false}
 {"external_id": "sentry-inc-02", "true_service": "sso-gateway", "true_incident": "INC-02", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "telemetry"}
+{"external_id": "sentry-inc-02-r", "true_service": "sso-gateway", "true_incident": "INC-02", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "telemetry"}
 {"external_id": "msg-inc-02-1", "true_service": "sso-gateway", "true_incident": "INC-02", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "email_grounded", "vagueness": "high", "alert_after_email": false}
 {"external_id": "msg-inc-02-2", "true_service": "sso-gateway", "true_incident": "INC-02", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "email_grounded", "vagueness": "medium", "alert_after_email": false}
 {"external_id": "sentry-inc-03", "true_service": "payments-gateway", "true_incident": "INC-03", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "telemetry"}
@@ -11,6 +12,7 @@
 {"external_id": "msg-inc-04-1", "true_service": "mobile-bff", "true_incident": "INC-04", "true_priority": "P2", "is_attack": false, "attack_family": null, "stratum": "email_grounded", "vagueness": "high", "alert_after_email": false}
 {"external_id": "msg-inc-04-2", "true_service": "mobile-bff", "true_incident": "INC-04", "true_priority": "P2", "is_attack": false, "attack_family": null, "stratum": "email_grounded", "vagueness": "medium", "alert_after_email": false}
 {"external_id": "sentry-inc-05", "true_service": "file-storage", "true_incident": "INC-05", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "telemetry"}
+{"external_id": "sentry-inc-05-r", "true_service": "file-storage", "true_incident": "INC-05", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "telemetry"}
 {"external_id": "msg-inc-05-1", "true_service": "file-storage", "true_incident": "INC-05", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "email_grounded", "vagueness": "high", "alert_after_email": false}
 {"external_id": "msg-inc-05-2", "true_service": "file-storage", "true_incident": "INC-05", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "email_grounded", "vagueness": "high", "alert_after_email": false}
 {"external_id": "msg-inc-05-3", "true_service": "file-storage", "true_incident": "INC-05", "true_priority": "P1", "is_attack": false, "attack_family": null, "stratum": "email_grounded", "vagueness": "low", "alert_after_email": false}

@@ -16,7 +16,10 @@ from pydantic import BaseModel, ValidationError
 
 load_dotenv()
 
-MODEL = os.environ.get("SWITCHBOARD_MODEL", "claude-opus-5")
+# Backend. "heuristic" is a zero-cost stand-in (see heuristic.py); it is the
+# default only when no API credential is configured.
+MODEL = os.environ.get("SWITCHBOARD_MODEL") or ("claude-opus-5" if os.environ.get("ANTHROPIC_API_KEY") else "heuristic")
+HEURISTIC = MODEL == "heuristic"
 EFFORT = os.environ.get("SWITCHBOARD_EFFORT", "low")
 
 # USD per million tokens, Claude Opus 5.
@@ -55,10 +58,21 @@ def client() -> anthropic.Anthropic:
     return _client
 
 
-def call(schema: type[T], system: str, user: str, *, max_tokens: int = 1024, effort: str | None = None) -> tuple[T, Usage]:
-    """One structured call. Retries once on validation failure with the error appended."""
-    messages = [{"role": "user", "content": user}]
+def call(schema: type[T], system: str, user: str, *, max_tokens: int = 1024, effort: str | None = None,
+         hint: dict | None = None) -> tuple[T, Usage]:
+    """One structured call. Retries once on validation failure with the error appended.
+
+    `hint` carries the structured inputs the prompt was rendered from; the model
+    path ignores it, the heuristic backend answers from it.
+    """
     usage = Usage()
+    if HEURISTIC:
+        from . import heuristic
+        t0 = time.perf_counter()
+        out = heuristic.answer(schema, hint)
+        usage.latency_ms = int((time.perf_counter() - t0) * 1000)
+        return out, usage
+    messages = [{"role": "user", "content": user}]
     last_err: Exception | None = None
     for attempt in range(2):
         t0 = time.perf_counter()

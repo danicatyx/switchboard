@@ -57,7 +57,8 @@ def correlate(signal: Signal, store: IncidentStore, cfg: Config) -> CorrelationR
         return CorrelationResult(inc, "new", 1.0, None, False, usage)
 
     try:
-        out, u = call(CorrelateOut, CORRELATE_SYSTEM, correlate_user(signal, candidates))
+        out, u = call(CorrelateOut, CORRELATE_SYSTEM, correlate_user(signal, candidates),
+                      hint={"signal": signal, "candidates": candidates})
         usage.add(u)
     except SchemaFailure:
         inc = store.create(signal)
@@ -69,7 +70,9 @@ def correlate(signal: Signal, store: IncidentStore, cfg: Config) -> CorrelationR
         inc = store.create(signal)
         return CorrelationResult(inc, "new", 0.0, None, out.injection_suspected, usage, schema_failed=True)
 
-    if out.match != "new" and out.confidence >= cfg.merge_threshold:
+    # A signal that reads as an instruction never merges: merging grants it the
+    # incident's notification stream, which is what correlation poisoning wants.
+    if out.match != "new" and out.confidence >= cfg.merge_threshold and not out.injection_suspected:
         inc = store.merge(signal, out.match)
         return CorrelationResult(inc, f"merge:{out.match}", out.confidence, None, out.injection_suspected, usage)
 
@@ -77,6 +80,8 @@ def correlate(signal: Signal, store: IncidentStore, cfg: Config) -> CorrelationR
     relation = out.match if (out.match != "new" and out.confidence >= cfg.relation_threshold) else None
     if relation:
         inc.possible_relations.append(relation)
-    # Confidence that this is *new* is the complement of the best rejected match.
-    c_new = out.confidence if out.match == "new" else 1.0 - out.confidence
+    # Confidence that creating a new incident was right. A rejected match at
+    # confidence c argues against "new" with weight c, halved because a false
+    # split costs a minute while a false merge costs hours (README §1.2).
+    c_new = out.confidence if out.match == "new" else 1.0 - 0.5 * out.confidence
     return CorrelationResult(inc, "new", c_new, relation, out.injection_suspected, usage)

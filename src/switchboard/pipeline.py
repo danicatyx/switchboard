@@ -81,7 +81,7 @@ def run_signal(raw: dict, store: IncidentStore, cfg: Config) -> DecisionRecord:
     # OWNERSHIP (lookup; or the ablation's model guess)
     if cfg.ablate == "ownership" and inc.service is not None:
         try:
-            guess, u = call(TeamGuess, OWNERSHIP_ABLATION_SYSTEM, ownership_ablation_user(signal))
+            guess, u = call(TeamGuess, OWNERSHIP_ABLATION_SYSTEM, ownership_ablation_user(signal), hint={"signal": signal})
             record("ownership_ablation", u)
             t = catalog_team(guess.team.strip().lower())
             if t:
