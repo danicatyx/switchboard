@@ -1,8 +1,15 @@
 # Switchboard: Cross-Source Signal Correlation and Localization for Multi-Team Incident Triage
+Aka, your AI coworker agent that's always on-call instead of you. You should never have to wake up middle of the night to hop into a war room.
 
-**Telemetry knows where. Customers know who and how bad. Switchboard correlates both into one owned incident and closes the loop with every reporter.**
+Incidents and bugs come up everywhere through slack/email/linear/jira/telemetry, etc. A lot of time and productivity is wasted each day for an on-call engineer to be dealing with issues, incidents, and bugs. Switchboard correlates all systems into one owned incident, assist with triaging the issue so that it gets assigned to the correct team or developer, and closes the loop with every reporter.
 
-**Live console:** https://danicatyx.github.io/switchboard/ · **Demo video:** _coming soon_ · **Brief:** [docs/BRIEF.md](docs/BRIEF.md) · **Repo:** https://github.com/danicatyx/switchboard
+**Live console (Try this for the experience):** https://danicatyx.github.io/switchboard/
+
+**Demo video:** https://youtu.be/quAXBWpqTdY?si=2wk_SaklYi_qaMTo
+
+**Brief:** [docs/BRIEF.md](docs/BRIEF.md) 
+
+**Repo:** https://github.com/danicatyx/switchboard
 
 > Built in one day as a solo hackathon project. This document is the full design. What was implemented, what was cut, and the measured results are in [docs/BRIEF.md](docs/BRIEF.md); the build plan is [docs/PLAN.md](docs/PLAN.md). Section 9 explains how to read the console.
 
