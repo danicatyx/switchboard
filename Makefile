@@ -1,7 +1,7 @@
 PY := .venv/bin/python
 RUNS ?= 1
 
-.PHONY: setup test eval ablate demo doctor report check baseline dashboard clean
+.PHONY: setup test eval ablate demo doctor report check baseline dashboard site clean
 
 setup:
 	python3 -m venv .venv && $(PY) -m pip install -q -e ".[dev]"
@@ -28,6 +28,11 @@ report:
 dashboard:
 	$(PY) -m evals.dashboard
 	open evals/reports/dashboard.html 2>/dev/null || true
+
+## Static site for GitHub Pages (site/index.html). Committed so Pages can serve it without Actions too.
+site:
+	$(PY) -m evals.dashboard --out site/index.html
+	touch site/.nojekyll
 
 check:
 	$(PY) -m evals.check

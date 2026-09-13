@@ -26,7 +26,8 @@ A second commitment follows from the first. Once a service is identified, owners
 6. [Implementation](#section-6-implementation)
 7. [Limitations](#section-7-limitations)
 8. [Future work](#section-8-future-work)
-9. [References](#references)
+9. [The console](#section-9-the-console)
+10. [References](#references)
 
 ---
 
@@ -529,6 +530,35 @@ Each run writes `reports/run_<id>/` containing per-case `DecisionRecord`s, the m
 **Medium term.** Multi-service incident modeling, relaxing the single-attribution assumption. Cost-aware model routing, with telemetry-grounded incidents the obvious first candidate since their localization is already deterministic. Retrieval-augmented remediation drafting for recurrent incident classes.
 
 **Worth exploring.** Treating ESCALATE volume as the headline product metric and reporting its shrink rate over time, on the argument that a triage system's value is better captured by how fast it stops needing humans than by its accuracy on the cases it already handles.
+
+---
+
+## Section 9: The console
+
+`make dashboard` builds a single self-contained page from the latest run of each eval configuration and opens it. `make site` writes the same page to `site/index.html` for hosting. Nothing on it calls a server; every number is computed from `evals/reports/run_*/` at build time, so rerunning `make eval` after any change refreshes the whole console.
+
+### Pages
+
+| Page | What it shows | How to read it |
+| --- | --- | --- |
+| **Overview** | Headline tiles, the signal timeline, grounding lift, impact by source, and two queues | The first tile is modeled value (see Impact). The timeline is every signal by arrival time: squares are alerts, circles are emails, color is the tier the gate assigned. "Needs a human" lists recent escalations with the reason the gate refused to act; "Acted automatically" lists recent auto-tier plans. Every row opens the signal in Replay. |
+| **Impact** | Dollar amounts per signal and per attack, and the cost model behind them | Five sources of value: triage minutes avoided, page interruptions avoided, revenue protected by acknowledging reporters, misroute loss avoided by the ownership lookup, and attack exposure avoided. The **Cost model** card is the whole model; edit any input and every figure recomputes. These are assumptions, not measurements: replace the defaults with your own before quoting them. |
+| **Replay** | The board: one row per signal in arrival order, with correlate, localize, priority, tier, plan, and modeled value | Press **Play** to watch signals arrive. Click a row for the drawer: the state trace (the realized path through the machine), the plan with idempotency keys, ground truth vs. decision, incident membership, and the untrusted text exactly as the pipeline saw it. The provenance chip is the central claim in miniature: blue `grounded` means the service came from an alert's tag, orange `inferred` means the localizer guessed, gray `unknown` means it abstained. |
+| **Results** | Every metric from Section 5, sliced | Grounding lift is the first chart: the same emails with and without the alert in the correlation index. Reliability plots stated confidence against empirical hit rate; a well-calibrated system sits on the diagonal. State transitions show where escalations concentrate. The headline table is the brief's results table, never blended across sources. |
+| **Attacks** | Outcomes by family and the per-attack audit | "Detected" is whether the flag fired; "Blocked" is whether any assertion failed. The row to look for is one that was blocked without being detected: that is the architecture holding when the detector did not. |
+| **Failures** | Every mislocalized non-attack signal with its trace | The summary says whether a change regressed; this page says why. Each entry opens in Replay. |
+| **Integrations** | Connect cards for Slack, Email, GitHub, Sentry, Datadog, and Linear | Status reflects what `doctor` found at build time. Each card's Connect dialog has a Direct / MCP transport switch and shows the `.env` lines to paste; the page never makes calls itself. Read integrations are held by the pipeline, write integrations only by the executor. |
+
+### Reading the numbers
+
+- **Grounding lift** is the delta between two runs on the same emails. It measures what a second signal source is worth to whatever localizer is behind `llm.call()`; a weak localizer makes the lift larger, a strong one makes it smaller. It is bounded by cross-source recall: an email that never correlates to its alert cannot inherit anything.
+- **Ownership misroutes** compares the deterministic lookup against a text-based team guess on the same localized signals. Misroutes under the lookup are upstream localization errors, since the lookup itself cannot fail on a catalog service.
+- **Tiers** are the gate's decisions. No model-inferred localization can reach AUTO because the `ungrounded_localization` rule caps confidence at 0.70; every auto-tier email was grounded.
+- **Modeled value** attributes dollars by what the pipeline did with each signal, not by what a human would have done. A merged signal earns a page avoided; an acknowledged reporter earns revenue protected; a signal the text guess would have misrouted earns misroute loss avoided; a blocked attack earns its family's exposure. Sums are on the Impact page with the assumptions beside them.
+
+### Hosting
+
+The artifact link from the build session is a private hosted copy that can be shared from its share menu. For a public deploy, push to GitHub and enable Pages once (Settings → Pages → Source: GitHub Actions). `.github/workflows/pages.yml` reruns the tests and evals and publishes `site/` on every push to `main`; add `ANTHROPIC_API_KEY` as a repository secret to build against a real model instead of the heuristic stand-in.
 
 ---
 
