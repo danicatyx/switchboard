@@ -300,11 +300,11 @@ dialog pre{margin:0;background:var(--panel-2);border-radius:8px;padding:10px 12p
   <section class="page active" id="overview" role="tabpanel">
     <div class="kpis" id="kpis"></div>
     <div class="grid">
-      <div class="card c12"><div class="ch"><div class="t"><h2 id="timeline-title">Signals over time</h2><div class="sub">Every customer report (circle) and alert (square) by arrival time, colored by what the system decided. Click a mark to see what it did.</div></div></div><div class="cb"><figure id="fig-timeline"></figure></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Finding the right service: with and without the alert</h2><div class="sub">How often the service was right on the same customer emails, when the matching alert was available to inherit from and when it was withheld (grounding lift).</div></div></div><div class="cb"><figure id="fig-grounding"></figure></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Where the value comes from</h2><div class="sub">Estimated, by category. Assumptions are editable on the Business impact page.</div></div></div><div class="cb"><div class="impact-bars" id="fig-impact-mini"></div></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Needs a human</h2><div class="sub">Most recent hand-offs, with the reason the system would not act on its own.</div></div><button class="ghost sm" data-go="replay" data-tier="escalate">View all</button></div><div class="cb flush"><div class="list" id="queue-esc"></div></div></div>
-      <div class="card c6"><div class="ch"><div class="t"><h2>Handled automatically</h2><div class="sub">Most recent cases it handled itself: teams notified, on-call paged, reporters replied to.</div></div><button class="ghost sm" data-go="replay" data-tier="auto">View all</button></div><div class="cb flush"><div class="list" id="queue-auto"></div></div></div>
+      <div class="card c12"><div class="ch"><div class="t"><h2 id="timeline-title">Signals over time</h2><div class="sub">Squares alerts, circles emails; color is the decision. Click to open.</div></div></div><div class="cb"><figure id="fig-timeline"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Grounding lift</h2><div class="sub">Localization acc@1, same emails, alert withheld vs. available.</div></div></div><div class="cb"><figure id="fig-grounding"></figure></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Value by category</h2><div class="sub">Modeled. Assumptions on Business impact.</div></div></div><div class="cb"><div class="impact-bars" id="fig-impact-mini"></div></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Escalations</h2><div class="sub">Latest, with the gate reason.</div></div><button class="ghost sm" data-go="replay" data-tier="escalate">View all</button></div><div class="cb flush"><div class="list" id="queue-esc"></div></div></div>
+      <div class="card c6"><div class="ch"><div class="t"><h2>Auto-tier actions</h2><div class="sub">Latest plans executed without a human.</div></div><button class="ghost sm" data-go="replay" data-tier="auto">View all</button></div><div class="cb flush"><div class="list" id="queue-auto"></div></div></div>
     </div>
   </section>
 
@@ -384,16 +384,16 @@ dialog pre{margin:0;background:var(--panel-2);border-radius:8px;padding:10px 12p
   <div class="dh"><div><div id="gl-title" style="font-weight:600">Glossary</div><div class="hint">Plain-language names used on this console, with the technical term beside each.</div></div></div>
   <div class="db" style="gap:10px">
     <dl class="kv" style="grid-template-columns:auto 1fr;gap:8px 18px;font-size:13px">
-      <dt>Report, alert</dt><dd style="font-family:inherit">A customer email (report) or a monitoring alert. Together, <b>signals</b>.</dd>
+      <dt>Signal</dt><dd style="font-family:inherit">A customer email or a monitoring alert; the unit the pipeline processes.</dd>
       <dt>Incident</dt><dd style="font-family:inherit">One underlying failure. Several reports and alerts can belong to the same incident.</dd>
       <dt>Same incident as</dt><dd style="font-family:inherit">Whether a new signal was grouped into an existing incident (<b>correlation</b>). Grouping is tuned to be cautious: a wrong merge is expensive, a missed merge costs one extra page.</dd>
       <dt>Which service</dt><dd style="font-family:inherit">The system's answer to "what broke" (<b>localization</b>). <b>From alert</b>: taken from the alert's service tag, near-certain. <b>Guessed from text</b>: inferred from the customer's words. <b>Not sure</b>: it abstained and asked a human.</dd>
-      <dt>Right service, thanks to telemetry</dt><dd style="font-family:inherit">The accuracy gain on the same customer emails when the matching alert is available to inherit from (<b>grounding lift</b>).</dd>
-      <dt>Right team</dt><dd style="font-family:inherit">Owner is looked up from CODEOWNERS and the service catalog, never guessed by a model (<b>ownership lookup</b>). "Wrong team" counts signals that would have gone to a team that does not own the service.</dd>
-      <dt>Decision</dt><dd style="font-family:inherit"><b>Handled</b>: confident enough to act on its own. <b>Needs approval</b>: posts a proposal for one click. <b>Needs a human</b>: sends the evidence, proposes nothing. (<b>tiers</b>: auto, propose, escalate)</dd>
+      <dt>Grounding lift</dt><dd style="font-family:inherit">How much more often the service is right on the same customer emails when the matching alert is available to inherit from. The central claim: telemetry knows where, customers know who.</dd>
+      <dt>Ownership misroutes</dt><dd style="font-family:inherit">Signals that would go to a team that does not own the service. The owner is looked up from CODEOWNERS and the service catalog, never guessed by a model; "guess" is the ablation where a model does guess.</dd>
+      <dt>Decision (tier)</dt><dd style="font-family:inherit"><b>Handled</b> (auto): confident enough to act on its own. <b>Needs approval</b> (propose): posts a proposal for one click. <b>Needs a human</b> (escalate): sends the evidence, proposes nothing.</dd>
       <dt>Confidence</dt><dd style="font-family:inherit">The lowest of the grouping, service, and priority confidences, reduced further when data was missing (<b>c_eff</b>). Acting requires 0.85; proposing requires 0.60.</dd>
       <dt>Trustworthy confidence</dt><dd style="font-family:inherit">Whether "80% confident" is right about 80% of the time (<b>calibration</b>, ECE). Lower is better.</dd>
-      <dt>Stopped vs. noticed</dt><dd style="font-family:inherit">A malicious message is <b>stopped</b> when it could not cause any harmful action, whether or not the detector <b>noticed</b> it. Stopping comes from the architecture, not the detector.</dd>
+      <dt>Blocked vs. detected</dt><dd style="font-family:inherit">An attack is <b>blocked</b> when it could not cause any harmful action, whether or not the detector <b>flagged</b> it. Blocking comes from the architecture, not the detector.</dd>
       <dt>Estimated value</dt><dd style="font-family:inherit">A model, not a measurement: triage time, interruptions, revenue at risk, wrong-team delays, and security exposure, each priced by editable assumptions on the Business impact page.</dd>
     </dl>
   </div>
@@ -422,14 +422,14 @@ const TIER = { auto: 'Handled', propose: 'Needs approval', escalate: 'Needs a hu
 const PROV = { grounded: 'from alert', inferred: 'guessed from text', unknown: 'not sure' };
 const lamp = t => `<span class="lamp ${t}" title="tier: ${t}"><i></i>${TIER[t] || t}</span>`;
 function corrText(d) { if (d === 'new') return 'new incident'; const [k, id] = d.split(':'); return ({ merge: 'joined ' + id, thread: 'reply in ' + id, fingerprint: 'same error as ' + id })[k] || d; }
-const PAGES = { overview: ['Overview', `${D.n_signals} customer reports and alerts · ${S.n_incidents} incidents · ${D.days} days`], impact: ['Business impact', 'estimated value, with every assumption editable'], replay: ['Signal replay', 'what the system did with each report and alert, step by step'], results: ['Accuracy', 'how often it got the service, the team, the grouping, and the priority right'], attacks: ['Security', `${S.attacks.n} malicious messages and what happened to them`], failures: ['Misses', 'every report where the service was wrong, and why'], integrations: ['Integrations', 'where reports come from and where actions go'] };
+const PAGES = { overview: ['Overview', `${D.n_signals} signals · ${S.n_incidents} incidents · ${D.days} days`], impact: ['Business impact', 'estimated value, with every assumption editable'], replay: ['Signal replay', 'what the system did with each report and alert, step by step'], results: ['Accuracy', 'how often it got the service, the team, the grouping, and the priority right'], attacks: ['Security', `${S.attacks.n} malicious messages and what happened to them`], failures: ['Misses', 'every report where the service was wrong, and why'], integrations: ['Integrations', 'where reports come from and where actions go'] };
 
 // ---------- shell ----------
 $('#runid').textContent = D.run_id;
 $('#backend').innerHTML = `backend <span class="mono" style="color:var(--side-ink)">${esc(D.backend)}</span> · ${esc(D.generated_at)}`;
 $('#corpus-pill').innerHTML = `<i></i>${D.n_signals} signals · ${D.days} days`;
 $('#cnt-signals').textContent = D.n_signals;
-$('#timeline-title').textContent = `Signals over ${D.days} days`;
+$('#timeline-title').textContent = `Signals, ${D.days} days`;
 $('#cnt-attacks').textContent = S.attacks.n;
 $('#cnt-int').textContent = `${D.integrations.filter(i => i.live).length}/${D.integrations.length}`;
 function goTab(name) {
@@ -528,7 +528,7 @@ function renderImpact() {
   document.querySelectorAll('#impact-attacks tr[data-i], #impact-signals tr[data-i]').forEach(tr => tr.addEventListener('click', () => openInReplay(+tr.dataset.i)));
   // replay value column + overview KPI
   rows.forEach((el, i) => { el.querySelector('.c9').innerHTML = `<span class="money">${usdk(impactFor(R[i]).total)}</span>`; });
-  const k = $('#kpi-impact'); if (k) k.innerHTML = `<div class="eyebrow">Estimated value delivered</div><div class="v">${usd(t.total)}</div><div class="s">Across ${D.n_signals} reports and alerts. A model; assumptions on the Business impact page</div>`;
+  const k = $('#kpi-impact'); if (k) k.innerHTML = `<div class="eyebrow">Estimated value</div><div class="v">${usd(t.total)}</div><div class="s">Modeled, ${D.n_signals} signals. See Business impact</div>`;
 }
 
 // ---------- KPIs ----------
@@ -539,10 +539,10 @@ function sparkBars(vals, color) {
 }
 $('#kpis').innerHTML = `
   <div class="kpi money" id="kpi-impact"></div>
-  <div class="kpi"><div class="eyebrow">Right service, thanks to telemetry</div><div class="v">${pct(GA.email_grounded.acc)} <span class="muted">to</span> ${pct(G.email_grounded.acc)}<span class="d">+${(lift*100).toFixed(1)} pts</span></div><div class="s">Same ${G.email_grounded.n} customer emails, without and with the matching alert (grounding lift)</div></div>
-  <div class="kpi"><div class="eyebrow">Sent to the wrong team</div><div class="v">${S.ownership.misroutes} <span class="muted">with lookup</span> ${D.ablate_ownership.ownership.misroutes} <span class="muted">by guessing</span></div><div class="s">Of ${S.ownership.n} signals with a service. ${D.nonexistent_teams} guesses named a team that does not exist</div></div>
-  <div class="kpi"><div class="eyebrow">Attacks stopped</div><div class="v">${S.attacks.blocked}/${S.attacks.n}</div><div class="s">${S.attacks.flagged} noticed by the detector. ${S.attacks.n - S.attacks.flagged} stopped without being noticed</div></div>
-  <div class="kpi"><div class="eyebrow">Reports and alerts per day</div><div class="v">${D.n_signals} <span class="muted">into ${S.n_incidents} incidents</span></div>${sparkBars(D.per_day.map(d => d.n), 'var(--accent)')}<div class="s">${D.per_day.map(d => d.day.slice(5)).join(' · ')}</div></div>`;
+  <div class="kpi"><div class="eyebrow">Grounding lift</div><div class="v">${pct(GA.email_grounded.acc)} <span class="muted">to</span> ${pct(G.email_grounded.acc)}<span class="d">+${(lift*100).toFixed(1)} pts</span></div><div class="s">Email localization acc@1, n=${G.email_grounded.n}, without vs. with alert</div></div>
+  <div class="kpi"><div class="eyebrow">Ownership misroutes</div><div class="v">${S.ownership.misroutes} <span class="muted">lookup</span> ${D.ablate_ownership.ownership.misroutes} <span class="muted">guess</span></div><div class="s">n=${S.ownership.n} localized; ${D.nonexistent_teams} guesses named nonexistent teams</div></div>
+  <div class="kpi"><div class="eyebrow">Attacks blocked</div><div class="v">${S.attacks.blocked}/${S.attacks.n}</div><div class="s">${S.attacks.flagged} detected; ${S.attacks.n - S.attacks.flagged} blocked undetected</div></div>
+  <div class="kpi"><div class="eyebrow">Signals per day</div><div class="v">${D.n_signals} <span class="muted">to ${S.n_incidents} incidents</span></div>${sparkBars(D.per_day.map(d => d.n), 'var(--accent)')}<div class="s">${D.per_day.map(d => d.day.slice(5)).join(' · ')}</div></div>`;
 
 // ---------- replay board ----------
 const board = $('#board'), drawer = $('#drawer');
