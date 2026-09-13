@@ -1,0 +1,20 @@
+{"service": "exports-scheduler", "release": "2.14.0", "deployed_at": "2026-09-10T22:40:00Z", "summary": "Migrate cron triggers to new timezone library"}
+{"service": "web-bff", "release": "9.3.1", "deployed_at": "2026-09-10T23:10:00Z", "summary": "Bump GraphQL client; no behavior change"}
+{"service": "sso-gateway", "release": "4.2.0", "deployed_at": "2026-09-11T01:15:00Z", "summary": "Rotate SAML signing certificate and tighten assertion clock skew to 30s"}
+{"service": "reports-api", "release": "7.8.2", "deployed_at": "2026-09-11T02:00:00Z", "summary": "Add query timeout of 8s for saved reports"}
+{"service": "notifications", "release": "3.1.0", "deployed_at": "2026-09-11T03:30:00Z", "summary": "Switch push provider SDK to v5"}
+{"service": "payments-gateway", "release": "6.0.3", "deployed_at": "2026-09-11T04:05:00Z", "summary": "Handle new processor webhook event type"}
+{"service": "search-indexer", "release": "1.9.0", "deployed_at": "2026-09-11T05:20:00Z", "summary": "Reindex documents with new tokenizer"}
+{"service": "file-storage", "release": "5.4.0", "deployed_at": "2026-09-11T06:45:00Z", "summary": "Enable multipart upload for files over 50MB"}
+{"service": "mobile-bff", "release": "12.1.0", "deployed_at": "2026-09-11T07:30:00Z", "summary": "Sync endpoint now requires If-None-Match header"}
+{"service": "billing-api", "release": "8.2.1", "deployed_at": "2026-09-11T08:00:00Z", "summary": "Seat count recalculation on plan change"}
+{"service": "dashboard-api", "release": "2.7.0", "deployed_at": "2026-09-11T09:15:00Z", "summary": "Cache usage counters for 60s"}
+{"service": "auth-service", "release": "11.0.0", "deployed_at": "2026-09-11T10:00:00Z", "summary": "MFA challenge flow rewrite"}
+{"service": "invoice-worker", "release": "3.3.0", "deployed_at": "2026-09-11T11:30:00Z", "summary": "Invoice PDF template refresh"}
+{"service": "exports-renderer", "release": "4.1.2", "deployed_at": "2026-09-11T13:00:00Z", "summary": "CSV writer: quote fields containing newlines"}
+{"service": "session-store", "release": "2.2.0", "deployed_at": "2026-09-11T14:20:00Z", "summary": "Reduce refresh token TTL to 12h"}
+{"service": "web-bff", "release": "9.3.2", "deployed_at": "2026-09-11T16:00:00Z", "summary": "Fix dashboard widget ordering"}
+{"service": "reports-api", "release": "7.8.3", "deployed_at": "2026-09-11T18:45:00Z", "summary": "Revert 8s query timeout for saved reports"}
+{"service": "payments-gateway", "release": "6.0.4", "deployed_at": "2026-09-11T20:10:00Z", "summary": "Retry refunds on processor 502"}
+{"service": "mobile-bff", "release": "12.1.1", "deployed_at": "2026-09-12T01:00:00Z", "summary": "Log sync header mismatches"}
+{"service": "file-storage", "release": "5.4.1", "deployed_at": "2026-09-12T03:30:00Z", "summary": "Fix multipart completion race"}

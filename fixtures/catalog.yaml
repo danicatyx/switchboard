@@ -1,0 +1,86 @@
+# Service catalog. Teams and channels are what own(λ) resolves to.
+# Surfaces deliberately overlap (three export services, three auth services,
+# three billing services) so text-only localization is genuinely hard.
+teams:
+  data-platform:
+    slack_channel: "#data-platform-oncall"
+    oncall_user: "@priya"
+    escalation_policy: "data-platform-primary"
+  identity:
+    slack_channel: "#identity-oncall"
+    oncall_user: "@marcus"
+    escalation_policy: "identity-primary"
+  payments:
+    slack_channel: "#payments-oncall"
+    oncall_user: "@lena"
+    escalation_policy: "payments-primary"
+  client-apps:
+    slack_channel: "#client-apps-oncall"
+    oncall_user: "@theo"
+    escalation_policy: "client-apps-primary"
+  core-infra:
+    slack_channel: "#core-infra-oncall"
+    oncall_user: "@sam"
+    escalation_policy: "core-infra-primary"
+
+services:
+  exports-scheduler:
+    team: data-platform
+    tier: tier-1
+    description: "Cron-driven scheduler that enqueues report and data export jobs."
+  exports-renderer:
+    team: data-platform
+    tier: tier-1
+    description: "Renders queued export jobs into CSV/PDF and writes them to file-storage."
+  reports-api:
+    team: data-platform
+    tier: tier-1
+    description: "Serves saved reports and dashboards' underlying queries to web and mobile."
+  search-indexer:
+    team: data-platform
+    tier: tier-2
+    description: "Builds and refreshes the search index for records and documents."
+  auth-service:
+    team: identity
+    tier: tier-0
+    description: "Password and MFA login, token issuance, session creation."
+  sso-gateway:
+    team: identity
+    tier: tier-0
+    description: "SAML/OIDC federation for enterprise accounts; redirects to customer IdPs."
+  session-store:
+    team: identity
+    tier: tier-0
+    description: "Backing store for active sessions and refresh tokens."
+  billing-api:
+    team: payments
+    tier: tier-0
+    description: "Plans, subscriptions, seat counts, and invoice previews."
+  invoice-worker:
+    team: payments
+    tier: tier-1
+    description: "Generates monthly invoices and emails PDF invoices to billing contacts."
+  payments-gateway:
+    team: payments
+    tier: tier-0
+    description: "Card charges, refunds, and webhook handling from the card processor."
+  web-bff:
+    team: client-apps
+    tier: tier-1
+    description: "Backend-for-frontend for the web app; aggregates other services' APIs."
+  mobile-bff:
+    team: client-apps
+    tier: tier-1
+    description: "Backend-for-frontend for iOS and Android; push registration and sync."
+  notifications:
+    team: client-apps
+    tier: tier-2
+    description: "Email, push, and in-app notification delivery."
+  dashboard-api:
+    team: core-infra
+    tier: tier-1
+    description: "Home dashboard widgets, usage counters, and status summaries."
+  file-storage:
+    team: core-infra
+    tier: tier-0
+    description: "Blob storage service for uploads, attachments, and generated exports."

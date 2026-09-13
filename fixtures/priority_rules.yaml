@@ -1,0 +1,32 @@
+# Deterministic, ordered, logged. Applied after the model proposes a base priority.
+# Mirrors README §3.6.
+priority_rules:
+  - id: multi_account_blast
+    if: "incident.distinct_reporting_accounts >= 3"
+    then: escalate(1)
+    rationale: "correlated customer reports establish breadth"
+
+  - id: error_rate_spike
+    if: "telemetry.error_rate_delta > 5.0"
+    then: escalate(1)
+    rationale: "multiples of 7d baseline"
+
+  - id: critical_path
+    if: "service.tier == 'tier-0'"
+    then: escalate(1)
+    rationale: "tier-0 surface"
+
+  - id: recurrence
+    if: "incident.similar_within_days(30)"
+    then: escalate(1)
+    rationale: "recurrence indicates incomplete prior fix"
+
+  - id: single_free_reporter
+    if: "incident.signal_count == 1 and reporter.plan == 'free' and reporter.account_age_days < 7"
+    then: cap_at(P3)
+    rationale: "base rate favors misconfiguration over defect"
+
+  - id: ungrounded_localization
+    if: "incident.localization_provenance == 'inferred:model'"
+    then: cap_confidence(0.70)
+    rationale: "acting on a model guess about which service broke"

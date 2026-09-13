@@ -1,0 +1,17 @@
+# CODEOWNERS for the acme monorepo. Joined with catalog.yaml by ownership.py.
+/services/exports-scheduler/   @acme/data-platform
+/services/exports-renderer/    @acme/data-platform
+/services/reports-api/         @acme/data-platform
+/services/search-indexer/      @acme/data-platform
+/services/auth-service/        @acme/identity
+/services/sso-gateway/         @acme/identity
+/services/session-store/       @acme/identity
+/services/billing-api/         @acme/payments
+/services/invoice-worker/      @acme/payments
+/services/payments-gateway/    @acme/payments
+/services/web-bff/             @acme/client-apps
+/services/mobile-bff/          @acme/client-apps
+# Stale: the growth team was folded into client-apps two quarters ago.
+/services/notifications/       @acme/growth
+/services/dashboard-api/       @acme/core-infra
+/services/file-storage/        @acme/core-infra
