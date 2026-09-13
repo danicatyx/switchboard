@@ -14,7 +14,7 @@ from typing import Callable
 
 import yaml
 
-from .catalog import FIXTURES, service as catalog_service
+from .catalog import _DEFAULT_FIXTURES as FIXTURES, service as catalog_service
 from .models import Incident, Priority, Signal
 from .store import IncidentStore
 

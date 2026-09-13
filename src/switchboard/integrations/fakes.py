@@ -1,28 +1,19 @@
-"""Fake adapters. No pipeline component imports a vendor SDK. The only live
-call in this build is an optional Slack incoming webhook.
+"""Fake adapters used by the replay harness and by the demo when no
+credentials are configured. Real counterparts: slack.py, github.py, email.py.
 """
 
 from __future__ import annotations
 
-import json
-import os
 import sys
-import urllib.request
 
 
 class FakeSlack:
-    def __init__(self, webhook_url: str | None = None) -> None:
-        self.webhook_url = webhook_url or os.environ.get("SLACK_WEBHOOK_URL") or None
+    def __init__(self) -> None:
         self.posted: list[dict] = []
 
     def post(self, channel: str, text: str, metadata: dict) -> None:
         self.posted.append({"channel": channel, "text": text, "metadata": metadata})
-        if self.webhook_url:
-            body = json.dumps({"text": f"*{channel}*\n{text}"}).encode()
-            req = urllib.request.Request(self.webhook_url, data=body, headers={"Content-Type": "application/json"})
-            urllib.request.urlopen(req, timeout=10).read()
-        else:
-            print(f"\n  ┌ SLACK {channel}\n" + "\n".join(f"  │ {l}" for l in text.splitlines()) + "\n  └", file=sys.stderr)
+        print(f"\n  ┌ SLACK {channel}\n" + "\n".join(f"  │ {l}" for l in text.splitlines()) + "\n  └", file=sys.stderr)
 
 
 class FakeGmail:

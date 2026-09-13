@@ -11,7 +11,9 @@ from dataclasses import dataclass, field
 from typing import Callable
 
 from ..catalog import load_catalog
+from ..integrations.email import SmtpSender
 from ..integrations.fakes import FakeGmail, FakeIncidentTracker, FakeSlack
+from ..integrations.slack import SlackAdapter
 from ..models import Action, ActionResult
 from ..plan import TRIAGE_HUMANS, TRIAGE_PROPOSALS
 from .wal import WAL
@@ -29,9 +31,22 @@ class AllowlistViolation(Exception):
 @dataclass
 class WriteCredentials:
     """Only the Executor is ever handed one of these."""
-    slack: FakeSlack = field(default_factory=FakeSlack)
-    gmail: FakeGmail = field(default_factory=FakeGmail)
+    slack: FakeSlack | SlackAdapter = field(default_factory=FakeSlack)
+    gmail: FakeGmail | SmtpSender = field(default_factory=FakeGmail)
     tracker: FakeIncidentTracker = field(default_factory=FakeIncidentTracker)
+
+    @classmethod
+    def from_env(cls) -> "WriteCredentials":
+        """Real adapters where configured, fakes (console) otherwise."""
+        slack = SlackAdapter()
+        smtp = SmtpSender()
+        return cls(slack=slack if slack.live else FakeSlack(),
+                   gmail=smtp if smtp.live else FakeGmail(),
+                   tracker=FakeIncidentTracker())
+
+    def describe(self) -> str:
+        return (f"slack={'live' if isinstance(self.slack, SlackAdapter) else 'console'} "
+                f"email={'smtp' if isinstance(self.gmail, SmtpSender) else 'console'} tracker=fake")
 
 
 def _fmt(payload: dict) -> str:

@@ -54,9 +54,10 @@ def main() -> None:
     wal_path = Path("wal.json")
     if wal_path.exists():
         wal_path.unlink()
-    executor = Executor(WriteCredentials(), WAL(wal_path), lambda inc_id: store.incidents[inc_id].reporters)
+    creds = WriteCredentials.from_env()
+    executor = Executor(creds, WAL(wal_path), lambda inc_id: store.incidents[inc_id].reporters)
 
-    print(f"\n{B}Switchboard demo{R} — {len(DEMO_IDS)} signals, executor live (Slack via webhook if SLACK_WEBHOOK_URL is set)\n")
+    print(f"\n{B}Switchboard demo{R} — {len(DEMO_IDS)} signals · executor {creds.describe()}\n")
     records: list[DecisionRecord] = []
     for ext in DEMO_IDS:
         raw = raws[ext]

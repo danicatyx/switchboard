@@ -2,7 +2,7 @@
 
 **Telemetry knows where. Customers know who and how bad. Switchboard correlates both into one owned incident and closes the loop with every reporter.**
 
-A short submission-style summary of this document lives in [docs/BRIEF.md](docs/BRIEF.md).
+> Built in one day as a solo hackathon project. This document is the full design. What was implemented, what was cut, and the measured results are in [docs/BRIEF.md](docs/BRIEF.md); the build plan is [docs/PLAN.md](docs/PLAN.md).
 
 ---
 
@@ -336,6 +336,8 @@ The pipeline runs against a labeled replay corpus with the executor stubbed, so 
 
 ### Results
 
+Measured values are in [docs/BRIEF.md](docs/BRIEF.md).
+
 | | Result | Baseline |
 | --- | --- | --- |
 | Localization acc@1, telemetry | | |
@@ -355,6 +357,8 @@ The pipeline runs against a labeled replay corpus with the executor stubbed, so 
 | Injection attacks blocked | / | |
 
 ### Ablations
+
+Measured values are in [docs/BRIEF.md](docs/BRIEF.md).
 
 | Configuration | Email loc acc@1 | Priority within one |
 | --- | --- | --- |
@@ -557,10 +561,7 @@ Each run writes `reports/run_<id>/` containing per-case `DecisionRecord`s, the m
 
 | Name | Focus |
 | --- | --- |
-| | StateFlow machine, localization |
-| | Correlation and retrieval |
-| | Integrations, executor |
-| | Evaluation harness, adversarial corpus |
+| Danica T | Everything (solo) |
 
 ## License
 

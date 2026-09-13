@@ -9,13 +9,32 @@ from pathlib import Path
 
 import yaml
 
-FIXTURES = Path(__file__).resolve().parents[2] / "fixtures"
+_DEFAULT_FIXTURES = Path(__file__).resolve().parents[2] / "fixtures"
+
+
+def _resolve_fixtures() -> Path:
+    """Ownership metadata source, in priority order: explicit dir, GitHub sync cache, bundled fixtures."""
+    import os
+    explicit = os.environ.get("SWITCHBOARD_FIXTURES_DIR")
+    if explicit:
+        return Path(explicit)
+    cache = Path(os.environ.get("SWITCHBOARD_CACHE_DIR", ".switchboard-cache"))
+    if (cache / "catalog.yaml").exists() and (cache / "CODEOWNERS").exists():
+        return cache
+    return _DEFAULT_FIXTURES
+
+
+FIXTURES = _resolve_fixtures()
 
 
 @lru_cache(maxsize=1)
 def load_catalog() -> dict:
     with open(FIXTURES / "catalog.yaml") as f:
-        return yaml.safe_load(f)
+        cat = yaml.safe_load(f)
+    if "symptoms" not in cat and FIXTURES != _DEFAULT_FIXTURES:
+        with open(_DEFAULT_FIXTURES / "catalog.yaml") as f:
+            cat["symptoms"] = yaml.safe_load(f).get("symptoms", {})
+    return cat
 
 
 def service_names() -> list[str]:
@@ -39,7 +58,10 @@ def services_block() -> str:
 @lru_cache(maxsize=1)
 def load_deploys() -> list[dict]:
     out = []
-    with open(FIXTURES / "deploys.jsonl") as f:
+    path = FIXTURES / "deploys.jsonl"
+    if not path.exists():
+        return out
+    with open(path) as f:
         for line in f:
             if line.strip():
                 d = json.loads(line)

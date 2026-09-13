@@ -17,7 +17,7 @@ One day, one person, zero API spend. [README.md](../README.md) is the full desig
 - Retrieval is "all open incidents in 24 h". No BM25, embeddings, or RRF; at 46 signals the candidate list never exceeds 12.
 - The Evaluation Agent's backward transitions are schema validation with one retry; a second failure is `ESCALATE`.
 - One fault test (Sentry withheld), not a per-adapter chaos matrix.
-- Gmail, Sentry, GitHub, and Linear are fakes fed by JSON fixtures. Slack posts to an incoming webhook if `SLACK_WEBHOOK_URL` is set, else to the console.
+- **Slack, email, and GitHub have real adapters** (`integrations/slack.py`, `email.py`, `github.py`; stdlib only, configured by `.env`). The eval harness never uses them: it runs against the corpus with the executor stubbed. Sentry has no receiver; telemetry is fixture-fed. Linear is a fake.
 - `−enum` and `−rules` ablations were not run.
 - Thresholds (`τ_auto = 0.85`, `τ_prop = 0.60`) are the README's values, not re-derived from the reliability curve; the corpus is too small to bin honestly.
 
@@ -54,10 +54,12 @@ We measure this directly. Localization accuracy on the same fifteen emails is re
 
 | App | Role | Direction | In this build |
 | --- | --- | --- | --- |
-| **Sentry** | Telemetry signals: fingerprints, stack traces, affected-user counts, error-rate deltas | read | fake, `sentry-*` rows in the corpus |
-| **GitHub** | CODEOWNERS and service catalog for ownership resolution; recent deploys as localization evidence | read | real file formats, read from `fixtures/` |
-| **Slack** | Pages the owning team once per incident, with correlated blast radius attached | write | incoming webhook, or console |
-| **Gmail** | Ingests customer reports; sends acknowledgment and resolution notices to every correlated reporter | read + write | fake, `msg-*` rows in the corpus; sends print to console |
+| **Slack** | Pages the owning team once per incident, with correlated blast radius attached; proposals and escalations to triage channels | write | `SLACK_BOT_TOKEN` (chat.postMessage, per-team channels) or `SLACK_WEBHOOK_URL`; console when unset |
+| **Email** | Ingests customer reports; sends acknowledgment and resolution notices to every correlated reporter | read + write | IMAP read (`ImapInbox.fetch_unseen`) and SMTP send with `In-Reply-To` threading; Gmail via app password, no OAuth |
+| **GitHub** | CODEOWNERS and service catalog for ownership resolution; recent deploys as localization evidence | read | `python -m switchboard.sync` pulls `CODEOWNERS`, `catalog.yaml`, and commits touching `services/<name>/` into a cache the loaders prefer over `fixtures/` |
+| **Sentry** | Telemetry signals: fingerprints, stack traces, affected-user counts, error-rate deltas | read | no receiver; JSONL drop file in live mode, corpus rows in eval |
+
+Credentials live in `.env` (see `.env.example`). Read credentials (IMAP, GitHub) are constructed by the pipeline; write credentials (Slack, SMTP) are constructed only inside `WriteCredentials.from_env()` and handed only to the executor. Live mode is `python -m switchboard.run --sources gmail,sentry --max-tier propose`, which caps every decision at PROPOSE by default so nothing external happens without a human click.
 
 ---
 

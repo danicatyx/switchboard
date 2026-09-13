@@ -6,3 +6,5 @@ __pycache__/
 evals/reports/
 wal.json
 *.egg-info/
+.switchboard-cache/
+inbox/
